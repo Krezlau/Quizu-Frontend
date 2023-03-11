@@ -9,4 +9,7 @@ module.exports = {
   },
   plugins: [require("daisyui")],
   darkMode: "class",
+  daisyui: {
+    themes: ["light", "dark", "cyberpunk"],
+  },
 }

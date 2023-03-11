@@ -4,8 +4,10 @@ const ThemeChanger = () => {
   const modeChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       document.documentElement.classList.add('dark')
+      document.documentElement.setAttribute('data-theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark')
+      document.documentElement.setAttribute('data-theme', 'light');
     }
   }
 
