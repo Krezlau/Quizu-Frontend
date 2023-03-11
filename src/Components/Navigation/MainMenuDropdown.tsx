@@ -8,7 +8,7 @@ const MainMenuDropdown = () => {
       <li><Link to="/search">Search</Link></li>
       <li><Link to="/explore">Explore</Link></li>
       <li><Link to="/new-quiz">Create new quiz</Link></li>
-      <li><Link to="/user/{id}/quizes">My quizes</Link></li>
+      <li><Link to="/user/{id}/quizzes">My quizzes</Link></li>
       <li><Link to="/user/{id}/stats">My stats</Link></li>
       <li><Link to="/about">About</Link></li>
     </ul>
