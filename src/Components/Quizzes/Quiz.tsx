@@ -34,7 +34,7 @@ const Quiz = () => {
           <p className="mt-1">69</p>
         </div>
       </div>
-      <button className="btn btn-secondary btn-sm mx-auto w-full mt-2 sm:mr-4 sm:w-auto sm:mt-0">Play</button>
+      <Link to="/quizzes/{id}/details" className="btn btn-secondary btn-sm mx-auto w-full mt-2 sm:mr-4 sm:w-auto sm:mt-0">Play</Link>
     </div>
   </div>
 }

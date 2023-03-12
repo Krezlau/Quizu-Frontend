@@ -8,6 +8,7 @@ import LoginPage from "./Components/Pages/LoginPage";
 import UserQuizzesPage from "./Components/Pages/UserQuizzesPage";
 import SignupPage from "./Components/Pages/SignupPage";
 import EditProfilePage from "./Components/Pages/EditProfilePage";
+import QuizDetailsPage from "./Components/Pages/QuizDetailsPage";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/user/:userId/profile" element={<UserProfilePage />}/>
           <Route path="/user/:userId/quizzes" element={<UserQuizzesPage />}/>
           <Route path="/user/:userId/edit" element={<EditProfilePage />}/>
+          <Route path="/quizzes/:quizId/details" element={<QuizDetailsPage />}/>
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/signup" element={<SignupPage />}/>
         </Routes>
