@@ -18,8 +18,8 @@ const ProfilePageHeading = () => {
     </div>
     <div className="flex flex-col justify-between gap-8 px-4 sm:flex-row">
       <div className="mx-auto sm:mx-0">
-        <Link to={"/user/{id}/stories"} className="btn mr-8">All Stories</Link>
-        <Link to={"/user/{id}/stories"} className="btn">Stats</Link>
+        <Link to={"/user/{id}/quizzes"} className="btn mr-8">All Stories</Link>
+        <Link to={"/user/{id}/stats"} className="btn">Stats</Link>
       </div>
       <Link to={"/user/{id}/edit"} className="btn w-48 mx-auto sm:mx-0">Edit my profile</Link>
     </div>

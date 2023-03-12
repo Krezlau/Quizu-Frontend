@@ -1,5 +1,5 @@
 import SectionHeader from "../UI/SectionHeader";
-import QuizCarousel from "../UI/QuizCarousel";
+import QuizCarousel from "../Quizzes/QuizCarousel";
 import ProfilePageHeading from "../UserProfile/ProfilePageHeading";
 import UserInfo from "../UserProfile/UserInfo";
 

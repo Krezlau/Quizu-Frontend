@@ -1,4 +1,4 @@
-import QuizCarousel from "../UI/QuizCarousel";
+import QuizCarousel from "../Quizzes/QuizCarousel";
 import PageHeader from "../UI/PageHeader";
 import SectionHeader from "../UI/SectionHeader";
 

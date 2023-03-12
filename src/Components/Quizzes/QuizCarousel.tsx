@@ -1,5 +1,5 @@
 import {useRef, WheelEventHandler} from "react";
-import Quiz from "../Quizzes/Quiz";
+import Quiz from "./Quiz";
 
 const QuizCarousel = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
