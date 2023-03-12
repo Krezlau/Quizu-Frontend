@@ -5,8 +5,9 @@ import {Route, Routes} from "react-router-dom";
 import HomePage from "./Components/Pages/HomePage";
 import UserProfilePage from "./Components/Pages/UserProfilePage";
 import LoginPage from "./Components/Pages/LoginPage";
-import UserStoriesPage from "./Components/Pages/UserQuizzesPage";
+import UserQuizzesPage from "./Components/Pages/UserQuizzesPage";
 import SignupPage from "./Components/Pages/SignupPage";
+import EditProfilePage from "./Components/Pages/EditProfilePage";
 
 function App() {
 
@@ -20,7 +21,8 @@ function App() {
           </h1>}/>
           <Route path="/home" element={<HomePage />}/>
           <Route path="/user/:userId/profile" element={<UserProfilePage />}/>
-          <Route path="/user/:userId/quizzes" element={<UserStoriesPage />}/>
+          <Route path="/user/:userId/quizzes" element={<UserQuizzesPage />}/>
+          <Route path="/user/:userId/edit" element={<EditProfilePage />}/>
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/signup" element={<SignupPage />}/>
         </Routes>
