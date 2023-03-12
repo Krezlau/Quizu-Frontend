@@ -1,5 +1,6 @@
 const Quiz = () => {
-  return <div className="card bg-primary p-4 md:min-w-[40rem] h-full ml-0">
+  return <div className="card bg-primary p-4 md:min-w-[40rem] h-full ml-0
+  transition duration-500 ease-in-out transform hover:scale-[1.05]">
     <h1 className="text-3xl mb-2 font-semibold">Title</h1>
     <p>Description - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam aliquam elementum vehicula. Curabitur fringilla orci turpis, at consectetur</p>
     <div className="flex flex-row flex-wrap justify-left gap-2 mt-4 mb-8">
