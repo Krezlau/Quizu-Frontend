@@ -6,6 +6,7 @@ import HomePage from "./Components/Pages/HomePage";
 import UserProfilePage from "./Components/Pages/UserProfilePage";
 import LoginPage from "./Components/Pages/LoginPage";
 import UserStoriesPage from "./Components/Pages/UserQuizzesPage";
+import SignupPage from "./Components/Pages/SignupPage";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/user/:userId/profile" element={<UserProfilePage />}/>
           <Route path="/user/:userId/quizzes" element={<UserStoriesPage />}/>
           <Route path="/login" element={<LoginPage />}/>
+          <Route path="/signup" element={<SignupPage />}/>
         </Routes>
       </PageLayout>
     </>
