@@ -7,8 +7,8 @@ const QuizDetailsPage = () => {
   return <>
     <PageHeader text={"Quiz Details"}/>
     <div className="card bg-neutral p-4 md:min-w-[40rem] h-full ml-0 text-xl">
-      <div className="flex flex-row justify-between">
-        <h1 className="text-5xl font-semibold">Title</h1>
+      <div className="flex flex-col justify-between md:flex-row">
+        <h1 className="text-5xl font-semibold">Very Very Very Long Fricking Title</h1>
         <div className="flex flex-row justify-left gap-1">
           <div className="stat-figure text-secondary">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -16,7 +16,7 @@ const QuizDetailsPage = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
             </svg>
           </div>
-          <p className="mt-2">20.1K</p>
+          <p className="my-auto">20.1K</p>
         </div>
 
       </div>
@@ -50,7 +50,7 @@ const QuizDetailsPage = () => {
           <p className="text-xl">69</p>
         </div>
       </div>
-      <button className="btn btn-secondary mx-auto w-64 mt-12">PLAY</button>
+      <button className="btn btn-secondary mx-auto w-full max-w-64 md:w-auto mt-12">PLAY</button>
     </div>
     <SectionHeader text={"About"} />
     <div className="card bg-neutral p-4 text-xl">

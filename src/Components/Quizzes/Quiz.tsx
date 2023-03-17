@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 const Quiz = () => {
   return <div className="card bg-primary p-4 md:min-w-[40rem] h-full ml-0
   transition duration-500 ease-in-out transform hover:scale-[1.05]">
-    <h1 className="text-3xl font-semibold">Title</h1>
+    <h1 className="text-3xl font-semibold">Very Very Very Long Fricking Title</h1>
     <h3 className="mb-1 text-sm">by <Link className="link link-accent link-hover hover:no-underline" to="/user/{id}/profile">User</Link></h3>
     <p>Description - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam aliquam elementum vehicula. Curabitur fringilla orci turpis, at consectetur</p>
     <div className="flex flex-row flex-wrap justify-left gap-2 mt-4 mb-4">
