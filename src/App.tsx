@@ -9,6 +9,7 @@ import UserQuizzesPage from "./Components/Pages/UserQuizzesPage";
 import SignupPage from "./Components/Pages/SignupPage";
 import EditProfilePage from "./Components/Pages/EditProfilePage";
 import QuizDetailsPage from "./Components/Pages/QuizDetailsPage";
+import ChangePasswordPage from "./Components/Pages/ChangePasswordPage";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/quizzes/:quizId/details" element={<QuizDetailsPage />}/>
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/signup" element={<SignupPage />}/>
+          <Route path="/change-password" element={<ChangePasswordPage />}/>
         </Routes>
       </PageLayout>
     </>
