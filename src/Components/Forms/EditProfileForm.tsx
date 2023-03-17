@@ -32,6 +32,10 @@ const EditProfileForm = () => {
     </form>
     <span className="border-2 border-primary my-8 mx-4"></span>
     <h1 className="text-2xl font-semibold mb-4 ml-4">Danger zone</h1>
+    <div className="flex flex-col gap-2 mx-4 sm:flex-row mb-4 sm:gap-8">
+      <button className="btn btn-error btn-sm">Change password</button>
+      <p className="my-auto">This will log you out on all your devices.</p>
+    </div>
     <div className="flex flex-col gap-2 mx-4 sm:flex-row sm:gap-8">
       <button className="btn btn-error btn-sm">Delete account</button>
       <p className="my-auto">Deletes the account. This action is irreversible.</p>
