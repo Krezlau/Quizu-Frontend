@@ -1,11 +1,9 @@
 import PageHeader from "../UI/PageHeader";
 import {Link} from "react-router-dom";
-import SectionHeader from "../UI/SectionHeader";
-import CommentForm from "../Forms/CommentForm";
 
-const QuizDetailsPage = () => {
+const ManageQuizPage = () => {
   return <>
-    <PageHeader text={"Quiz Details"}/>
+  <PageHeader text={"Manage Quiz"} />
     <div className="card bg-neutral p-4 md:min-w-[40rem] h-full ml-0 text-xl">
       <div className="flex flex-col justify-between md:flex-row">
         <h1 className="text-5xl font-semibold">Very Very Very Long Fricking Title</h1>
@@ -52,21 +50,7 @@ const QuizDetailsPage = () => {
       </div>
       <button className="btn btn-secondary mx-auto w-full max-w-64 md:w-auto mt-12">PLAY</button>
     </div>
-    <div className="flex flex-row justify-right w-full pt-4 px-4">
-      <Link to={"/quizzes/{id}/manage"} className="btn btn-secondary ml-auto">Manage</Link>
-    </div>
-    <SectionHeader text={"About"} />
-    <div className="card bg-neutral p-4 text-xl">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam aliquam elementum vehicula. Curabitur fringilla orci turpis, at consectetur ipsum condimentum eu. Donec eu fermentum lacus, vel elementum dolor. In cursus ex vel eleifend sodales. Nam posuere urna nec ante ullamcorper eleifend vitae non turpis. Nulla neque risus, ullamcorper a tempor nec, molestie ut nunc. Donec lacus libero, pulvinar sit amet lacinia sit amet, placerat vel lectus. Donec odio nisl, aliquam id sagittis vel, rhoncus sit amet odio. Nulla mollis sit amet mauris eget consequat. Mauris aliquam, erat ut convallis posuere, arcu augue vestibulum quam, a iaculis neque lacus quis ante.</p>
-    </div>
-    <SectionHeader text={"Additional Info"} />
-    <div className="card bg-neutral p-4 text-xl">
-      <p>Here there will be stats. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam aliquam elementum vehicula. Curabitur fringilla orci turpis, at consectetur ipsum condimentum eu. Donec eu fermentum lacus, vel elementum dolor. In cursus ex vel eleifend sodales. Nam posuere urna nec ante ullamcorper eleifend vitae non turpis. Nulla neque risus, ullamcorper a tempor nec, molestie ut nunc. Donec lacus libero, pulvinar sit amet lacinia sit amet, placerat vel lectus. Donec odio nisl, aliquam id sagittis vel, rhoncus sit amet odio. Nulla mollis sit amet mauris eget consequat. Mauris aliquam, erat ut convallis posuere, arcu augue vestibulum quam, a iaculis neque lacus quis ante.</p>
-    </div>
-    <SectionHeader text={"Comments"} />
-    <CommentForm />
-    <p>TODO Lista komentarzy tutaj, może infinite scroll??</p>
   </>
 }
 
-export default QuizDetailsPage;
+export default ManageQuizPage;
