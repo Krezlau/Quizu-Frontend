@@ -5,7 +5,7 @@ import AvatarDropdown from "./AvatarDropdown";
 
 const NavigationBar = () => {
   return (
-    <div className="navbar bg-base-100 flex justify-between w-screen gap-4 text-white bg-purple-700">
+    <div className="navbar fixed top-0 z-40 bg-primary flex justify-between w-full gap-4 text-white bg-purple-700">
       <MainMenuDropdown/>
       <Search/>
       <ThemeChanger/>
