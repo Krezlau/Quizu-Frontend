@@ -12,6 +12,7 @@ import QuizDetailsPage from "./Components/Pages/QuizDetailsPage";
 import ChangePasswordPage from "./Components/Pages/ChangePasswordPage";
 import CreateNewQuizPage from "./Components/Pages/CreateNewQuizPage";
 import ManageQuizPage from "./Components/Pages/ManageQuizPage";
+import QuizManageInfoPage from "./Components/Pages/QuizManageInfoPage";
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="/user/:userId/quizzes" element={<UserQuizzesPage />}/>
           <Route path="/user/:userId/edit" element={<EditProfilePage />}/>
           <Route path="/quizzes/:quizId/details" element={<QuizDetailsPage />}/>
+          <Route path="/quizzes/:quizId/manage-info" element={<QuizManageInfoPage />} />
           <Route path="/quizzes/:quizId/manage" element={<ManageQuizPage />}/>
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/signup" element={<SignupPage />}/>
