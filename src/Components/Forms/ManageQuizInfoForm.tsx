@@ -13,14 +13,44 @@ const ManageQuizInfoForm = () => {
           id="description"
           className="textarea textarea-bordered resize-none mx-auto w-full h-20 max-w-[40rem]"
         />
-        <SectionHeader text="Tags" centered={true} label="tags" />
-        <p className="text-center text-2xl italic">TODO</p>
-        {/* TODO tag selection/deletion and show tags */}
         <SectionHeader text="About Section" centered={true} label="about" />
         <textarea
           id="about"
-          className="textarea textarea-bordered resize-none mx-auto w-full h-64 max-w-[40rem] mb-8"
+          className="textarea textarea-bordered resize-none mx-auto w-full h-64 max-w-[40rem]"
         />
+        <SectionHeader text="Tags" centered={true} label="tags" />
+        <select className="select w-full max-w-xs mx-auto">
+          <option disabled selected>
+            Choose a tag
+          </option>
+          <option>tag1</option>
+          <option>tag2</option>
+          <option>tag3</option>
+          <option>tag4</option>
+          <option>tag5</option>
+        </select>
+        <div className="flex flex-row flex-wrap justify-left gap-2 mt-4 mx-auto mb-8">
+          <div className="badge badge-accent badge-lg flex flex-row gap-2 justify-between">
+            tag1
+            <div className="hover:cursor-pointer mb-1">x</div>
+          </div>
+          <div className="badge badge-accent badge-lg flex flex-row gap-2 justify-between">
+            tag2
+            <div className="hover:cursor-pointer mb-1">x</div>
+          </div>
+          <div className="badge badge-accent badge-lg flex flex-row gap-2 justify-between">
+            tag3
+            <div className="hover:cursor-pointer mb-1">x</div>
+          </div>
+          <div className="badge badge-accent badge-lg flex flex-row gap-2 justify-between">
+            tag4
+            <div className="hover:cursor-pointer mb-1">x</div>
+          </div>
+          <div className="badge badge-accent badge-lg flex flex-row gap-2 justify-between">
+            tag5
+            <div className="hover:cursor-pointer mb-1">x</div>
+          </div>
+        </div>
         <button className="btn btn-success mx-auto mb-8 w-full max-w-[20rem]">
           SAVE
         </button>
