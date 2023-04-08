@@ -2,6 +2,7 @@ import SectionHeader from "../UI/SectionHeader";
 import { Link } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import { ChangeEvent, FormEvent, useState } from "react";
+import countries from "../../auxiliary/countries";
 
 const SignupForm = () => {
   const { useLoading, signUp } = useHttp();
@@ -108,11 +109,10 @@ const SignupForm = () => {
         onChange={locationChangeHandler}
         defaultValue="Choose a country"
       >
-        <option disabled >
-          Choose a country
-        </option>
-        <option>Poland</option>
-        <option>USA</option>
+        <option disabled>Choose a country</option>
+        {countries.map((c) => (
+          <option>{c.name}</option>
+        ))}
       </select>
       <div className="mx-auto w-full sm:max-w-sm">
         <button className="btn w-full mx-auto" type="submit">
