@@ -1,3 +1,4 @@
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { loginUser, useAuthDispatch } from "../store/auth-actions";
 import { authActions } from "../store/auth-slice";
@@ -14,7 +15,35 @@ const useHttp = () => {
     dispatch(authActions.logout());
   };
 
-  return { login: login, isLoading: isLoading, logout: logout };
+  const signUp = (
+    username: string,
+    email: string,
+    password: string,
+    repeatPassword: string,
+    name: string,
+    surname: string,
+    location: string
+  ) => {
+    setIsLoading(true);
+
+    axios
+      .post(
+        "https://localhost:7202/api/auth/register",
+        { username, email, password, repeatPassword, location, name, surname },
+        { headers: { "Content-Type": "application/json" } }
+      )
+      .then((r) => {
+        console.log("success");
+      })
+      .catch((e: AxiosError) => {
+        if (e.response && e.response.data) console.log(e.response?.data);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  return { login: login, isLoading: isLoading, logout: logout, signUp: signUp };
 };
 
 export default useHttp;
