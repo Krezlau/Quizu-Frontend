@@ -114,4 +114,11 @@ export const loginUser = (
   };
 };
 
+export const logoutUser = () => {
+  return (dispatch: Dispatch<AnyAction>) => {
+    clearAuthStorage();
+    dispatch(authActions.logout());
+  };
+};
+
 export const useAuthDispatch: () => AppDispatch = useDispatch;

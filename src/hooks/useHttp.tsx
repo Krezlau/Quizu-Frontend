@@ -1,7 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
-import { loginUser, useAuthDispatch } from "../store/auth-actions";
-import { authActions } from "../store/auth-slice";
+import { loginUser, logoutUser, useAuthDispatch } from "../store/auth-actions";
 
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
@@ -12,7 +11,7 @@ const useHttp = () => {
   };
 
   const logout = () => {
-    dispatch(authActions.logout());
+    dispatch(logoutUser());
   };
 
   const signUp = (
