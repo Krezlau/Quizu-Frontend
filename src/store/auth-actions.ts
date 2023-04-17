@@ -62,7 +62,7 @@ export const retrieveStoredToken = () => {
         .post(
           "https://localhost:7202/api/Auth/refresh",
           { accessToken: storedToken },
-          { headers: { "Content-Type": "application/json" } }
+          { headers: { "Content-Type": "application/json" }, withCredentials : true }
         )
         .then((r) => storeNewToken(r.data.result));
     } catch (e) {
