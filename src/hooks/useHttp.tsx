@@ -46,10 +46,9 @@ const useHttp = () => {
       });
   };
 
-  const fetchQuizzes = useCallback((page: number, pageSize: number) => {
+  const fetchQuizzes = useCallback(async (page: number, pageSize: number) => {
     setIsLoading(true);
-    let quizzes: IQuiz[] = [];
-    axios
+    const quizzes: IQuiz[] = await axios
       .get(
         `https://localhost:7202/api/Quizzes?PageNumber=${page}&PageSize=${pageSize}`,
         {
@@ -57,14 +56,13 @@ const useHttp = () => {
         }
       )
       .then((r) => {
-        quizzes = r.data.result.queryResult;
+        return r.data.result.queryResult;
       })
       .catch((e: AxiosError) => {
         console.log(e);
-      })
-      .finally(() => {
         setIsLoading(false);
-      });
+      })
+    setIsLoading(false);
     return quizzes;
   }, []);
 
@@ -79,7 +77,7 @@ const useHttp = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       )

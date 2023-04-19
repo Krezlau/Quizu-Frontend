@@ -7,20 +7,22 @@ import SectionHeader from "../UI/SectionHeader";
 
 const HomePage = () => {
   const [quizzes, setQuizzes] = useState<IQuiz[]>([]);
+  const [recommended, setRecommended] = useState<IQuiz[]>([]);
   const { fetchQuizzes } = useHttp();
   useEffect(() => {
-    setQuizzes(fetchQuizzes(1, 5));
+    fetchQuizzes(1, 5).then((r) => setQuizzes(r));
+    fetchQuizzes(2, 5).then((r) => setRecommended(r));
   }, [fetchQuizzes]);
 
   return (
     <>
       <PageHeader text={"Hello, User! 👋"} />
       <SectionHeader text={"Recent Activity"} />
-      <QuizCarousel quizzes={quizzes}/>
+      <QuizCarousel quizzes={quizzes} />
       <SectionHeader text={"Streak"} />
       <div className="card p-4 w-full h-64 bg-neutral">xd</div>
       <SectionHeader text={"Recommendations"} />
-      <QuizCarousel quizzes={quizzes}/>
+      <QuizCarousel quizzes={recommended} />
     </>
   );
 };
