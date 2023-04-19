@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { loginUser, logoutUser, useAuthDispatch } from "../store/auth-actions";
+import IQuiz from "../types/IQuiz";
 
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
@@ -42,7 +43,35 @@ const useHttp = () => {
       });
   };
 
-  return { login: login, isLoading: isLoading, logout: logout, signUp: signUp };
+  const fetchQuizzes = useCallback((page: number, pageSize: number) => {
+    setIsLoading(true);
+    let quizzes: IQuiz[] = [];
+    axios
+      .get(
+        `https://localhost:7202/api/Quizzes?PageNumber=${page}&PageSize=${pageSize}`,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+      .then((r) => {
+        quizzes = r.data.result;
+      })
+      .catch((e: AxiosError) => {
+        console.log(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+    return quizzes;
+  }, []);
+
+  return {
+    login: login,
+    isLoading: isLoading,
+    logout: logout,
+    signUp: signUp,
+    fetchQuizzes,
+  };
 };
 
 export default useHttp;

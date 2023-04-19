@@ -1,7 +1,8 @@
-import {useRef, WheelEventHandler} from "react";
+import React, {useRef, WheelEventHandler} from "react";
+import IQuiz from "../../types/IQuiz";
 import Quiz from "./Quiz";
 
-const QuizCarousel = () => {
+const QuizCarousel: React.FC<{quizzes: IQuiz[]}> = (props) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const wheelHandler: WheelEventHandler<HTMLDivElement> = (event) => {
     if (!event.deltaY) {
@@ -11,12 +12,7 @@ const QuizCarousel = () => {
   }
 
   return <div className="overflow-x-scroll flex flex-col gap-2 max-h-[40rem] md:carousel md:carousel-center p-4 bg-neutral md:flex-row md:space-x-4 rounded-box md:h-64 md:px-6" ref={carouselRef} onWheel={wheelHandler}>
-    <Quiz />
-    <Quiz />
-    <Quiz />
-    <Quiz />
-    <Quiz />
-    <Quiz />
+    {props.quizzes.map(q => <Quiz />)}
   </div>
 }
 

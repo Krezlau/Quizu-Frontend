@@ -52,6 +52,7 @@ export const retrieveStoredToken = () => {
 
   const remainingTime = calculateRemainingTime(storedExpirationDate);
 
+  console.log("trying to retrieve token");
   if (remainingTime <= 0 || !storedToken || !storedUsername || !storedUserId) {
     if (!storedToken || !storedUsername || !storedUserId) {
       clearAuthStorage();
@@ -64,7 +65,12 @@ export const retrieveStoredToken = () => {
           { accessToken: storedToken },
           { headers: { "Content-Type": "application/json" }, withCredentials : true }
         )
-        .then((r) => storeNewToken(r.data.result));
+        .then((r) => {
+          storeNewToken(r.data.result);
+          return {
+            token: storedToken,
+          };
+        });
     } catch (e) {
       return null;
     }
