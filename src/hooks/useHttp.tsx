@@ -1,11 +1,14 @@
 import axios, { AxiosError } from "axios";
 import { useCallback, useState } from "react";
+import { useSelector } from "react-redux";
+import { IRootState } from "../store";
 import { loginUser, logoutUser, useAuthDispatch } from "../store/auth-actions";
 import IQuiz from "../types/IQuiz";
 
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
   const dispatch = useAuthDispatch();
+  const token = useSelector((state: IRootState) => state.auth.accessToken);
 
   const login = (email: string, password: string) => {
     dispatch(loginUser(email, password, setIsLoading));
@@ -54,7 +57,7 @@ const useHttp = () => {
         }
       )
       .then((r) => {
-        quizzes = r.data.result;
+        quizzes = r.data.result.queryResult;
       })
       .catch((e: AxiosError) => {
         console.log(e);
@@ -65,12 +68,37 @@ const useHttp = () => {
     return quizzes;
   }, []);
 
+  const addQuiz = (title: string) => {
+    setIsLoading(true);
+    axios
+      .post(
+        `https://localhost:7202/api/Quizzes`,
+        {
+          title,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        }
+      )
+      .catch((e: AxiosError) => {
+        console.log(e);
+        // error notification of course
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return {
     login: login,
     isLoading: isLoading,
     logout: logout,
     signUp: signUp,
     fetchQuizzes,
+    addQuiz,
   };
 };
 
