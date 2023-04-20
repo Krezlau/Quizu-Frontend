@@ -43,7 +43,7 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
         />
         <input
           id="title"
-          className="textarea textarea-bordered resize-none mx-auto w-full h-20 max-w-[40rem]"
+          className="textarea textarea-bordered resize-none mx-auto w-full max-w-[40rem]"
           value={title}
           onChange={titleChangeHandler}
         />
