@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import useHttp from "../../hooks/useHttp";
+import { IRootState } from "../../store";
 import IQuiz from "../../types/IQuiz";
 import QuizCarousel from "../Quizzes/QuizCarousel";
 import PageHeader from "../UI/PageHeader";
@@ -9,6 +11,8 @@ const HomePage = () => {
   const [quizzes, setQuizzes] = useState<IQuiz[]>([]);
   const [recommended, setRecommended] = useState<IQuiz[]>([]);
   const { fetchQuizzes } = useHttp();
+  const username = useSelector((state: IRootState) => state.auth.username);
+
   useEffect(() => {
     fetchQuizzes(1, 5).then((r) => setQuizzes(r));
     fetchQuizzes(2, 5).then((r) => setRecommended(r));
@@ -16,7 +20,7 @@ const HomePage = () => {
 
   return (
     <>
-      <PageHeader text={"Hello, User! 👋"} />
+      <PageHeader text={`Hello, ${username}! 👋`} />
       <SectionHeader text={"Recent Activity"} />
       <QuizCarousel quizzes={quizzes} />
       <SectionHeader text={"Streak"} />

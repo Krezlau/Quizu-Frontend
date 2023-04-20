@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { Axios, AxiosError } from "axios";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { IRootState } from "../store";
@@ -94,12 +94,9 @@ const useHttp = () => {
   const fetchQuizDetails = useCallback(async (id: string) => {
     setIsLoading(true);
     const quiz: IQuizDetails = await axios
-      .get(
-        `https://localhost:7202/api/Quizzes/${id}`,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      )
+      .get(`https://localhost:7202/api/Quizzes/${id}`, {
+        headers: { "Content-Type": "application/json" },
+      })
       .then((r) => {
         return r.data.result;
       })
@@ -111,6 +108,37 @@ const useHttp = () => {
     return quiz;
   }, []);
 
+  const updateQuizInfo = (
+    quizId: string,
+    description: string,
+    about: string,
+    title: string
+  ) => {
+    setIsLoading(true);
+
+    axios
+      .put(
+        `https://localhost:7202/api/Quizzes/${quizId}`,
+        {
+          title,
+          description,
+          about,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .catch((e: AxiosError) => {
+        console.log(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return {
     login: login,
     isLoading: isLoading,
@@ -119,6 +147,7 @@ const useHttp = () => {
     fetchQuizzes,
     addQuiz,
     fetchQuizDetails,
+    updateQuizInfo,
   };
 };
 

@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import useHttp from "../../hooks/useHttp";
 import IQuizDetails from "../../types/IQuizDetails";
 import SectionHeader from "../UI/SectionHeader";
 
@@ -9,6 +10,8 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
   const [about, setAbout] = useState<string>(
     props.quiz.about ? props.quiz.about : ""
   );
+  const [title, setTitle] = useState<string>(props.quiz.title);
+  const { updateQuizInfo } = useHttp();
 
   const descriptionChangeHandler = (
     event: ChangeEvent<HTMLTextAreaElement>
@@ -20,9 +23,30 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
     setAbout(event.target.value);
   };
 
+  const titleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  }
+
+  const submitHandler = (event: FormEvent) => {
+    event.preventDefault();
+
+    updateQuizInfo(props.quiz.id, description, about, title);
+  };
+
   return (
     <>
-      <form className="flex flex-col justify-center">
+      <form className="flex flex-col justify-center" onSubmit={submitHandler}>
+        <SectionHeader
+          text="Title"
+          centered={true}
+          label="title"
+        />
+        <input
+          id="title"
+          className="textarea textarea-bordered resize-none mx-auto w-full h-20 max-w-[40rem]"
+          value={title}
+          onChange={titleChangeHandler}
+        />
         <SectionHeader
           text="Short Description"
           centered={true}
@@ -74,7 +98,7 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
             <div className="hover:cursor-pointer mb-1">x</div>
           </div>
         </div>
-        <button className="btn btn-success mx-auto mb-8 w-full max-w-[20rem]">
+        <button type="submit" className="btn btn-success mx-auto mb-8 w-full max-w-[20rem]">
           SAVE
         </button>
       </form>
