@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { IRootState } from "../store";
 import { loginUser, logoutUser, useAuthDispatch } from "../store/auth-actions";
 import IQuiz from "../types/IQuiz";
+import IQuizDetails from "../types/IQuizDetails";
 
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
@@ -61,7 +62,7 @@ const useHttp = () => {
       .catch((e: AxiosError) => {
         console.log(e);
         setIsLoading(false);
-      })
+      });
     setIsLoading(false);
     return quizzes;
   }, []);
@@ -90,6 +91,26 @@ const useHttp = () => {
       });
   };
 
+  const fetchQuizDetails = useCallback(async (id: string) => {
+    setIsLoading(true);
+    const quiz: IQuizDetails = await axios
+      .get(
+        `https://localhost:7202/api/Quizzes/${id}`,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+      .then((r) => {
+        return r.data.result;
+      })
+      .catch((e: AxiosError) => {
+        console.log(e);
+        setIsLoading(false);
+      });
+    setIsLoading(false);
+    return quiz;
+  }, []);
+
   return {
     login: login,
     isLoading: isLoading,
@@ -97,6 +118,7 @@ const useHttp = () => {
     signUp: signUp,
     fetchQuizzes,
     addQuiz,
+    fetchQuizDetails,
   };
 };
 
