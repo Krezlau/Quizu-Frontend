@@ -1,6 +1,25 @@
+import React, { ChangeEvent, useState } from "react";
+import IQuizDetails from "../../types/IQuizDetails";
 import SectionHeader from "../UI/SectionHeader";
 
-const ManageQuizInfoForm = () => {
+const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
+  const [description, setDescription] = useState<string>(
+    props.quiz.description ? props.quiz.description : ""
+  );
+  const [about, setAbout] = useState<string>(
+    props.quiz.about ? props.quiz.about : ""
+  );
+
+  const descriptionChangeHandler = (
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setDescription(event.target.value);
+  };
+
+  const aboutChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setAbout(event.target.value);
+  };
+
   return (
     <>
       <form className="flex flex-col justify-center">
@@ -12,11 +31,15 @@ const ManageQuizInfoForm = () => {
         <textarea
           id="description"
           className="textarea textarea-bordered resize-none mx-auto w-full h-20 max-w-[40rem]"
+          value={description}
+          onChange={descriptionChangeHandler}
         />
         <SectionHeader text="About Section" centered={true} label="about" />
         <textarea
           id="about"
           className="textarea textarea-bordered resize-none mx-auto w-full h-64 max-w-[40rem]"
+          value={about}
+          onChange={aboutChangeHandler}
         />
         <SectionHeader text="Tags" centered={true} label="tags" />
         <select className="select w-full max-w-xs mx-auto">

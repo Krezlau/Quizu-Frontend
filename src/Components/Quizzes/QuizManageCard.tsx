@@ -25,7 +25,7 @@ const QuizManageCard: React.FC<{ quiz: IQuiz }> = (props) => {
         </div>
         <div className="flex flex-row justify-right px-4 pt-4">
           <Link
-            to="/quizzes/{id}/manage-info"
+            to={`/quizzes/${props.quiz.id}/manage-info`}
             className="btn btn-primary ml-auto"
           >
             Change Info
