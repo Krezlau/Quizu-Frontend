@@ -1,26 +1,12 @@
 import PageHeader from "../UI/PageHeader";
-import { useParams } from "react-router-dom";
 import SectionHeader from "../UI/SectionHeader";
 import CommentForm from "../Forms/CommentForm";
 import QuizDetailsCard from "../Quizzes/QuizDetailsCard";
-import { useEffect, useState } from "react";
-import useHttp from "../../hooks/useHttp";
-import IQuizDetails from "../../types/IQuizDetails";
+import useFetchQuizDetails from "../../hooks/useFetchQuizDetails";
 
 const QuizDetailsPage = () => {
-  const { quizId } = useParams<{ quizId?: string }>();
-  const { fetchQuizDetails } = useHttp();
-  const [quiz, setQuiz] = useState<IQuizDetails>();
+  const quiz = useFetchQuizDetails();
 
-  useEffect(() => {
-    if (quizId) {
-      fetchQuizDetails(quizId).then((r) => {
-        if (r) {
-          setQuiz(r);
-        }
-      });
-    }
-  }, []);
   return (
     <>
       <PageHeader text={"Quiz Details"} />
