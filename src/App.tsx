@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { authActions } from "./store/auth-slice";
 import NotLoggedInPage from "./Components/Pages/NotLoggedInPage";
 import LoadingSpinner from "./Components/UI/LoadingSpinner";
+import Alert from "./Components/UI/Alert";
 
 function App() {
   const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);
@@ -51,13 +52,16 @@ function App() {
             path="/"
             element={
               <>
-              <h1 className="text-3xl font-bold underline dark:text-amber-400">
-                Hello world!
-              </h1>
+                <h1 className="text-3xl font-bold underline dark:text-amber-400">
+                  Hello world!
+                </h1>
               </>
             }
           />
-          <Route path="/home" element={isLoggedIn ? <HomePage /> : <Navigate to="/about"/>} />
+          <Route
+            path="/home"
+            element={isLoggedIn ? <HomePage /> : <Navigate to="/about" />}
+          />
           <Route path="/user/:userId/profile" element={<UserProfilePage />} />
           <Route path="/user/:userId/quizzes" element={<UserQuizzesPage />} />
           <Route path="/user/:userId/edit" element={<EditProfilePage />} />
@@ -70,15 +74,25 @@ function App() {
             element={<QuizManageInfoPage />}
           />
           <Route path="/quizzes/:quizId/manage" element={<ManageQuizPage />} />
-          <Route path="/login" element={isLoggedIn ? <Navigate to="/home"/> : <LoginPage />} />
-          <Route path="/signup" element={isLoggedIn ? <Navigate to="/home"/> : <SignupPage />} />
+          <Route
+            path="/login"
+            element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />}
+          />
+          <Route
+            path="/signup"
+            element={isLoggedIn ? <Navigate to="/home" /> : <SignupPage />}
+          />
           <Route
             path="/change-password"
             element={isLoggedIn ? <ChangePasswordPage /> : <NotLoggedInPage />}
           />
-          <Route path="/new-quiz" element={isLoggedIn ? <CreateNewQuizPage /> : <NotLoggedInPage/>} />
+          <Route
+            path="/new-quiz"
+            element={isLoggedIn ? <CreateNewQuizPage /> : <NotLoggedInPage />}
+          />
         </Routes>
       </PageLayout>
+      <Alert />
     </>
   );
 }
