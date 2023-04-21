@@ -19,6 +19,7 @@ import { clearAuthStorage, retrieveStoredToken } from "./store/auth-actions";
 import { useDispatch } from "react-redux";
 import { authActions } from "./store/auth-slice";
 import NotLoggedInPage from "./Components/Pages/NotLoggedInPage";
+import LoadingSpinner from "./Components/UI/LoadingSpinner";
 
 function App() {
   const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);
@@ -49,9 +50,11 @@ function App() {
           <Route
             path="/"
             element={
+              <>
               <h1 className="text-3xl font-bold underline dark:text-amber-400">
                 Hello world!
               </h1>
+              </>
             }
           />
           <Route path="/home" element={isLoggedIn ? <HomePage /> : <Navigate to="/about"/>} />
