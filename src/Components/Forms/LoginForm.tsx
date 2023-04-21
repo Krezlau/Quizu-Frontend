@@ -2,6 +2,7 @@ import SectionHeader from "../UI/SectionHeader";
 import { Link } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import { ChangeEvent, FormEvent, useState } from "react";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 const LoginForm = () => {
   const { login, isLoading } = useHttp();
@@ -40,9 +41,9 @@ const LoginForm = () => {
         className="input w-full mx-auto mb-12 sm:max-w-md"
       />
       <div className="mx-auto w-full sm:max-w-sm">
-        <button className="btn w-full mx-auto" type="submit">
-          Login
-        </button>
+          <button className={`btn w-full mx-auto ${isLoading ? "btn-disabled" : ""}`} type="submit" >
+            {isLoading ? <LoadingSpinner /> : "Login"}
+          </button>
         <div className="divider">OR</div>
         <Link
           to={"/signup"}

@@ -1,10 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import useHttp from "../../hooks/useHttp";
+import LoadingSpinner from "../UI/LoadingSpinner";
 import SectionHeader from "../UI/SectionHeader";
 
 const NewQuizForm = () => {
   const [title, setTitle] = useState<string>("");
-  const { addQuiz } = useHttp();
+  const { isLoading, addQuiz } = useHttp();
 
   const titleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -19,7 +20,7 @@ const NewQuizForm = () => {
     <SectionHeader text={"Title"} centered={true} label={"title"}/>
     <input type="text" id="title" value={title}  onChange={titleChangeHandler} className="input w-full mx-auto mb-12 sm:max-w-md" />
     <div className="mx-auto w-full sm:max-w-sm">
-      <button className="btn w-full mx-auto" type="submit">Create</button>
+      <button className={`btn w-full mx-auto ${isLoading ? "btn-disabled" : ""}`} type="submit">{ isLoading ? <LoadingSpinner /> : "Create"}</button>
     </div>
   </form>
 }

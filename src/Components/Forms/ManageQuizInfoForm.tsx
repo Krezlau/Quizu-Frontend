@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import useHttp from "../../hooks/useHttp";
 import IQuizDetails from "../../types/IQuizDetails";
+import LoadingSpinner from "../UI/LoadingSpinner";
 import SectionHeader from "../UI/SectionHeader";
 
 const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
@@ -11,7 +12,7 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
     props.quiz.about ? props.quiz.about : ""
   );
   const [title, setTitle] = useState<string>(props.quiz.title);
-  const { updateQuizInfo } = useHttp();
+  const { isLoading, updateQuizInfo } = useHttp();
 
   const descriptionChangeHandler = (
     event: ChangeEvent<HTMLTextAreaElement>
@@ -98,8 +99,8 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
             <div className="hover:cursor-pointer mb-1">x</div>
           </div>
         </div>
-        <button type="submit" className="btn btn-success mx-auto mb-8 w-full max-w-[20rem]">
-          SAVE
+        <button type="submit" className={`btn btn-success mx-auto mb-8 w-full max-w-[20rem] ${isLoading ? "btn-disabled" : ""}`}>
+          { isLoading ? <LoadingSpinner /> : "Save" }
         </button>
       </form>
       <form className="flex flex-col justify-center">

@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import { ChangeEvent, FormEvent, useState } from "react";
 import countries from "../../auxiliary/countries";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 const SignupForm = () => {
-  const { useLoading, signUp } = useHttp();
+  const { isLoading, signUp } = useHttp();
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -115,8 +116,11 @@ const SignupForm = () => {
         ))}
       </select>
       <div className="mx-auto w-full sm:max-w-sm">
-        <button className="btn w-full mx-auto" type="submit">
-          Register
+        <button
+          className={`btn w-full mx-auto ${isLoading ? "btn-disabled" : ""}`}
+          type="submit"
+        >
+          {isLoading ? <LoadingSpinner /> : "Register"}
         </button>
         <div className="divider">OR</div>
         <p className="w-full block text-center text-xl">

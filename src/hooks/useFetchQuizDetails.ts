@@ -5,7 +5,7 @@ import useHttp from "./useHttp";
 
 const useFetchQuizDetails = () => {
   const { quizId } = useParams<{ quizId?: string }>();
-  const { fetchQuizDetails } = useHttp();
+  const { isLoading, fetchQuizDetails } = useHttp();
   const [quiz, setQuiz] = useState<IQuizDetails>();
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const useFetchQuizDetails = () => {
     }
   }, []);
 
-  return quiz;
+  return { quiz, isLoading };
 };
 
 export default useFetchQuizDetails;
