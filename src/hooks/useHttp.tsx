@@ -95,6 +95,9 @@ const useHttp = () => {
           },
         }
       )
+      .then(() => {
+        showAlert("success", "Successfully created new quiz.");
+      })
       .catch((e: AxiosError) => {
         showError(e);
       })
@@ -143,6 +146,9 @@ const useHttp = () => {
           },
         }
       )
+      .then(() => {
+        showAlert("success", "Successfully changed quiz info.");
+      })
       .catch((e: AxiosError) => {
         showError(e);
       })

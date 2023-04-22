@@ -1,14 +1,15 @@
 import { ChangeEvent, useState } from "react";
 
 const useValidation = (
+  defaultValue = "",
   validateFunc: (value: string) => boolean,
   message: string,
   validateFunc2?: (value: string) => boolean,
   message2?: string,
   validateFunc3?: (value: string) => boolean,
-  message3?: string
+  message3?: string,
 ) => {
-  const [enteredValue, setEnteredValue] = useState("");
+  const [enteredValue, setEnteredValue] = useState(defaultValue);
   const [isTouched, setIsTouched] = useState(false);
 
   const errorMessage = `${validateFunc(enteredValue) ? "" : message} ${

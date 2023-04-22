@@ -18,6 +18,7 @@ const SignupForm = () => {
     inputBlurHandler: usernameBlurHandler,
     errorMessage: usernameError,
   } = useValidation(
+    "",
     (v) => v.trim().length >= 3,
     "Username is too short. Must be at least 3 characters long.",
     (v) => v.trim().length <= 25,
@@ -31,6 +32,7 @@ const SignupForm = () => {
     inputBlurHandler: emailBlurHandler,
     errorMessage: emailError,
   } = useValidation(
+    "",
     (v) => v.trim().length >= 3,
     "Email is too short. Must be at least 3 characters long.",
     (v) => v.trim().length <= 25,
@@ -46,6 +48,7 @@ const SignupForm = () => {
     inputBlurHandler: passwordBlurHandler,
     errorMessage: passwordError,
   } = useValidation(
+    "",
     (v) => v.trim().length >= 8,
     "Password is too short. Must be at least 8 characters long.",
     (v) => v.trim().length <= 255,
@@ -59,6 +62,7 @@ const SignupForm = () => {
     inputBlurHandler: repeatPasswordBlurHandler,
     errorMessage: repeatPasswordError,
   } = useValidation(
+    "",
     (v) => v.trim().length >= 8,
     "Password is too short. Must be at least 8 characters long.",
     (v) => v.trim().length <= 255,
@@ -74,6 +78,7 @@ const SignupForm = () => {
     inputBlurHandler: nameBlurHandler,
     errorMessage: nameError,
   } = useValidation(
+    "",
     (v) => v.trim().length >= 3,
     "Name is too short. Must be at least 3 characters long.",
     (v) => v.trim().length <= 25,
@@ -87,6 +92,7 @@ const SignupForm = () => {
     inputBlurHandler: surnameBlurHandler,
     errorMessage: surnameError,
   } = useValidation(
+    "",
     (v) => v.trim().length >= 3,
     "Surname is too short. Must be at least 3 characters long.",
     (v) => v.trim().length <= 25,
@@ -102,7 +108,14 @@ const SignupForm = () => {
     signUp(username, email, password, repeatPassword, name, surname, location);
   };
 
-  const formValid = usernameIsValid && emailIsValid && passwordIsValid && repeatPasswordIsValid && nameIsValid && surnameIsValid && location !== "";
+  const formValid =
+    usernameIsValid &&
+    emailIsValid &&
+    passwordIsValid &&
+    repeatPasswordIsValid &&
+    nameIsValid &&
+    surnameIsValid &&
+    location !== "";
 
   return (
     <form className="flex flex-col justify-center" onSubmit={submitHandler}>
@@ -183,7 +196,9 @@ const SignupForm = () => {
       </select>
       <div className="mx-auto w-full sm:max-w-sm">
         <button
-          className={`btn w-full mx-auto ${isLoading || !formValid ? "btn-disabled" : ""}`}
+          className={`btn w-full mx-auto ${
+            isLoading || !formValid ? "btn-disabled" : ""
+          }`}
           type="submit"
         >
           {isLoading ? <LoadingSpinner /> : "Register"}
