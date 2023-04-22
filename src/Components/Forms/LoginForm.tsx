@@ -23,7 +23,7 @@ const LoginForm = () => {
     event.preventDefault();
     login(email, password);
     console.log("hehe")
-    showAlert("error", "hahahahha");
+    showAlert("info", "hahahahha");
   };
 
   return (

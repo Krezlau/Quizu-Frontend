@@ -33,7 +33,6 @@ const alertSlice = createSlice({
     hide: (state) => {
       state.isActive = false;
       state.pos = "-bottom-1/4";
-      state.text = "";
     },
   },
 });
