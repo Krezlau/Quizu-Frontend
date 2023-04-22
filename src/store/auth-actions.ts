@@ -86,7 +86,8 @@ export const retrieveStoredToken = () => {
 export const loginUser = (
   email: string,
   password: string,
-  setIsLoading: (newState: boolean) => void
+  setIsLoading: (newState: boolean) => void,
+  showError: (e: AxiosError) => void,
 ) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     setIsLoading(true);
@@ -112,7 +113,7 @@ export const loginUser = (
         );
       })
       .catch((e: AxiosError) => {
-        if (e.response && e.response.data) console.log(e.response?.data);
+        showError(e);
       })
       .finally(() => {
         setIsLoading(false);

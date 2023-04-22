@@ -3,13 +3,11 @@ import { Link } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import { ChangeEvent, FormEvent, useState } from "react";
 import LoadingSpinner from "../UI/LoadingSpinner";
-import useAlert from "../../hooks/useAlert";
 
 const LoginForm = () => {
   const { login, isLoading } = useHttp();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const showAlert = useAlert();
 
   const emailChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -22,8 +20,6 @@ const LoginForm = () => {
   const formSubmitHandler = (event: FormEvent) => {
     event.preventDefault();
     login(email, password);
-    console.log("hehe")
-    showAlert("info", "hahahahha");
   };
 
   return (

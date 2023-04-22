@@ -14,10 +14,8 @@ const SignupForm = () => {
   const {
     value: username,
     isValid: usernameIsValid,
-    hasError: usernameHasError,
     valueChangeHandler: usernameChangeHandler,
     inputBlurHandler: usernameBlurHandler,
-    reset: usernameReset,
     errorMessage: usernameError,
   } = useValidation(
     (v) => v.trim().length >= 3,
@@ -29,10 +27,8 @@ const SignupForm = () => {
   const {
     value: email,
     isValid: emailIsValid,
-    hasError: emailHasError,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
-    reset: emailReset,
     errorMessage: emailError,
   } = useValidation(
     (v) => v.trim().length >= 3,
@@ -46,10 +42,8 @@ const SignupForm = () => {
   const {
     value: password,
     isValid: passwordIsValid,
-    hasError: passwordHasError,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-    reset: passwordReset,
     errorMessage: passwordError,
   } = useValidation(
     (v) => v.trim().length >= 8,
@@ -61,10 +55,8 @@ const SignupForm = () => {
   const {
     value: repeatPassword,
     isValid: repeatPasswordIsValid,
-    hasError: repeatPasswordHasError,
     valueChangeHandler: repeatPasswordChangeHandler,
     inputBlurHandler: repeatPasswordBlurHandler,
-    reset: repeatPasswordReset,
     errorMessage: repeatPasswordError,
   } = useValidation(
     (v) => v.trim().length >= 8,
@@ -78,10 +70,8 @@ const SignupForm = () => {
   const {
     value: name,
     isValid: nameIsValid,
-    hasError: nameHasError,
     valueChangeHandler: nameChangeHandler,
     inputBlurHandler: nameBlurHandler,
-    reset: nameReset,
     errorMessage: nameError,
   } = useValidation(
     (v) => v.trim().length >= 3,
@@ -93,10 +83,8 @@ const SignupForm = () => {
   const {
     value: surname,
     isValid: surnameIsValid,
-    hasError: surnameHasError,
     valueChangeHandler: surnameChangeHandler,
     inputBlurHandler: surnameBlurHandler,
-    reset: surnameReset,
     errorMessage: surnameError,
   } = useValidation(
     (v) => v.trim().length >= 3,

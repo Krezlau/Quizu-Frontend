@@ -1,18 +1,30 @@
-import axios, { Axios, AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { IRootState } from "../store";
 import { loginUser, logoutUser, useAuthDispatch } from "../store/auth-actions";
 import IQuiz from "../types/IQuiz";
 import IQuizDetails from "../types/IQuizDetails";
+import IResponse from "../types/IResponse";
+import useAlert from "./useAlert";
 
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
   const dispatch = useAuthDispatch();
   const token = useSelector((state: IRootState) => state.auth.accessToken);
+  const showAlert = useAlert();
+
+  const showError = (e: AxiosError) => {
+    try {
+      const response: IResponse = e.response!.data as IResponse;
+      showAlert("error", response.errorMessages[0]);
+    } catch (e) {
+      showAlert("error", "Something unexpected happened.");
+    }
+  };
 
   const login = (email: string, password: string) => {
-    dispatch(loginUser(email, password, setIsLoading));
+    dispatch(loginUser(email, password, setIsLoading, showError));
   };
 
   const logout = () => {
@@ -36,11 +48,12 @@ const useHttp = () => {
         { username, email, password, repeatPassword, location, name, surname },
         { headers: { "Content-Type": "application/json" } }
       )
-      .then((r) => {
+      .then(() => {
+        showAlert("success", "Successfully registered. You can now log in.");
         console.log("success");
       })
       .catch((e: AxiosError) => {
-        if (e.response && e.response.data) console.log(e.response?.data);
+        showError(e);
       })
       .finally(() => {
         setIsLoading(false);
@@ -60,7 +73,7 @@ const useHttp = () => {
         return r.data.result.queryResult;
       })
       .catch((e: AxiosError) => {
-        console.log(e);
+        showError(e);
         setIsLoading(false);
       });
     setIsLoading(false);
@@ -83,8 +96,7 @@ const useHttp = () => {
         }
       )
       .catch((e: AxiosError) => {
-        console.log(e);
-        // error notification of course
+        showError(e);
       })
       .finally(() => {
         setIsLoading(false);
@@ -101,7 +113,7 @@ const useHttp = () => {
         return r.data.result;
       })
       .catch((e: AxiosError) => {
-        console.log(e);
+        showError(e);
         setIsLoading(false);
       });
     setIsLoading(false);
@@ -132,7 +144,7 @@ const useHttp = () => {
         }
       )
       .catch((e: AxiosError) => {
-        console.log(e);
+        showError(e);
       })
       .finally(() => {
         setIsLoading(false);
