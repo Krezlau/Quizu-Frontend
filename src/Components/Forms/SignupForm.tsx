@@ -4,42 +4,106 @@ import useHttp from "../../hooks/useHttp";
 import { ChangeEvent, FormEvent, useState } from "react";
 import countries from "../../auxiliary/countries";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import useValidation from "../../hooks/useValidation";
+import ErrorText from "../UI/ErrorText";
 
 const SignupForm = () => {
   const { isLoading, signUp } = useHttp();
-  const [username, setUsername] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [repeatPassword, setRepeatPassword] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [surname, setSurname] = useState<string>("");
   const [location, setLocation] = useState<string>("");
 
-  const usernameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
-  };
+  const {
+    value: username,
+    isValid: usernameIsValid,
+    hasError: usernameHasError,
+    valueChangeHandler: usernameChangeHandler,
+    inputBlurHandler: usernameBlurHandler,
+    reset: usernameReset,
+    errorMessage: usernameError,
+  } = useValidation(
+    (v) => v.trim().length >= 3,
+    "Username is too short. Must be at least 3 characters long.",
+    (v) => v.trim().length <= 25,
+    "Username is too long. Must be no longer than 25 characters."
+  );
 
-  const emailChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
+  const {
+    value: email,
+    isValid: emailIsValid,
+    hasError: emailHasError,
+    valueChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    reset: emailReset,
+    errorMessage: emailError,
+  } = useValidation(
+    (v) => v.trim().length >= 3,
+    "Email is too short. Must be at least 3 characters long.",
+    (v) => v.trim().length <= 25,
+    "Email is too long. Must be no longer than 25 characters.",
+    (v) => v.includes("@"),
+    "Not a valid email."
+  );
 
-  const passwordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
+  const {
+    value: password,
+    isValid: passwordIsValid,
+    hasError: passwordHasError,
+    valueChangeHandler: passwordChangeHandler,
+    inputBlurHandler: passwordBlurHandler,
+    reset: passwordReset,
+    errorMessage: passwordError,
+  } = useValidation(
+    (v) => v.trim().length >= 8,
+    "Password is too short. Must be at least 8 characters long.",
+    (v) => v.trim().length <= 255,
+    "Password is too long. Must be no longer than 255 characters."
+  );
 
-  const repeatPasswordChangeHandler = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    setRepeatPassword(event.target.value);
-  };
+  const {
+    value: repeatPassword,
+    isValid: repeatPasswordIsValid,
+    hasError: repeatPasswordHasError,
+    valueChangeHandler: repeatPasswordChangeHandler,
+    inputBlurHandler: repeatPasswordBlurHandler,
+    reset: repeatPasswordReset,
+    errorMessage: repeatPasswordError,
+  } = useValidation(
+    (v) => v.trim().length >= 8,
+    "Password is too short. Must be at least 8 characters long.",
+    (v) => v.trim().length <= 255,
+    "Password is too long. Must be no longer than 255 characters.",
+    (v) => v === password,
+    "Passwords do not match."
+  );
 
-  const nameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
+  const {
+    value: name,
+    isValid: nameIsValid,
+    hasError: nameHasError,
+    valueChangeHandler: nameChangeHandler,
+    inputBlurHandler: nameBlurHandler,
+    reset: nameReset,
+    errorMessage: nameError,
+  } = useValidation(
+    (v) => v.trim().length >= 3,
+    "Name is too short. Must be at least 3 characters long.",
+    (v) => v.trim().length <= 25,
+    "Name is too long. Must be no longer than 25 characters."
+  );
 
-  const surnameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setSurname(event.target.value);
-  };
+  const {
+    value: surname,
+    isValid: surnameIsValid,
+    hasError: surnameHasError,
+    valueChangeHandler: surnameChangeHandler,
+    inputBlurHandler: surnameBlurHandler,
+    reset: surnameReset,
+    errorMessage: surnameError,
+  } = useValidation(
+    (v) => v.trim().length >= 3,
+    "Surname is too short. Must be at least 3 characters long.",
+    (v) => v.trim().length <= 25,
+    "Surname is too long. Must be no longer than 25 characters."
+  );
 
   const locationChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
     setLocation(event.target.value);
@@ -50,6 +114,8 @@ const SignupForm = () => {
     signUp(username, email, password, repeatPassword, name, surname, location);
   };
 
+  const formValid = usernameIsValid && emailIsValid && passwordIsValid && repeatPasswordIsValid && nameIsValid && surnameIsValid && location !== "";
+
   return (
     <form className="flex flex-col justify-center" onSubmit={submitHandler}>
       <SectionHeader text={"Username"} centered={true} label={"username"} />
@@ -59,7 +125,9 @@ const SignupForm = () => {
         className="input w-full mx-auto sm:max-w-md"
         value={username}
         onChange={usernameChangeHandler}
+        onBlur={usernameBlurHandler}
       />
+      <ErrorText text={usernameError} />
       <SectionHeader text={"Email"} centered={true} label={"email"} />
       <input
         type="text"
@@ -67,7 +135,9 @@ const SignupForm = () => {
         className="input w-full mx-auto sm:max-w-md"
         value={email}
         onChange={emailChangeHandler}
+        onBlur={emailBlurHandler}
       />
+      <ErrorText text={emailError} />
       <SectionHeader text={"Password"} centered={true} label={"password"} />
       <input
         type="password"
@@ -75,7 +145,9 @@ const SignupForm = () => {
         className="input w-full mx-auto sm:max-w-md"
         value={password}
         onChange={passwordChangeHandler}
+        onBlur={passwordBlurHandler}
       />
+      <ErrorText text={passwordError} />
       <SectionHeader
         text={"Repeat Password"}
         centered={true}
@@ -87,7 +159,9 @@ const SignupForm = () => {
         className="input w-full mx-auto sm:max-w-md"
         value={repeatPassword}
         onChange={repeatPasswordChangeHandler}
+        onBlur={repeatPasswordBlurHandler}
       />
+      <ErrorText text={repeatPasswordError} />
       <SectionHeader text={"Name"} centered={true} label={"name"} />
       <input
         type="text"
@@ -95,7 +169,9 @@ const SignupForm = () => {
         className="input w-full mx-auto sm:max-w-md"
         value={name}
         onChange={nameChangeHandler}
+        onBlur={nameBlurHandler}
       />
+      <ErrorText text={nameError} />
       <SectionHeader text={"Surname"} centered={true} label={"surname"} />
       <input
         type="text"
@@ -103,7 +179,9 @@ const SignupForm = () => {
         className="input w-full mx-auto sm:max-w-md"
         value={surname}
         onChange={surnameChangeHandler}
+        onBlur={surnameBlurHandler}
       />
+      <ErrorText text={surnameError} />
       <SectionHeader text="Location" centered={true} label="location" />
       <select
         className="select w-full max-w-xs mx-auto mb-12"
@@ -117,7 +195,7 @@ const SignupForm = () => {
       </select>
       <div className="mx-auto w-full sm:max-w-sm">
         <button
-          className={`btn w-full mx-auto ${isLoading ? "btn-disabled" : ""}`}
+          className={`btn w-full mx-auto ${isLoading || !formValid ? "btn-disabled" : ""}`}
           type="submit"
         >
           {isLoading ? <LoadingSpinner /> : "Register"}
