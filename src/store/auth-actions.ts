@@ -44,8 +44,8 @@ export const storeNewToken = (token: string) => {
   localStorage.setItem("expirationTime", expirationTime);
 };
 
-export const retrieveStoredToken = () => {
-  const storedToken = localStorage.getItem("token");
+export const retrieveStoredToken = async () => {
+  let storedToken = localStorage.getItem("token");
   const storedExpirationDate = localStorage.getItem("expirationTime");
   const storedUserId = localStorage.getItem("userId");
   const storedUsername = localStorage.getItem("username");
@@ -59,7 +59,7 @@ export const retrieveStoredToken = () => {
       return null;
     }
     try {
-      axios
+      storedToken = await axios
         .post(
           "https://localhost:7202/api/Auth/refresh",
           { accessToken: storedToken },
@@ -67,9 +67,7 @@ export const retrieveStoredToken = () => {
         )
         .then((r) => {
           storeNewToken(r.data.result);
-          return {
-            token: storedToken,
-          };
+          return r.data.result;
         });
     } catch (e) {
       return null;

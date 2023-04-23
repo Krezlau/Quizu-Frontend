@@ -1,9 +1,12 @@
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
+import { IRootState } from "../../store";
 
 const AvatarDropdown = () => {
   const { logout } = useHttp();
   const navigate = useNavigate();
+  const username = useSelector((state: IRootState) => state.auth.username)
 
   const logoutHandler = () => {
     logout();
@@ -17,7 +20,7 @@ const AvatarDropdown = () => {
         className="btn btn-ghost btn-circle avatar placeholder bg-slate-700"
       >
         <div className="w-10 rounded-full">
-          <span className="text-xl">KJ</span>
+          <span className="text-xl">{username && username.length > 0 ? username[0] : "?"}</span>
         </div>
       </label>
       <ul

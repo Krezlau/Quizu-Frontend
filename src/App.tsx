@@ -19,7 +19,6 @@ import { clearAuthStorage, retrieveStoredToken } from "./store/auth-actions";
 import { useDispatch } from "react-redux";
 import { authActions } from "./store/auth-slice";
 import NotLoggedInPage from "./Components/Pages/NotLoggedInPage";
-import LoadingSpinner from "./Components/UI/LoadingSpinner";
 import Alert from "./Components/UI/Alert";
 
 function App() {
@@ -27,20 +26,21 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const tokenData = retrieveStoredToken();
+    retrieveStoredToken().then((tokenData) => {
+      if (!tokenData || !tokenData.token) {
+        clearAuthStorage();
+        dispatch(authActions.logout());
+        return;
+      }
 
-    if (!tokenData) {
-      clearAuthStorage();
-      return;
-    }
-
-    dispatch(
-      authActions.login({
-        username: tokenData.username,
-        userId: tokenData.userId,
-        accessToken: tokenData.token,
-      })
-    );
+      dispatch(
+        authActions.login({
+          username: tokenData.username,
+          userId: tokenData.userId,
+          accessToken: tokenData.token,
+        })
+      );
+    });
   }, [dispatch]);
 
   return (
