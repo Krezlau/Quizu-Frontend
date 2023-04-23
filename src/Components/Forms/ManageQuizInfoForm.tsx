@@ -1,6 +1,7 @@
 import React, { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
+import useHttpValidation from "../../hooks/useHttpValidation";
 import useValidation from "../../hooks/useValidation";
 import IQuizDetails from "../../types/IQuizDetails";
 import ErrorText from "../UI/ErrorText";
@@ -24,6 +25,9 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
     (v) => v.trim().length <= 100,
     "Title is too long. Must be no longer than 100 characters."
   );
+
+  const {availableMessage, isLoadingVal} = useHttpValidation(title, titleIsValid, props.quiz.title)
+
   const {
     value: description,
     inputBlurHandler: descriptionBlurHandler,
@@ -57,21 +61,56 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
   const formIsValid = titleIsValid && descriptionIsValid && aboutIsValid;
 
   const deleteHandler = () => {
-    deleteQuiz(props.quiz.id, navigate);  
-  }
+    deleteQuiz(props.quiz.id, navigate);
+  };
 
   return (
     <>
       <form className="flex flex-col justify-center" onSubmit={submitHandler}>
         <SectionHeader text="Title" centered={true} label="title" />
-        <input
-          id="title"
-          className="textarea textarea-bordered resize-none mx-auto w-full max-w-[40rem]"
-          value={title}
-          onChange={titleChangeHandler}
-          onBlur={titleBlurHandler}
-        />
+        <div className="flex flex-row gap-2 justify-center w-full mx-auto">
+          <div className="w-5"></div>
+          <input
+            id="title"
+            className="input input-bordered w-full max-w-[40rem]"
+            value={title}
+            onChange={titleChangeHandler}
+            onBlur={titleBlurHandler}
+          />
+          <div className="w-5">
+            {isLoadingVal && <LoadingSpinner center={true} />}
+            {!isLoadingVal && availableMessage === "" && titleIsValid && (
+              <svg
+                className="scale-50"
+                xmlns="http://www.w3.org/2000/svg"
+                height="48"
+                viewBox="0 96 960 960"
+                width="48"
+              >
+                <path
+                  fill="green"
+                  d="M378 810 154 586l43-43 181 181 384-384 43 43-427 427Z"
+                />
+              </svg>
+            )}
+            {!isLoadingVal && availableMessage !== "" && titleIsValid && (
+              <svg
+                className="scale-50"
+                xmlns="http://www.w3.org/2000/svg"
+                height="48"
+                viewBox="0 96 960 960"
+                width="48"
+              >
+                <path
+                  fill="red"
+                  d="m249 849-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"
+                />
+              </svg>
+            )}
+          </div>
+        </div>
         <ErrorText text={titleErrorMessage} />
+        <ErrorText text={availableMessage} />
         <SectionHeader
           text="Short Description"
           centered={true}
@@ -198,7 +237,11 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
         <label htmlFor="my-modal-6" className="btn btn-error">
           DELETE QUIZ
         </label>
-        <Modal title="Delete quiz" text="Are you sure? This action cannot be reversed!" buttonFunc={deleteHandler} />
+        <Modal
+          title="Delete quiz"
+          text="Are you sure? This action cannot be reversed!"
+          buttonFunc={deleteHandler}
+        />
         <p className="m-auto sm:mx-0">This action is irreversible!</p>
       </div>
     </>

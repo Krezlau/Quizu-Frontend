@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
+import useHttpValidation from "../../hooks/useHttpValidation";
 import useValidation from "../../hooks/useValidation";
 import ErrorText from "../UI/ErrorText";
 import LoadingSpinner from "../UI/LoadingSpinner";
@@ -8,8 +9,6 @@ import SectionHeader from "../UI/SectionHeader";
 
 const NewQuizForm = () => {
   const { isLoading, addQuiz } = useHttp();
-  const { isLoading: isLoadingVal, checkIfTitleAvailable } = useHttp();
-  const [availableMessage, setAvailableMessage] = useState("");
   const navigate = useNavigate();
   const {
     value: title,
@@ -25,18 +24,7 @@ const NewQuizForm = () => {
     "Title is too long. Must be no longer than 100 characters."
   );
 
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (titleIsValid) {
-        checkIfTitleAvailable(title, setAvailableMessage);
-      }
-      if (!titleIsValid) {
-        setAvailableMessage("");
-      }
-    }, 1000);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [title]);
+  const {isLoadingVal, availableMessage} = useHttpValidation(title, titleIsValid);
 
   const formSubmitHandler = (event: FormEvent) => {
     event.preventDefault();
