@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { authActions } from "./store/auth-slice";
 import NotLoggedInPage from "./Components/Pages/NotLoggedInPage";
 import Alert from "./Components/UI/Alert";
+import Modal from "./Components/UI/Modal";
 
 function App() {
   const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);

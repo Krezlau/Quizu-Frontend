@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
+import { NavigateFunction } from "react-router-dom";
 import { IRootState } from "../store";
 import { loginUser, logoutUser, useAuthDispatch } from "../store/auth-actions";
 import IQuiz from "../types/IQuiz";
@@ -157,6 +158,31 @@ const useHttp = () => {
       });
   };
 
+  const deleteQuiz = (quizId: string, navigate: NavigateFunction) => {
+    setIsLoading(true);
+
+    axios
+      .delete(
+        `https://localhost:7202/api/Quizzes/${quizId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(() => {
+        showAlert("success", "Successfully deleted");
+        navigate("/home")
+      })
+      .catch((e: AxiosError) => {
+        showError(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
   return {
     login: login,
     isLoading: isLoading,
@@ -166,6 +192,7 @@ const useHttp = () => {
     addQuiz,
     fetchQuizDetails,
     updateQuizInfo,
+    deleteQuiz,
   };
 };
 

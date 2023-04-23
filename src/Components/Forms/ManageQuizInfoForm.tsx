@@ -1,12 +1,16 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import useValidation from "../../hooks/useValidation";
 import IQuizDetails from "../../types/IQuizDetails";
 import ErrorText from "../UI/ErrorText";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import Modal from "../UI/Modal";
 import SectionHeader from "../UI/SectionHeader";
 
 const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
+  const navigate = useNavigate();
+
   const {
     value: title,
     inputBlurHandler: titleBlurHandler,
@@ -42,7 +46,7 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
     (v) => v.trim().length <= 1000,
     "About section too long. Must be no longer than 1000 characters."
   );
-  const { isLoading, updateQuizInfo } = useHttp();
+  const { isLoading, updateQuizInfo, deleteQuiz } = useHttp();
 
   const submitHandler = (event: FormEvent) => {
     event.preventDefault();
@@ -51,6 +55,10 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
   };
 
   const formIsValid = titleIsValid && descriptionIsValid && aboutIsValid;
+
+  const deleteHandler = () => {
+    deleteQuiz(props.quiz.id, navigate);  
+  }
 
   return (
     <>
@@ -187,9 +195,10 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
         Danger Zone
       </h1>
       <div className="flex flex-col sm:flex-row gap-4 justify-left px-12">
-        <button type="button" className="btn btn-error">
+        <label htmlFor="my-modal-6" className="btn btn-error">
           DELETE QUIZ
-        </button>
+        </label>
+        <Modal title="Delete quiz" text="Are you sure? This action cannot be reversed!" buttonFunc={deleteHandler} />
         <p className="m-auto sm:mx-0">This action is irreversible!</p>
       </div>
     </>
