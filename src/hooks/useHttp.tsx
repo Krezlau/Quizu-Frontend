@@ -183,6 +183,32 @@ const useHttp = () => {
       });
   }
 
+  const checkIfTitleAvailable = (value: string, setMessage: (string) => void) => {
+    setIsLoading(true);
+
+    axios
+      .get(
+        `https://localhost:7202/api/Quizzes/available?title=${value}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((r) => {
+        if (r.data.result)
+        setMessage("");
+        if (!r.data.result)
+        setMessage("Title not available.");
+      })
+      .catch((e: AxiosError) => {
+        setMessage("Title not valid.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
   return {
     login: login,
     isLoading: isLoading,
@@ -193,6 +219,7 @@ const useHttp = () => {
     fetchQuizDetails,
     updateQuizInfo,
     deleteQuiz,
+    checkIfTitleAvailable,
   };
 };
 
