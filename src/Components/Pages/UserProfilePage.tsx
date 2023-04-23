@@ -12,7 +12,7 @@ const UserProfilePage = () => {
     </div>
     <UserInfo />
     <SectionHeader text={"Most Popular Quizzes"} />
-    <QuizCarousel />
+    <QuizCarousel quizzes={[]}/>
   </>
 }
 
