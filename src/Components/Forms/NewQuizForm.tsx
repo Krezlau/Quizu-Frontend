@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import useValidation from "../../hooks/useValidation";
 import ErrorText from "../UI/ErrorText";
@@ -7,8 +8,9 @@ import SectionHeader from "../UI/SectionHeader";
 
 const NewQuizForm = () => {
   const { isLoading, addQuiz } = useHttp();
-  const { isLoadingVal, checkIfTitleAvailable } = useHttp();
+  const { isLoading: isLoadingVal, checkIfTitleAvailable } = useHttp();
   const [availableMessage, setAvailableMessage] = useState("");
+  const navigate = useNavigate();
   const {
     value: title,
     inputBlurHandler: titleBlurHandler,
@@ -39,18 +41,7 @@ const NewQuizForm = () => {
   const formSubmitHandler = (event: FormEvent) => {
     event.preventDefault();
 
-    addQuiz(title);
-  };
-
-  const blurHandler = () => {
-    titleBlurHandler();
-
-    if (titleIsValid) {
-      checkIfTitleAvailable(title, setAvailableMessage);
-    }
-    if (!titleIsValid) {
-      setAvailableMessage("");
-    }
+    addQuiz(title, navigate);
   };
 
   return (
@@ -63,11 +54,11 @@ const NewQuizForm = () => {
           id="title"
           value={title}
           onChange={titleChangeHandler}
-          onBlur={blurHandler}
+          onBlur={titleBlurHandler}
           className="input w-full sm:max-w-md "
         />
         <div className="w-5">
-          {isLoadingVal && <LoadingSpinner />}
+          {isLoadingVal && <LoadingSpinner center={true}/>}
           {!isLoadingVal && availableMessage === "" && titleIsValid && (
             <svg
               className="scale-50"

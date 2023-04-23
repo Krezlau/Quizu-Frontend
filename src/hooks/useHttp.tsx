@@ -81,7 +81,7 @@ const useHttp = () => {
     return quizzes;
   }, []);
 
-  const addQuiz = (title: string) => {
+  const addQuiz = (title: string, navigate: NavigateFunction) => {
     setIsLoading(true);
     axios
       .post(
@@ -96,8 +96,9 @@ const useHttp = () => {
           },
         }
       )
-      .then(() => {
+      .then((r) => {
         showAlert("success", "Successfully created new quiz.");
+        navigate(`/quizzes/${r.data.result}/details`)
       })
       .catch((e: AxiosError) => {
         showError(e);
