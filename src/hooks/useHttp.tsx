@@ -7,6 +7,7 @@ import { loginUser, logoutUser, useAuthDispatch } from "../store/auth-actions";
 import IQuiz from "../types/IQuiz";
 import IQuizDetails from "../types/IQuizDetails";
 import IResponse from "../types/IResponse";
+import IUserProfile from "../types/IUserProfile";
 import useAlert from "./useAlert";
 
 const useHttp = () => {
@@ -98,7 +99,7 @@ const useHttp = () => {
       )
       .then((r) => {
         showAlert("success", "Successfully created new quiz.");
-        navigate(`/quizzes/${r.data.result}/details`)
+        navigate(`/quizzes/${r.data.result}/details`);
       })
       .catch((e: AxiosError) => {
         showError(e);
@@ -163,18 +164,15 @@ const useHttp = () => {
     setIsLoading(true);
 
     axios
-      .delete(
-        `https://localhost:7202/api/Quizzes/${quizId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .delete(`https://localhost:7202/api/Quizzes/${quizId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(() => {
         showAlert("success", "Successfully deleted");
-        navigate("/home")
+        navigate("/home");
       })
       .catch((e: AxiosError) => {
         showError(e);
@@ -182,25 +180,23 @@ const useHttp = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }
+  };
 
-  const checkIfTitleAvailable = (value: string, setMessage: (string) => void) => {
+  const checkIfTitleAvailable = (
+    value: string,
+    setMessage: (string) => void
+  ) => {
     setIsLoading(true);
 
     axios
-      .get(
-        `https://localhost:7202/api/Quizzes/available?title=${value}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .get(`https://localhost:7202/api/Quizzes/available?title=${value}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((r) => {
-        if (r.data.result)
-        setMessage("");
-        if (!r.data.result)
-        setMessage("Title not available.");
+        if (r.data.result) setMessage("");
+        if (!r.data.result) setMessage("Title not available.");
       })
       .catch((e: AxiosError) => {
         setMessage("Title not valid.");
@@ -208,7 +204,27 @@ const useHttp = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }
+  };
+
+  const fetchUserInfo = useCallback(async (userId: string) => {
+    setIsLoading(true);
+    const user: IUserProfile = await axios
+      .get(`https://localhost:7202/api/Users/${userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((r) => {
+        return r.data.result;
+      })
+      .catch((e: AxiosError) => {
+        showError(e);
+        setIsLoading(false);
+      });
+    setIsLoading(false);
+    return user; 
+  }, []);
 
   return {
     login: login,
@@ -221,6 +237,7 @@ const useHttp = () => {
     updateQuizInfo,
     deleteQuiz,
     checkIfTitleAvailable,
+    fetchUserInfo,
   };
 };
 
