@@ -6,6 +6,7 @@ import useValidation from "../../hooks/useValidation";
 import ErrorText from "../UI/ErrorText";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import SectionHeader from "../UI/SectionHeader";
+import ValidationWrapper from "../UI/ValidationWrapper";
 
 const NewQuizForm = () => {
   const { isLoading, addQuiz } = useHttp();
@@ -24,7 +25,11 @@ const NewQuizForm = () => {
     "Title is too long. Must be no longer than 100 characters."
   );
 
-  const {isLoadingVal, availableMessage} = useHttpValidation(title, titleIsValid);
+  const { isLoadingVal, availableMessage } = useHttpValidation(
+    title,
+    titleIsValid,
+    false
+  );
 
   const formSubmitHandler = (event: FormEvent) => {
     event.preventDefault();
@@ -35,8 +40,11 @@ const NewQuizForm = () => {
   return (
     <form onSubmit={formSubmitHandler} className="flex flex-col justify-center">
       <SectionHeader text={"Title"} centered={true} label={"title"} />
-      <div className="flex flex-row gap-2 justify-center w-full mx-auto">
-        <div className="w-5"></div>
+      <ValidationWrapper
+        isLoading={isLoadingVal ? isLoadingVal : false}
+        isValid={titleIsValid}
+        message={availableMessage}
+      >
         <input
           type="text"
           id="title"
@@ -45,40 +53,8 @@ const NewQuizForm = () => {
           onBlur={titleBlurHandler}
           className="input w-full sm:max-w-md "
         />
-        <div className="w-5">
-          {isLoadingVal && <LoadingSpinner center={true}/>}
-          {!isLoadingVal && availableMessage === "" && titleIsValid && (
-            <svg
-              className="scale-50"
-              xmlns="http://www.w3.org/2000/svg"
-              height="48"
-              viewBox="0 96 960 960"
-              width="48"
-            >
-              <path
-                fill="green"
-                d="M378 810 154 586l43-43 181 181 384-384 43 43-427 427Z"
-              />
-            </svg>
-          )}
-          {!isLoadingVal && availableMessage !== "" && titleIsValid && (
-            <svg
-              className="scale-50"
-              xmlns="http://www.w3.org/2000/svg"
-              height="48"
-              viewBox="0 96 960 960"
-              width="48"
-            >
-              <path
-                fill="red"
-                d="m249 849-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"
-              />
-            </svg>
-          )}
-        </div>
-      </div>
+      </ValidationWrapper>
       <ErrorText text={titleErrorMessage} />
-      <ErrorText text={availableMessage} />
       <div className="mx-auto w-full sm:max-w-sm">
         <button
           className={`btn w-full mx-auto mt-12 ${
