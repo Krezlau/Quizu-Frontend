@@ -223,7 +223,7 @@ const useHttp = () => {
         setIsLoading(false);
       });
     setIsLoading(false);
-    return user; 
+    return user;
   }, []);
 
   const checkIfUsernameAvailable = (
@@ -250,6 +250,44 @@ const useHttp = () => {
       });
   };
 
+  const updateProfileInfo = (
+    userId: string,
+    username: string,
+    name: string,
+    surname: string,
+    location: string,
+    about: string
+  ) => {
+    setIsLoading(true);
+
+    axios
+      .put(
+        `https://localhost:7202/api/Users/${userId}`,
+        {
+          username,
+          name,
+          surname,
+          location,
+          about,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(() => {
+        showAlert("success", "Successfully changed profile info.");
+      })
+      .catch((e: AxiosError) => {
+        showError(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return {
     login: login,
     isLoading: isLoading,
@@ -263,6 +301,7 @@ const useHttp = () => {
     checkIfTitleAvailable,
     fetchUserInfo,
     checkIfUsernameAvailable,
+    updateProfileInfo,
   };
 };
 

@@ -10,8 +10,8 @@ import ValidationWrapper from "../UI/ValidationWrapper";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import IUserProfile from "../../types/IUserProfile";
 
-const EditProfileForm: React.FC<{user: IUserProfile}> = (props) => {
-  const { isLoading, signUp } = useHttp();
+const EditProfileForm: React.FC<{ user: IUserProfile }> = (props) => {
+  const { isLoading, updateProfileInfo } = useHttp();
   const [location, setLocation] = useState<string>(props.user.location);
 
   const {
@@ -81,6 +81,17 @@ const EditProfileForm: React.FC<{user: IUserProfile}> = (props) => {
 
   const submitHandler = (event: FormEvent) => {
     event.preventDefault();
+
+    if (formValid) {
+      updateProfileInfo(
+        props.user.id,
+        username,
+        name,
+        surname,
+        location,
+        about
+      );
+    }
   };
 
   const formValid =
@@ -180,7 +191,9 @@ const EditProfileForm: React.FC<{user: IUserProfile}> = (props) => {
         <button
           type="submit"
           className={`btn btn-primary mx-auto w-full row-start-11 col-span-1 lg:row-start-5 lg:col-span-2 sm:w-auto ${
-            isLoading || !formValid || isLoadingVal || availableMessage !== "" ? "btn-disabled border-primary" : ""
+            isLoading || !formValid || isLoadingVal || availableMessage !== ""
+              ? "btn-disabled border-primary"
+              : ""
           }`}
         >
           {isLoading ? <LoadingSpinner /> : "Save"}
