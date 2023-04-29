@@ -9,7 +9,7 @@ interface IAlertState {
 
 const initialState: IAlertState = {
   isActive: false,
-  pos: "-bottom-1/4",
+  pos: "-bottom-full",
   type: "",
   text: "",
 };
@@ -32,7 +32,7 @@ const alertSlice = createSlice({
     },
     hide: (state) => {
       state.isActive = false;
-      state.pos = "-bottom-1/4";
+      state.pos = "-bottom-full";
     },
   },
 });
