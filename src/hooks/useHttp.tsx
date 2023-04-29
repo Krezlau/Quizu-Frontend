@@ -184,7 +184,7 @@ const useHttp = () => {
 
   const checkIfTitleAvailable = (
     value: string,
-    setMessage: (string) => void
+    setMessage: (message: string) => void
   ) => {
     setIsLoading(true);
 
@@ -226,6 +226,30 @@ const useHttp = () => {
     return user; 
   }, []);
 
+  const checkIfUsernameAvailable = (
+    value: string,
+    setMessage: (message: string) => void
+  ) => {
+    setIsLoading(true);
+
+    axios
+      .get(`https://localhost:7202/api/Users/available?username=${value}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((r) => {
+        if (r.data.result) setMessage("");
+        if (!r.data.result) setMessage("Title not available.");
+      })
+      .catch((e: AxiosError) => {
+        setMessage("Title not valid.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return {
     login: login,
     isLoading: isLoading,
@@ -238,6 +262,7 @@ const useHttp = () => {
     deleteQuiz,
     checkIfTitleAvailable,
     fetchUserInfo,
+    checkIfUsernameAvailable,
   };
 };
 
