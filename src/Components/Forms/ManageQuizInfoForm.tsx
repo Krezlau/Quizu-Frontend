@@ -146,7 +146,7 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
         <button
           type="submit"
           className={`btn btn-success mx-auto mb-8 w-full max-w-[20rem] ${
-            isLoading || !formIsValid ? "btn-disabled" : ""
+            isLoading || !formIsValid || isLoadingVal || availableMessage !== "" ? "btn-disabled" : ""
           }`}
         >
           {isLoading ? <LoadingSpinner /> : "Save"}

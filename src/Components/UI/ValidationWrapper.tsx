@@ -1,13 +1,24 @@
 import ErrorText from "./ErrorText";
 import LoadingSpinner from "./LoadingSpinner";
 
-const ValidationWrapper: React.FC<{isLoading: boolean, message: string, isValid: boolean, children: React.ReactNode}> = (props) => {
-  return <>
-      <div className="flex flex-row gap-2 justify-center w-full mx-auto">
-        <div className="w-5"></div>
-      {props.children}
+const ValidationWrapper: React.FC<{
+  isLoading: boolean;
+  message: string;
+  isValid: boolean;
+  left?: boolean;
+  children: React.ReactNode;
+}> = (props) => {
+  return (
+    <>
+      <div
+        className={`flex flex-row gap-2 justify-center mx-auto w-full ${
+          props.left ? "sm:mx-0 sm:w-auto" : ""
+        }`}
+      >
+        {props.left ? <></> : <div className="w-5"></div>}
+        {props.children}
         <div className="w-5">
-          {props.isLoading && <LoadingSpinner center={true}/>}
+          {props.isLoading && <LoadingSpinner center={true} />}
           {!props.isLoading && props.message === "" && props.isValid && (
             <svg
               className="scale-50"
@@ -39,8 +50,8 @@ const ValidationWrapper: React.FC<{isLoading: boolean, message: string, isValid:
         </div>
       </div>
       <ErrorText text={props.message} />
-      </>
-}
+    </>
+  );
+};
 
 export default ValidationWrapper;
-
