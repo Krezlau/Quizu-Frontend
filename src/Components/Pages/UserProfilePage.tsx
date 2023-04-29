@@ -2,27 +2,11 @@ import SectionHeader from "../UI/SectionHeader";
 import QuizCarousel from "../Quizzes/QuizCarousel";
 import ProfilePageHeading from "../UserProfile/ProfilePageHeading";
 import UserInfo from "../UserProfile/UserInfo";
-import useHttp from "../../hooks/useHttp";
-import IUserProfile from "../../types/IUserProfile";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import useFetchUserDetails from "../../hooks/useFetchUserDetails";
 
 const UserProfilePage = () => {
-  const {userId} = useParams<{ userId?: string }>();
-  const { isLoading, fetchUserInfo } = useHttp();
-  const [user, setUser] = useState<IUserProfile>();
-
-  useEffect(() => {
-    if (userId) {
-      fetchUserInfo(userId).then((r) => {
-        if (r) {
-          setUser(r);
-        }
-      });
-    }
-  }, []);
-
+  const {isLoading, user} = useFetchUserDetails();
 
   return <>
     

@@ -1,17 +1,18 @@
 import SectionHeader from "../UI/SectionHeader";
 import { Link } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
-import { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import useValidation from "../../hooks/useValidation";
 import useHttpValidation from "../../hooks/useHttpValidation";
 import countries from "../../auxiliary/countries";
 import ErrorText from "../UI/ErrorText";
 import ValidationWrapper from "../UI/ValidationWrapper";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import IUserProfile from "../../types/IUserProfile";
 
-const EditProfileForm = () => {
+const EditProfileForm: React.FC<{user: IUserProfile}> = (props) => {
   const { isLoading, signUp } = useHttp();
-  const [location, setLocation] = useState<string>("");
+  const [location, setLocation] = useState<string>(props.user.location);
 
   const {
     value: username,
@@ -20,7 +21,7 @@ const EditProfileForm = () => {
     inputBlurHandler: usernameBlurHandler,
     errorMessage: usernameError,
   } = useValidation(
-    "",
+    props.user.username,
     (v) => v.trim().length >= 3,
     "Username is too short. Must be at least 3 characters long.",
     (v) => v.trim().length <= 25,
@@ -30,7 +31,8 @@ const EditProfileForm = () => {
   const { isLoadingVal, availableMessage } = useHttpValidation(
     username,
     usernameIsValid,
-    true
+    true,
+    props.user.username
   );
 
   const {
@@ -40,7 +42,7 @@ const EditProfileForm = () => {
     inputBlurHandler: nameBlurHandler,
     errorMessage: nameError,
   } = useValidation(
-    "",
+    props.user.name,
     (v) => v.trim().length >= 3,
     "Name is too short. Must be at least 3 characters long.",
     (v) => v.trim().length <= 25,
@@ -54,7 +56,7 @@ const EditProfileForm = () => {
     inputBlurHandler: surnameBlurHandler,
     errorMessage: surnameError,
   } = useValidation(
-    "",
+    props.user.surname,
     (v) => v.trim().length >= 3,
     "Surname is too short. Must be at least 3 characters long.",
     (v) => v.trim().length <= 25,
@@ -68,7 +70,7 @@ const EditProfileForm = () => {
     valueChangeHandler: aboutChangeHandler,
     isValid: aboutIsValid,
   } = useValidation(
-    "",
+    props.user.about,
     (v) => v.trim().length <= 1000,
     "About section too long. Must be no longer than 1000 characters."
   );
@@ -157,7 +159,7 @@ const EditProfileForm = () => {
           <select
             className="select"
             onChange={locationChangeHandler}
-            defaultValue="Choose a country"
+            value={location}
           >
             <option disabled>Choose a country</option>
             {countries.map((c) => (
