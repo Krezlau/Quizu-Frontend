@@ -18,6 +18,11 @@ const useHttp = () => {
   const showAlert = useAlert();
 
   const showError = (e: AxiosError) => {
+    if (e.response && e.response.status && e.response.status === 403) {
+      showAlert("error", "Action forbidden. You shouldn't be here!");
+      return;
+    }
+
     try {
       const response: IResponse = e.response!.data as IResponse;
       showAlert("error", response.errorMessages[0]);
@@ -301,7 +306,7 @@ const useHttp = () => {
       })
       .then(() => {
         showAlert("success", "Successfully deleted");
-        dispatch(authActions.logout())
+        dispatch(authActions.logout());
         navigate("/login");
       })
       .catch((e: AxiosError) => {
@@ -312,13 +317,19 @@ const useHttp = () => {
       });
   };
 
-  const changeUserPassword = (userId: string, currentPassword: string, newPassword: string, navigate: NavigateFunction) => {
+  const changeUserPassword = (
+    userId: string,
+    currentPassword: string,
+    newPassword: string,
+    navigate: NavigateFunction
+  ) => {
     setIsLoading(true);
     axios
       .post(
         `https://localhost:7202/api/Auth/change-password`,
         {
-          currentPassword, newPassword
+          currentPassword,
+          newPassword,
         },
         {
           headers: {
@@ -338,7 +349,7 @@ const useHttp = () => {
         setIsLoading(false);
       });
   };
-  
+
   return {
     login: login,
     isLoading: isLoading,
