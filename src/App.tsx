@@ -1,6 +1,6 @@
 import NavigationBar from "./Components/Navigation/NavigationBar";
 import PageLayout from "./Components/Pages/PageLayout";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./Components/Pages/HomePage";
 import UserProfilePage from "./Components/Pages/UserProfilePage";
@@ -20,7 +20,7 @@ import { useDispatch } from "react-redux";
 import { authActions } from "./store/auth-slice";
 import NotLoggedInPage from "./Components/Pages/NotLoggedInPage";
 import Alert from "./Components/UI/Alert";
-import Modal from "./Components/UI/Modal";
+import ForbiddenPage from "./Components/Pages/ForbiddenPage";
 
 function App() {
   const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);
@@ -91,6 +91,7 @@ function App() {
             path="/new-quiz"
             element={isLoggedIn ? <CreateNewQuizPage /> : <NotLoggedInPage />}
           />
+          <Route path="/forbidden" element={<ForbiddenPage />} />
         </Routes>
       </PageLayout>
       <Alert />
