@@ -311,6 +311,33 @@ const useHttp = () => {
         setIsLoading(false);
       });
   };
+
+  const changeUserPassword = (userId: string, currentPassword: string, newPassword: string, navigate: NavigateFunction) => {
+    setIsLoading(true);
+    axios
+      .post(
+        `https://localhost:7202/api/Auth/change-password`,
+        {
+          currentPassword, newPassword
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((r) => {
+        showAlert("success", "Successfully changed password.");
+        navigate(`/user/${userId}/profile`);
+      })
+      .catch((e: AxiosError) => {
+        showError(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
   
   return {
     login: login,
@@ -327,6 +354,7 @@ const useHttp = () => {
     checkIfUsernameAvailable,
     updateProfileInfo,
     deleteUserAccount,
+    changeUserPassword,
   };
 };
 
