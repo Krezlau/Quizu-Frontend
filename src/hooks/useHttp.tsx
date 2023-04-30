@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { NavigateFunction } from "react-router-dom";
 import { IRootState } from "../store";
 import { loginUser, logoutUser, useAuthDispatch } from "../store/auth-actions";
+import { authActions } from "../store/auth-slice";
 import IQuiz from "../types/IQuiz";
 import IQuizDetails from "../types/IQuizDetails";
 import IResponse from "../types/IResponse";
@@ -288,6 +289,29 @@ const useHttp = () => {
       });
   };
 
+  const deleteUserAccount = (userId: string, navigate: NavigateFunction) => {
+    setIsLoading(true);
+
+    axios
+      .delete(`https://localhost:7202/api/Users/${userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        showAlert("success", "Successfully deleted");
+        dispatch(authActions.logout())
+        navigate("/login");
+      })
+      .catch((e: AxiosError) => {
+        showError(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+  
   return {
     login: login,
     isLoading: isLoading,
@@ -302,6 +326,7 @@ const useHttp = () => {
     fetchUserInfo,
     checkIfUsernameAvailable,
     updateProfileInfo,
+    deleteUserAccount,
   };
 };
 

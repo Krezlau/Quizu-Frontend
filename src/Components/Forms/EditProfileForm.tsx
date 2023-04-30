@@ -1,5 +1,5 @@
 import SectionHeader from "../UI/SectionHeader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import useValidation from "../../hooks/useValidation";
@@ -9,10 +9,12 @@ import ErrorText from "../UI/ErrorText";
 import ValidationWrapper from "../UI/ValidationWrapper";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import IUserProfile from "../../types/IUserProfile";
+import Modal from "../UI/Modal";
 
 const EditProfileForm: React.FC<{ user: IUserProfile }> = (props) => {
-  const { isLoading, updateProfileInfo } = useHttp();
+  const { isLoading, updateProfileInfo, deleteUserAccount } = useHttp();
   const [location, setLocation] = useState<string>(props.user.location);
+  const navigate = useNavigate();
 
   const {
     value: username,
@@ -93,6 +95,10 @@ const EditProfileForm: React.FC<{ user: IUserProfile }> = (props) => {
       );
     }
   };
+
+  const deleteHandler = () => {
+    deleteUserAccount(props.user.id, navigate);
+  }
 
   const formValid =
     aboutIsValid &&
@@ -208,7 +214,12 @@ const EditProfileForm: React.FC<{ user: IUserProfile }> = (props) => {
         <p className="my-auto">This will log you out on all your devices.</p>
       </div>
       <div className="flex flex-col gap-2 mx-4 sm:flex-row sm:gap-8">
-        <button className="btn btn-error btn-sm">Delete account</button>
+        <label htmlFor="my-modal-6" className="btn btn-error btn-sm">Delete account</label>
+        <Modal
+          title="Delete user account?"
+          text="Are you sure? This action cannot be reversed! All your data will be lost."
+          buttonFunc={deleteHandler}
+        />
         <p className="my-auto">
           Deletes the account. This action is irreversible.
         </p>
