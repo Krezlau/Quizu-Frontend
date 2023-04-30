@@ -3,7 +3,12 @@ import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavigateFunction } from "react-router-dom";
 import { IRootState } from "../store";
-import { loginUser, logoutUser, useAuthDispatch } from "../store/auth-actions";
+import {
+  loginUser,
+  logoutUser,
+  refreshToken,
+  useAuthDispatch,
+} from "../store/auth-actions";
 import { authActions } from "../store/auth-slice";
 import IQuiz from "../types/IQuiz";
 import IQuizDetails from "../types/IQuizDetails";
@@ -18,6 +23,11 @@ const useHttp = () => {
   const showAlert = useAlert();
 
   const showError = (e: AxiosError) => {
+    if (e.response && e.response.status && e.response.status === 401) {
+      showAlert("error", "Session has expired. Please log in again.");
+      dispatch(authActions.logout());
+      return;
+    }
     if (e.response && e.response.status && e.response.status === 403) {
       showAlert("error", "Action forbidden. You shouldn't be here!");
       return;
@@ -29,6 +39,27 @@ const useHttp = () => {
     } catch (e) {
       showAlert("error", "Something unexpected happened.");
     }
+  };
+
+  const refresh = async () => {
+    const newToken = await axios
+      .post(
+        "https://localhost:7202/api/Auth/refresh",
+        { accessToken: token },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      )
+      .then((r) => {
+        return r.data.result;
+      })
+      .catch((e: AxiosError) => {
+        return null;
+      });
+    if (!newToken) return false;
+    refreshToken(newToken);
+    return true;
   };
 
   const login = (email: string, password: string) => {
@@ -88,7 +119,11 @@ const useHttp = () => {
     return quizzes;
   }, []);
 
-  const addQuiz = (title: string, navigate: NavigateFunction) => {
+  const addQuiz = (
+    title: string,
+    navigate: NavigateFunction,
+    doNotTryAgain?: boolean
+  ) => {
     setIsLoading(true);
     axios
       .post(
@@ -108,6 +143,18 @@ const useHttp = () => {
         navigate(`/quizzes/${r.data.result}/details`);
       })
       .catch((e: AxiosError) => {
+        const isAuthError =
+          e.response && e.response.status && e.response.status === 401;
+        if (isAuthError && !doNotTryAgain) {
+          refresh().then((outcome) => {
+            if (outcome) {
+              addQuiz(title, navigate, true);
+              return;
+            }
+            showError(e);
+          });
+          return;
+        }
         showError(e);
       })
       .finally(() => {
