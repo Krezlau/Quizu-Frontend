@@ -57,9 +57,9 @@ const useHttp = () => {
       .catch((e: AxiosError) => {
         return null;
       });
-    if (!newToken) return false;
-    refreshToken(newToken);
-    return true;
+    if (!newToken) return null;
+    dispatch(refreshToken(newToken));
+    return newToken;
   };
 
   const login = (email: string, password: string) => {
@@ -122,7 +122,8 @@ const useHttp = () => {
   const addQuiz = (
     title: string,
     navigate: NavigateFunction,
-    doNotTryAgain?: boolean
+    doNotTryAgain?: boolean,
+    newToken?: string,
   ) => {
     setIsLoading(true);
     axios
@@ -134,7 +135,7 @@ const useHttp = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${newToken ? newToken : token}`,
           },
         }
       )
@@ -146,9 +147,10 @@ const useHttp = () => {
         const isAuthError =
           e.response && e.response.status && e.response.status === 401;
         if (isAuthError && !doNotTryAgain) {
+          console.log("its auth error and try again is on.")
           refresh().then((outcome) => {
             if (outcome) {
-              addQuiz(title, navigate, true);
+              addQuiz(title, navigate, true, outcome);
               return;
             }
             showError(e);

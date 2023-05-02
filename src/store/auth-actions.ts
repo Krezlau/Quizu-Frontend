@@ -85,9 +85,10 @@ export const retrieveStoredToken = async () => {
 };
 
 export const refreshToken = (newToken: string) => {
-  return async (dispatch: Dispatch<AnyAction>) => {
+  return (dispatch: Dispatch<AnyAction>) => {
     storeNewToken(newToken);
     dispatch(authActions.refresh({ token: newToken }));
+    console.log("refreshed")
   };
 };
 
@@ -104,7 +105,10 @@ export const loginUser = (
       .post(
         "https://localhost:7202/api/auth/login",
         { email, password },
-        { headers: { "Content-Type": "application/json" } }
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
       )
       .then((r) => {
         dispatch(
