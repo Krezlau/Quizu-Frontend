@@ -41,6 +41,27 @@ const useHttp = () => {
     }
   };
 
+  const handleErrorResponse = (
+    e: AxiosError,
+    doNotTryAgain: boolean | undefined,
+    tryAgainFunc: (outcome: string) => void
+  ) => {
+    const isAuthError =
+      e.response && e.response.status && e.response.status === 401;
+    if (isAuthError && !doNotTryAgain) {
+      console.log("its auth error and try again is on.");
+      refresh().then((outcome) => {
+        if (outcome) {
+          tryAgainFunc(outcome);
+          return;
+        }
+        showError(e);
+      });
+      return;
+    }
+    showError(e);
+  };
+
   const refresh = async () => {
     const newToken = await axios
       .post(
@@ -123,7 +144,7 @@ const useHttp = () => {
     title: string,
     navigate: NavigateFunction,
     doNotTryAgain?: boolean,
-    newToken?: string,
+    newToken?: string
   ) => {
     setIsLoading(true);
     axios
@@ -144,20 +165,9 @@ const useHttp = () => {
         navigate(`/quizzes/${r.data.result}/details`);
       })
       .catch((e: AxiosError) => {
-        const isAuthError =
-          e.response && e.response.status && e.response.status === 401;
-        if (isAuthError && !doNotTryAgain) {
-          console.log("its auth error and try again is on.")
-          refresh().then((outcome) => {
-            if (outcome) {
-              addQuiz(title, navigate, true, outcome);
-              return;
-            }
-            showError(e);
-          });
-          return;
-        }
-        showError(e);
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          addQuiz(title, navigate, true, o)
+        );
       })
       .finally(() => {
         setIsLoading(false);
@@ -185,7 +195,9 @@ const useHttp = () => {
     quizId: string,
     description: string,
     about: string,
-    title: string
+    title: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
   ) => {
     setIsLoading(true);
 
@@ -200,7 +212,7 @@ const useHttp = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${newToken ? newToken : token}`,
           },
         }
       )
@@ -208,21 +220,28 @@ const useHttp = () => {
         showAlert("success", "Successfully changed quiz info.");
       })
       .catch((e: AxiosError) => {
-        showError(e);
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          updateQuizInfo(quizId, description, about, title, true, o)
+        );
       })
       .finally(() => {
         setIsLoading(false);
       });
   };
 
-  const deleteQuiz = (quizId: string, navigate: NavigateFunction) => {
+  const deleteQuiz = (
+    quizId: string,
+    navigate: NavigateFunction,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
     setIsLoading(true);
 
     axios
       .delete(`https://localhost:7202/api/Quizzes/${quizId}`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${newToken ? newToken : token}`,
         },
       })
       .then(() => {
@@ -230,7 +249,9 @@ const useHttp = () => {
         navigate("/home");
       })
       .catch((e: AxiosError) => {
-        showError(e);
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          deleteQuiz(quizId, navigate, true, o)
+        );
       })
       .finally(() => {
         setIsLoading(false);
@@ -311,7 +332,9 @@ const useHttp = () => {
     name: string,
     surname: string,
     location: string,
-    about: string
+    about: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
   ) => {
     setIsLoading(true);
 
@@ -328,7 +351,7 @@ const useHttp = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${newToken ? newToken : token}`,
           },
         }
       )
@@ -336,21 +359,37 @@ const useHttp = () => {
         showAlert("success", "Successfully changed profile info.");
       })
       .catch((e: AxiosError) => {
-        showError(e);
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          updateProfileInfo(
+            userId,
+            username,
+            name,
+            surname,
+            location,
+            about,
+            true,
+            o
+          )
+        );
       })
       .finally(() => {
         setIsLoading(false);
       });
   };
 
-  const deleteUserAccount = (userId: string, navigate: NavigateFunction) => {
+  const deleteUserAccount = (
+    userId: string,
+    navigate: NavigateFunction,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
     setIsLoading(true);
 
     axios
       .delete(`https://localhost:7202/api/Users/${userId}`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${newToken ? newToken : token}`,
         },
       })
       .then(() => {
@@ -359,7 +398,9 @@ const useHttp = () => {
         navigate("/login");
       })
       .catch((e: AxiosError) => {
-        showError(e);
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          deleteUserAccount(userId, navigate, true, o)
+        );
       })
       .finally(() => {
         setIsLoading(false);
@@ -370,7 +411,9 @@ const useHttp = () => {
     userId: string,
     currentPassword: string,
     newPassword: string,
-    navigate: NavigateFunction
+    navigate: NavigateFunction,
+    doNotTryAgain?: boolean,
+    newToken?: string
   ) => {
     setIsLoading(true);
     axios
@@ -383,7 +426,7 @@ const useHttp = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${newToken ? newToken : token}`,
           },
         }
       )
@@ -392,7 +435,16 @@ const useHttp = () => {
         navigate(`/user/${userId}/profile`);
       })
       .catch((e: AxiosError) => {
-        showError(e);
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          changeUserPassword(
+            userId,
+            currentPassword,
+            newPassword,
+            navigate,
+            true,
+            o
+          )
+        );
       })
       .finally(() => {
         setIsLoading(false);
