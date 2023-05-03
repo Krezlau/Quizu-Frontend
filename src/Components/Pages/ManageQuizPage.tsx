@@ -4,9 +4,17 @@ import QuizQuestionList from "../Quizzes/QuizQuestionList";
 import useFetchQuizDetails from "../../hooks/useFetchQuizDetails";
 import QuizManageCard from "../Quizzes/QuizManageCard";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../store";
+import ForbiddenPage from "./ForbiddenPage";
 
 const ManageQuizPage = () => {
   const { isLoading, quiz } = useFetchQuizDetails();
+  const userId = useSelector((state: IRootState) => state.auth.userId);
+
+  if (quiz && quiz.authorId !== userId) {
+    return <ForbiddenPage />
+  }
 
   return (
     <>

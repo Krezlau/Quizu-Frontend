@@ -63,7 +63,10 @@ export const retrieveStoredToken = async () => {
         .post(
           "https://localhost:7202/api/Auth/refresh",
           { accessToken: storedToken },
-          { headers: { "Content-Type": "application/json" }, withCredentials : true }
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
         )
         .then((r) => {
           storeNewToken(r.data.result);
@@ -81,11 +84,19 @@ export const retrieveStoredToken = async () => {
   };
 };
 
+export const refreshToken = (newToken: string) => {
+  return (dispatch: Dispatch<AnyAction>) => {
+    storeNewToken(newToken);
+    dispatch(authActions.refresh({ token: newToken }));
+    console.log("refreshed")
+  };
+};
+
 export const loginUser = (
   email: string,
   password: string,
   setIsLoading: (newState: boolean) => void,
-  showError: (e: AxiosError) => void,
+  showError: (e: AxiosError) => void
 ) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     setIsLoading(true);
@@ -94,7 +105,10 @@ export const loginUser = (
       .post(
         "https://localhost:7202/api/auth/login",
         { email, password },
-        { headers: { "Content-Type": "application/json" } }
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
       )
       .then((r) => {
         dispatch(

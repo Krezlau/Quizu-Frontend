@@ -4,9 +4,10 @@ import useHttp from "./useHttp";
 const useHttpValidation = (
   value: string,
   valueIsValid: boolean,
+  ifUsername: boolean,
   defaultValue?: string
 ) => {
-  const { isLoading: isLoadingVal, checkIfTitleAvailable } = useHttp();
+  const { isLoading: isLoadingVal, checkIfTitleAvailable, checkIfUsernameAvailable } = useHttp();
   const [availableMessage, setAvailableMessage] = useState("");
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -14,8 +15,11 @@ const useHttpValidation = (
         setAvailableMessage("");
         return;
       }
-      if (valueIsValid) {
+      if (valueIsValid && !ifUsername) {
         checkIfTitleAvailable(value, setAvailableMessage);
+      }
+      if (valueIsValid && ifUsername) {
+        checkIfUsernameAvailable(value, setAvailableMessage);
       }
       if (!valueIsValid) {
         setAvailableMessage("");

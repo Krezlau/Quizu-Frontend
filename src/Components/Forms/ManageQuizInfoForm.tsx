@@ -8,6 +8,7 @@ import ErrorText from "../UI/ErrorText";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import Modal from "../UI/Modal";
 import SectionHeader from "../UI/SectionHeader";
+import ValidationWrapper from "../UI/ValidationWrapper";
 
 const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
   const navigate = useNavigate();
@@ -26,7 +27,12 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
     "Title is too long. Must be no longer than 100 characters."
   );
 
-  const {availableMessage, isLoadingVal} = useHttpValidation(title, titleIsValid, props.quiz.title)
+  const { availableMessage, isLoadingVal } = useHttpValidation(
+    title,
+    titleIsValid,
+    false,
+    props.quiz.title
+  );
 
   const {
     value: description,
@@ -68,8 +74,11 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
     <>
       <form className="flex flex-col justify-center" onSubmit={submitHandler}>
         <SectionHeader text="Title" centered={true} label="title" />
-        <div className="flex flex-row gap-2 justify-center w-full mx-auto">
-          <div className="w-5"></div>
+        <ValidationWrapper
+          isValid={titleIsValid}
+          message={availableMessage}
+          isLoading={isLoadingVal ? isLoadingVal : false}
+        >
           <input
             id="title"
             className="input input-bordered w-full max-w-[40rem]"
@@ -77,40 +86,8 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
             onChange={titleChangeHandler}
             onBlur={titleBlurHandler}
           />
-          <div className="w-5">
-            {isLoadingVal && <LoadingSpinner center={true} />}
-            {!isLoadingVal && availableMessage === "" && titleIsValid && (
-              <svg
-                className="scale-50"
-                xmlns="http://www.w3.org/2000/svg"
-                height="48"
-                viewBox="0 96 960 960"
-                width="48"
-              >
-                <path
-                  fill="green"
-                  d="M378 810 154 586l43-43 181 181 384-384 43 43-427 427Z"
-                />
-              </svg>
-            )}
-            {!isLoadingVal && availableMessage !== "" && titleIsValid && (
-              <svg
-                className="scale-50"
-                xmlns="http://www.w3.org/2000/svg"
-                height="48"
-                viewBox="0 96 960 960"
-                width="48"
-              >
-                <path
-                  fill="red"
-                  d="m249 849-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"
-                />
-              </svg>
-            )}
-          </div>
-        </div>
+        </ValidationWrapper>
         <ErrorText text={titleErrorMessage} />
-        <ErrorText text={availableMessage} />
         <SectionHeader
           text="Short Description"
           centered={true}
@@ -169,7 +146,7 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
         <button
           type="submit"
           className={`btn btn-success mx-auto mb-8 w-full max-w-[20rem] ${
-            isLoading || !formIsValid ? "btn-disabled" : ""
+            isLoading || !formIsValid || isLoadingVal || availableMessage !== "" ? "btn-disabled" : ""
           }`}
         >
           {isLoading ? <LoadingSpinner /> : "Save"}

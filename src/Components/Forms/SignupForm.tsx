@@ -6,6 +6,8 @@ import countries from "../../auxiliary/countries";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import useValidation from "../../hooks/useValidation";
 import ErrorText from "../UI/ErrorText";
+import useHttpValidation from "../../hooks/useHttpValidation";
+import ValidationWrapper from "../UI/ValidationWrapper";
 
 const SignupForm = () => {
   const { isLoading, signUp } = useHttp();
@@ -23,6 +25,12 @@ const SignupForm = () => {
     "Username is too short. Must be at least 3 characters long.",
     (v) => v.trim().length <= 25,
     "Username is too long. Must be no longer than 25 characters."
+  );
+
+  const { isLoadingVal, availableMessage } = useHttpValidation(
+    username,
+    usernameIsValid,
+    true
   );
 
   const {
@@ -120,14 +128,20 @@ const SignupForm = () => {
   return (
     <form className="flex flex-col justify-center" onSubmit={submitHandler}>
       <SectionHeader text={"Username"} centered={true} label={"username"} />
-      <input
-        type="text"
-        id="username"
-        className="input w-full mx-auto sm:max-w-md"
-        value={username}
-        onChange={usernameChangeHandler}
-        onBlur={usernameBlurHandler}
-      />
+      <ValidationWrapper
+        isValid={usernameIsValid}
+        isLoading={isLoadingVal ? isLoadingVal : false}
+        message={availableMessage}
+      >
+        <input
+          type="text"
+          id="username"
+          className="input w-full sm:max-w-md"
+          value={username}
+          onChange={usernameChangeHandler}
+          onBlur={usernameBlurHandler}
+        />
+      </ValidationWrapper>
       <ErrorText text={usernameError} />
       <SectionHeader text={"Email"} centered={true} label={"email"} />
       <input
@@ -191,7 +205,7 @@ const SignupForm = () => {
       >
         <option disabled>Choose a country</option>
         {countries.map((c) => (
-          <option>{c.name}</option>
+          <option key={c.name}>{c.name}</option>
         ))}
       </select>
       <div className="mx-auto w-full sm:max-w-sm">

@@ -6,7 +6,8 @@ import { IRootState } from "../../store";
 const AvatarDropdown = () => {
   const { logout } = useHttp();
   const navigate = useNavigate();
-  const username = useSelector((state: IRootState) => state.auth.username)
+  const username = useSelector((state: IRootState) => state.auth.username);
+  const userId = useSelector((state: IRootState) => state.auth.userId);
 
   const logoutHandler = () => {
     logout();
@@ -20,7 +21,9 @@ const AvatarDropdown = () => {
         className="btn btn-ghost btn-circle avatar placeholder bg-slate-700"
       >
         <div className="w-10 rounded-full">
-          <span className="text-xl">{username && username.length > 0 ? username[0] : "?"}</span>
+          <span className="text-xl">
+            {username && username.length > 0 ? username[0] : "?"}
+          </span>
         </div>
       </label>
       <ul
@@ -28,10 +31,10 @@ const AvatarDropdown = () => {
         className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4"
       >
         <li>
-          <Link to="/user/{id}/profile">Profile</Link>
+          <Link to={`/user/${userId}/profile`}>Profile</Link>
         </li>
         <li>
-          <Link to="/user/{id}/settings">Settings</Link>
+          <Link to={`/user/${userId}/profile`}>Settings</Link>
         </li>
         <li>
           <button onClick={logoutHandler}>Logout</button>
