@@ -13,14 +13,14 @@ const UserQuizzesPage = () => {
   const [isAllLoaded, setIsAllLoaded] = useState(false);
 
   useEffect(() => {
-    fetchQuizzes(1, 10, userId).then((r) => {
+    fetchQuizzes(1, 5, userId).then((r) => {
       setQuizzes(r.queryResult);
       if (r.pageCount === 1) setIsAllLoaded(true);
     });
   }, [fetchQuizzes]);
 
   const loadMore = () => {
-    fetchQuizzes(page, 10, userId).then((r) => {
+    fetchQuizzes(page, 5, userId).then((r) => {
       setQuizzes((state) => state.concat(r.queryResult));
       if (r.pageCount === page) setIsAllLoaded(true);
     });

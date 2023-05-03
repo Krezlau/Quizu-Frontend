@@ -127,7 +127,10 @@ const useHttp = () => {
       .get(
         `https://localhost:7202/api/Quizzes${userId ? "/byUserId/" + userId : ""}?PageNumber=${page}&PageSize=${pageSize}`,
         {
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       )
       .then((r) => {
