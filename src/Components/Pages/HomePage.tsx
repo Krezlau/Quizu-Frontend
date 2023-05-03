@@ -14,8 +14,8 @@ const HomePage = () => {
   const username = useSelector((state: IRootState) => state.auth.username);
 
   useEffect(() => {
-    fetchQuizzes(1, 5).then((r) => setQuizzes(r));
-    fetchQuizzes(2, 5).then((r) => setRecommended(r));
+    fetchQuizzes(1, 5).then((r) => setQuizzes(r.queryResult));
+    fetchQuizzes(2, 5).then((r) => setRecommended(r.queryResult));
   }, [fetchQuizzes]);
 
   return (

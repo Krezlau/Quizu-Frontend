@@ -10,6 +10,7 @@ import {
   useAuthDispatch,
 } from "../store/auth-actions";
 import { authActions } from "../store/auth-slice";
+import IPageResponse from "../types/IPageResponse";
 import IQuiz from "../types/IQuiz";
 import IQuizDetails from "../types/IQuizDetails";
 import IResponse from "../types/IResponse";
@@ -120,17 +121,17 @@ const useHttp = () => {
       });
   };
 
-  const fetchQuizzes = useCallback(async (page: number, pageSize: number) => {
+  const fetchQuizzes = useCallback(async (page: number, pageSize: number, userId?: string) => {
     setIsLoading(true);
-    const quizzes: IQuiz[] = await axios
+    const quizzes: IPageResponse<IQuiz> = await axios
       .get(
-        `https://localhost:7202/api/Quizzes?PageNumber=${page}&PageSize=${pageSize}`,
+        `https://localhost:7202/api/Quizzes${userId ? "/byUserId/" + userId : ""}?PageNumber=${page}&PageSize=${pageSize}`,
         {
           headers: { "Content-Type": "application/json" },
         }
       )
       .then((r) => {
-        return r.data.result.queryResult;
+        return r.data.result;
       })
       .catch((e: AxiosError) => {
         showError(e);
