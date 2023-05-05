@@ -488,6 +488,29 @@ const useHttp = () => {
       });
   };
 
+  const fetchQuestions = useCallback(async (quizId: string) => {
+    setIsLoading(true);
+    const questions: IQuestion[] = await axios
+      .get(
+        `https://localhost:7202/api/QuestionsAnswers/quiz/${quizId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((r) => {
+        return r.data.result;
+      })
+      .catch((e: AxiosError) => {
+        showError(e);
+        setIsLoading(false);
+      });
+    setIsLoading(false);
+    return questions;
+  }, []);
+
   return {
     login: login,
     isLoading: isLoading,
@@ -505,6 +528,7 @@ const useHttp = () => {
     deleteUserAccount,
     changeUserPassword,
     addNewQuestion,
+    fetchQuestions,
   };
 };
 

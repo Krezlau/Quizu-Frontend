@@ -5,7 +5,9 @@ import IAnswer from "../../types/IAnswer";
 import ErrorText from "../UI/ErrorText";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
-const QuizNewQuestionForm: React.FC<{ quizId: string }> = (props) => {
+const QuizNewQuestionForm: React.FC<{ quizId: string; onAdd: () => void }> = (
+  props
+) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isCorrect1, setIsCorrect1] = useState(false);
   const [isCorrect2, setIsCorrect2] = useState(false);
@@ -124,7 +126,7 @@ const QuizNewQuestionForm: React.FC<{ quizId: string }> = (props) => {
 
   const submitHandler = (event: FormEvent) => {
     event.preventDefault();
-    
+
     if (!isFormValid) return;
 
     const answers: IAnswer[] = [
@@ -132,13 +134,15 @@ const QuizNewQuestionForm: React.FC<{ quizId: string }> = (props) => {
       { content: answer2, isCorrect: isCorrect2 },
     ];
 
-    if (answer3 !== "") answers.push({content: answer3, isCorrect: isCorrect3})
-    if (answer4 !== "") answers.push({content: answer4, isCorrect: isCorrect4})
+    if (answer3 !== "")
+      answers.push({ content: answer3, isCorrect: isCorrect3 });
+    if (answer4 !== "")
+      answers.push({ content: answer4, isCorrect: isCorrect4 });
 
     addNewQuestion({
       quizId: props.quizId,
       content: question,
-      answers: answers
+      answers: answers,
     });
 
     resetQuestion();
@@ -146,6 +150,8 @@ const QuizNewQuestionForm: React.FC<{ quizId: string }> = (props) => {
     resetAnswer2();
     resetAnswer3();
     resetAnswer4();
+
+    setTimeout(() => {props.onAdd()}, 1000)
   };
 
   return (
