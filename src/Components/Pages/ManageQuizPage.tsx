@@ -7,6 +7,7 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../store";
 import ForbiddenPage from "./ForbiddenPage";
+import QuizNewQuestionForm from "../Forms/QuizNewQuestionForm";
 
 const ManageQuizPage = () => {
   const { isLoading, quiz } = useFetchQuizDetails();
@@ -23,6 +24,7 @@ const ManageQuizPage = () => {
       {quiz && !isLoading && <QuizManageCard quiz={quiz} /> }
       {!quiz && !isLoading && <p>Could not fetch quiz.</p>}
       <SectionHeader text="Questions" />
+      <QuizNewQuestionForm />
       <QuizQuestionList />
     </>
   );
