@@ -1,17 +1,18 @@
-import { FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import useHttp from "../../hooks/useHttp";
 import useValidation from "../../hooks/useValidation";
+import IAnswer from "../../types/IAnswer";
 import ErrorText from "../UI/ErrorText";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
-const QuizNewQuestionForm = () => {
+const QuizNewQuestionForm: React.FC<{ quizId: string }> = (props) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isCorrect1, setIsCorrect1] = useState(false);
   const [isCorrect2, setIsCorrect2] = useState(false);
   const [isCorrect3, setIsCorrect3] = useState(false);
   const [isCorrect4, setIsCorrect4] = useState(false);
 
-  const {isLoading} = useHttp();
+  const { isLoading, addNewQuestion } = useHttp();
 
   const openFormHandler = () => {
     setIsFormOpen(true);
@@ -121,6 +122,32 @@ const QuizNewQuestionForm = () => {
     answer4Error && answer4 !== "" ? " " + answer4Error : ""
   }${!isCorrectValid ? " Exactly one answer must be correct." : ""}`;
 
+  const submitHandler = (event: FormEvent) => {
+    event.preventDefault();
+    
+    if (!isFormValid) return;
+
+    const answers: IAnswer[] = [
+      { content: answer1, isCorrect: isCorrect1 },
+      { content: answer2, isCorrect: isCorrect2 },
+    ];
+
+    if (answer3 !== "") answers.push({content: answer3, isCorrect: isCorrect3})
+    if (answer4 !== "") answers.push({content: answer4, isCorrect: isCorrect4})
+
+    addNewQuestion({
+      quizId: props.quizId,
+      content: question,
+      answers: answers
+    });
+
+    resetQuestion();
+    resetAnswer1();
+    resetAnswer2();
+    resetAnswer3();
+    resetAnswer4();
+  };
+
   return (
     <>
       {!isFormOpen && (
@@ -132,7 +159,7 @@ const QuizNewQuestionForm = () => {
         </div>
       )}
       {isFormOpen && (
-        <form className="p-4 w-full my-2 text-center">
+        <form onSubmit={submitHandler} className="p-4 w-full my-2 text-center">
           <input
             className="card bg-neutral text-xl p-4 mb-2 w-full text-center"
             placeholder="Question"
@@ -224,16 +251,14 @@ const QuizNewQuestionForm = () => {
               >
                 Cancel
               </button>
-        <button
-          type="submit"
-          className={`btn btn-primary w-full md:w-auto ${
-            isLoading || !isFormValid 
-              ? "btn-disabled"
-              : ""
-          }`}
-        >
-          {isLoading ? <LoadingSpinner /> : "Add"}
-        </button>
+              <button
+                type="submit"
+                className={`btn btn-primary w-full md:w-auto ${
+                  isLoading || !isFormValid ? "btn-disabled" : ""
+                }`}
+              >
+                {isLoading ? <LoadingSpinner /> : "Add"}
+              </button>
             </div>
           </div>
         </form>

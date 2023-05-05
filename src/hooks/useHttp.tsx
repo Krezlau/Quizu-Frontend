@@ -11,6 +11,7 @@ import {
 } from "../store/auth-actions";
 import { authActions } from "../store/auth-slice";
 import IPageResponse from "../types/IPageResponse";
+import IQuestion from "../types/IQuestion";
 import IQuiz from "../types/IQuiz";
 import IQuizDetails from "../types/IQuizDetails";
 import IResponse from "../types/IResponse";
@@ -455,6 +456,38 @@ const useHttp = () => {
       });
   };
 
+  const addNewQuestion = (
+    question: IQuestion,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+    axios
+      .post(
+        `https://localhost:7202/api/QuestionsAnswers`,
+        {
+          ...question
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken ? newToken : token}`,
+          },
+        }
+      )
+      .then((r) => {
+        showAlert("success", "Question added.");
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          addNewQuestion(question, true, o)
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return {
     login: login,
     isLoading: isLoading,
@@ -471,6 +504,7 @@ const useHttp = () => {
     updateProfileInfo,
     deleteUserAccount,
     changeUserPassword,
+    addNewQuestion,
   };
 };
 

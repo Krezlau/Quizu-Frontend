@@ -14,18 +14,18 @@ const ManageQuizPage = () => {
   const userId = useSelector((state: IRootState) => state.auth.userId);
 
   if (quiz && quiz.authorId !== userId) {
-    return <ForbiddenPage />
+    return <ForbiddenPage />;
   }
 
   return (
     <>
       <PageHeader text={"Manage Quiz"} />
-      { isLoading && <LoadingSpinner size="xl" center={true} />}
-      {quiz && !isLoading && <QuizManageCard quiz={quiz} /> }
+      {isLoading && <LoadingSpinner size="xl" center={true} />}
+      {quiz && !isLoading && <QuizManageCard quiz={quiz} />}
       {!quiz && !isLoading && <p>Could not fetch quiz.</p>}
       <SectionHeader text="Questions" />
-      <QuizNewQuestionForm />
-      <QuizQuestionList />
+      {quiz && !isLoading && <QuizNewQuestionForm quizId={quiz.id} />}
+      {quiz && !isLoading && <QuizQuestionList />}
     </>
   );
 };
