@@ -122,28 +122,33 @@ const useHttp = () => {
       });
   };
 
-  const fetchQuizzes = useCallback(async (page: number, pageSize: number, userId?: string) => {
-    setIsLoading(true);
-    const quizzes: IPageResponse<IQuiz> = await axios
-      .get(
-        `https://localhost:7202/api/Quizzes${userId ? "/byUserId/" + userId : ""}?PageNumber=${page}&PageSize=${pageSize}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((r) => {
-        return r.data.result;
-      })
-      .catch((e: AxiosError) => {
-        showError(e);
-        setIsLoading(false);
-      });
-    setIsLoading(false);
-    return quizzes;
-  }, []);
+  const fetchQuizzes = useCallback(
+    async (page: number, pageSize: number, userId?: string) => {
+      setIsLoading(true);
+      const quizzes: IPageResponse<IQuiz> = await axios
+        .get(
+          `https://localhost:7202/api/Quizzes${
+            userId ? "/byUserId/" + userId : ""
+          }?PageNumber=${page}&PageSize=${pageSize}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((r) => {
+          return r.data.result;
+        })
+        .catch((e: AxiosError) => {
+          showError(e);
+          setIsLoading(false);
+        });
+      setIsLoading(false);
+      return quizzes;
+    },
+    []
+  );
 
   const addQuiz = (
     title: string,
@@ -466,7 +471,7 @@ const useHttp = () => {
       .post(
         `https://localhost:7202/api/QuestionsAnswers`,
         {
-          ...question
+          ...question,
         },
         {
           headers: {
@@ -489,27 +494,26 @@ const useHttp = () => {
   };
 
   const fetchQuestions = useCallback(async (quizId: string) => {
-    setIsLoading(true);
-    const questions: IQuestion[] = await axios
-      .get(
-        `https://localhost:7202/api/QuestionsAnswers/quiz/${quizId}`,
-        {
+    if (token) {
+      setIsLoading(true);
+      const questions: IQuestion[] = await axios
+        .get(`https://localhost:7202/api/QuestionsAnswers/quiz/${quizId}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
-      )
-      .then((r) => {
-        return r.data.result;
-      })
-      .catch((e: AxiosError) => {
-        showError(e);
-        setIsLoading(false);
-      });
-    setIsLoading(false);
-    return questions;
-  }, []);
+        })
+        .then((r) => {
+          return r.data.result;
+        })
+        .catch((e: AxiosError) => {
+          showError(e);
+          setIsLoading(false);
+        });
+      setIsLoading(false);
+      return questions;
+    }
+  }, [token]);
 
   return {
     login: login,
