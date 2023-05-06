@@ -25,7 +25,7 @@ const useFetchQuestions = () => {
     renew();
   }, [token]);
 
-  return { questions, renew, isLoading };
+  return { questions, renew, isLoading, setQuestions };
 };
 
 export default useFetchQuestions;

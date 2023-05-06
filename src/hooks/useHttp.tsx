@@ -493,27 +493,60 @@ const useHttp = () => {
       });
   };
 
-  const fetchQuestions = useCallback(async (quizId: string) => {
-    if (token) {
-      setIsLoading(true);
-      const questions: IQuestion[] = await axios
-        .get(`https://localhost:7202/api/QuestionsAnswers/quiz/${quizId}`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((r) => {
-          return r.data.result;
-        })
-        .catch((e: AxiosError) => {
-          showError(e);
-          setIsLoading(false);
-        });
-      setIsLoading(false);
-      return questions;
-    }
-  }, [token]);
+  const fetchQuestions = useCallback(
+    async (quizId: string, doNotTryAgain?: boolean, newToken?: string) => {
+      if (token) {
+        setIsLoading(true);
+        const questions: IQuestion[] = await axios
+          .get(`https://localhost:7202/api/QuestionsAnswers/quiz/${quizId}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((r) => {
+            return r.data.result;
+          })
+          .catch((e: AxiosError) => {
+            handleErrorResponse(e, doNotTryAgain, (o) =>
+              fetchQuestions(quizId, true, o)
+            );
+          });
+        setIsLoading(false);
+        return questions;
+      }
+    },
+    [token]
+  );
+
+  const deleteQuestion = async (
+    questionId: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+
+    const outcome = await axios
+      .delete(`https://localhost:7202/api/QuestionsAnswers/${questionId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${newToken ? newToken : token}`,
+        },
+      })
+      .then(() => {
+        showAlert("success", "Successfully deleted.");
+        return true;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          deleteQuestion(questionId, true, o)
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+    return outcome;
+  };
 
   return {
     login: login,
@@ -533,6 +566,7 @@ const useHttp = () => {
     changeUserPassword,
     addNewQuestion,
     fetchQuestions,
+    deleteQuestion,
   };
 };
 

@@ -2,7 +2,7 @@ import React from "react";
 import IQuestion from "../../types/IQuestion";
 import QuizQuestion from "./QuizQuestion";
 
-const QuizQuestionList: React.FC<{ questions: IQuestion[] }> = (props) => {
+const QuizQuestionList: React.FC<{ questions: IQuestion[], onDelete: (questionId: string) => void }> = (props) => {
   const questions = props.questions.reverse();
 
   return (
@@ -13,7 +13,7 @@ const QuizQuestionList: React.FC<{ questions: IQuestion[] }> = (props) => {
         </p>
       ) : (
         questions.map((q) => (
-          <QuizQuestion key={q.id} question={q} />
+          <QuizQuestion key={q.id} question={q} onDelete={props.onDelete} />
         ))
       )}
     </ul>
