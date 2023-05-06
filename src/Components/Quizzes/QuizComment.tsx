@@ -20,13 +20,13 @@ const QuizComment: React.FC<{ comment: IComment }> = (props) => {
           <h3 className="text-md">
             <Link
               className="link link-accent link-hover hover:no-underline"
-              to={`user/${props.comment.authorId}/profile`}
+              to={`/user/${props.comment.authorId}/profile`}
             >
               {props.comment.authorName}
             </Link>
           </h3>
           <p className="text-sm text-gray-500">
-            {props.comment.createdAt.toDateString()}
+            {new Date(props.comment.createdAt).toDateString()}
           </p>
         </div>
       </div>

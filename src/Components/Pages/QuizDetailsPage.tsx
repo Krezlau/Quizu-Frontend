@@ -5,14 +5,44 @@ import QuizDetailsCard from "../Quizzes/QuizDetailsCard";
 import useFetchQuizDetails from "../../hooks/useFetchQuizDetails";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import QuizCommentList from "../Quizzes/QuizCommentList";
+import useFetchComments from "../../hooks/useFetchComments";
+import useHttp from "../../hooks/useHttp";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../store";
 
 const QuizDetailsPage = () => {
   const { isLoading, quiz } = useFetchQuizDetails();
+  const {
+    isLoading: commentsLoading,
+    isAllLoaded,
+    comments,
+    setComments,
+    loadMore,
+  } = useFetchComments();
+  const { isLoading: addLoading, addNewComment } = useHttp();
+  const auth = useSelector((state: IRootState) => state.auth);
+
+  const addCommentHandler = (content: string) => {
+    if (quiz)
+    addNewComment(content, quiz.id).then((o) => {
+      if (o)
+        setComments((s) => [
+          ...s,
+          {
+            content: content,
+            id: o,
+            authorName: auth.username,
+            authorId: auth.userId,
+            createdAt: new Date(),
+          },
+        ]);
+    });
+  };
 
   return (
     <>
       <PageHeader text={"Quiz Details"} />
-      {isLoading && <LoadingSpinner size="xl" center={true}/>}
+      {isLoading && <LoadingSpinner size="xl" center={true} />}
       {quiz ? <QuizDetailsCard quiz={quiz} /> : <p> Could not fetch quiz. </p>}
       <SectionHeader text={"About"} />
       <div className="card bg-neutral p-4 text-xl">
@@ -29,8 +59,12 @@ const QuizDetailsPage = () => {
         <p>Coming soon! (stats)</p>
       </div>
       <SectionHeader text={"Comments"} />
-      <CommentForm />
-      <QuizCommentList comments={[{id:"xd", content:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu neque vitae tortor accumsan tristique laoreet in metus. Aenean leo nibh, ultrices ac elit ut, ultrices venenatis dolor. Curabitur quam.", authorId:"afsf", authorName:"Krez", createdAt: new Date()}, {id:"", content:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu neque vitae tortor accumsan tristique laoreet in metus. Aenean leo nibh, ultrices ac elit ut, ultrices venenatis dolor. Curabitur quam.", authorId:"afsf", authorName:"Arez", createdAt: new Date()}]} />
+      <CommentForm onAdd={addCommentHandler} isLoading={addLoading} />
+      <QuizCommentList
+        comments={comments}
+        loadMore={loadMore}
+        isAllLoaded={isAllLoaded}
+      />
     </>
   );
 };

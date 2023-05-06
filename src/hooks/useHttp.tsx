@@ -10,6 +10,7 @@ import {
   useAuthDispatch,
 } from "../store/auth-actions";
 import { authActions } from "../store/auth-slice";
+import IComment from "../types/IComment";
 import IPageResponse from "../types/IPageResponse";
 import IQuestion from "../types/IQuestion";
 import IQuiz from "../types/IQuiz";
@@ -614,6 +615,70 @@ const useHttp = () => {
     return response;
   };
 
+  const fetchComments = useCallback(
+    async (quizId: string, page: number, pageSize: number) => {
+      setIsLoading(true);
+      const comments: IPageResponse<IComment> = await axios
+        .get(
+          `https://localhost:7202/api/Comments/quiz/${quizId}
+          ?PageNumber=${page}&PageSize=${pageSize}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((r) => {
+          return r.data.result;
+        })
+        .catch((e: AxiosError) => {
+          showError(e);
+          setIsLoading(false);
+        });
+      setIsLoading(false);
+      return comments;
+    },
+    []
+  );
+
+  const addNewComment = async (
+    content: string,
+    quizId: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+    const outcome: string = await axios
+      .post(
+        `https://localhost:7202/api/Comments`,
+        {
+          content,
+          quizId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken ? newToken : token}`,
+          },
+        }
+      )
+      .then((r) => {
+        showAlert("success", "Comment added.");
+        return r.data.result;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          addNewComment(content, quizId, true, o)
+        );
+        return null;
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return outcome;
+  };
+
   return {
     login: login,
     isLoading: isLoading,
@@ -635,6 +700,8 @@ const useHttp = () => {
     deleteQuestion,
     likeQuiz,
     unlikeQuiz,
+    fetchComments,
+    addNewComment,
   };
 };
 
