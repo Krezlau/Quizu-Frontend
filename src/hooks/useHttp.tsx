@@ -188,7 +188,10 @@ const useHttp = () => {
     setIsLoading(true);
     const quiz: IQuizDetails = await axios
       .get(`https://localhost:7202/api/Quizzes/${id}`, {
-        headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
       })
       .then((r) => {
         return r.data.result;
@@ -199,7 +202,7 @@ const useHttp = () => {
       });
     setIsLoading(false);
     return quiz;
-  }, []);
+  }, [token]);
 
   const updateQuizInfo = (
     quizId: string,
@@ -548,6 +551,69 @@ const useHttp = () => {
     return outcome;
   };
 
+  const likeQuiz = async (
+    quizId: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+    const response = await axios
+      .post(
+        `https://localhost:7202/api/Likes/${quizId}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken ? newToken : token}`,
+          },
+        }
+      )
+      .then((r) => {
+        return true;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          likeQuiz(quizId, doNotTryAgain, o)
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return response;
+  };
+
+  const unlikeQuiz = async (
+    quizId: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+    const response = await axios
+      .delete(
+        `https://localhost:7202/api/Likes/${quizId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken ? newToken : token}`,
+          },
+        }
+      )
+      .then((r) => {
+        return true;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          likeQuiz(quizId, doNotTryAgain, o)
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return response;
+  };
+
   return {
     login: login,
     isLoading: isLoading,
@@ -567,6 +633,8 @@ const useHttp = () => {
     addNewQuestion,
     fetchQuestions,
     deleteQuestion,
+    likeQuiz,
+    unlikeQuiz,
   };
 };
 
