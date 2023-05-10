@@ -25,7 +25,7 @@ const QuizDetailsPage = () => {
   const addCommentHandler = (content: string) => {
     if (quiz)
     addNewComment(content, quiz.id).then((o) => {
-      if (o)
+      if (o) {
         setComments((s) => [
           ...s,
           {
@@ -36,6 +36,7 @@ const QuizDetailsPage = () => {
             createdAt: new Date(),
           },
         ]);
+      }
     });
   };
 
@@ -43,7 +44,7 @@ const QuizDetailsPage = () => {
     <>
       <PageHeader text={"Quiz Details"} />
       {isLoading && <LoadingSpinner size="xl" center={true} />}
-      {quiz ? <QuizDetailsCard quiz={quiz} /> : <p> Could not fetch quiz. </p>}
+      {quiz ? <QuizDetailsCard quiz={quiz} commentsCount={comments.length} /> : <p> Could not fetch quiz. </p>}
       <SectionHeader text={"About"} />
       <div className="card bg-neutral p-4 text-xl">
         {isLoading && <LoadingSpinner size="xl" center={true} />}
@@ -59,7 +60,7 @@ const QuizDetailsPage = () => {
         <p>Coming soon! (stats)</p>
       </div>
       <SectionHeader text={"Comments"} />
-      <CommentForm onAdd={addCommentHandler} isLoading={addLoading} />
+      <CommentForm onAdd={addCommentHandler} isLoading={addLoading ? addLoading : false} />
       <QuizCommentList
         comments={comments}
         loadMore={loadMore}

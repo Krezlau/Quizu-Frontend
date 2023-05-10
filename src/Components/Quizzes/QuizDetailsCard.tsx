@@ -5,11 +5,10 @@ import useHttp from "../../hooks/useHttp";
 import { IRootState } from "../../store";
 import IQuiz from "../../types/IQuiz";
 
-const QuizDetailsCard: React.FC<{ quiz: IQuiz }> = (props) => {
+const QuizDetailsCard: React.FC<{ quiz: IQuiz, commentsCount: number }> = (props) => {
   const userId = useSelector((state: IRootState) => state.auth.userId);
   const [isLiked, setIsLiked] = useState(props.quiz.isLikedByUser);
   const [likesCount, setLikesCount] = useState(props.quiz.likesCount);
-  const [commentsCount, setCommentsCount] = useState(props.quiz.commentsCount);
   const { isLoading, likeQuiz, unlikeQuiz } = useHttp();
 
   useEffect(() => {
@@ -128,7 +127,7 @@ const QuizDetailsCard: React.FC<{ quiz: IQuiz }> = (props) => {
               </svg>
             </div>
             <p className="text-2xl font-bold my-auto">
-              {commentsCount}
+              {props.commentsCount}
             </p>
           </div>
         </div>
