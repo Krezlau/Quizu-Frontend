@@ -21,6 +21,7 @@ import { authActions } from "./store/auth-slice";
 import NotLoggedInPage from "./Components/Pages/NotLoggedInPage";
 import Alert from "./Components/UI/Alert";
 import ForbiddenPage from "./Components/Pages/ForbiddenPage";
+import PlayFetchPage from "./Components/Pages/PlayFetchPage";
 
 function App() {
   const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);
@@ -75,6 +76,7 @@ function App() {
             element={<QuizManageInfoPage />}
           />
           <Route path="/quizzes/:quizId/manage" element={<ManageQuizPage />} />
+          <Route path="/quizzes/:quizId/play" element={<PlayFetchPage />} />
           <Route
             path="/login"
             element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />}
