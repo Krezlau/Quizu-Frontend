@@ -2,11 +2,20 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IRootState } from "../../store";
 import IComment from "../../types/IComment";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
-const QuizComment: React.FC<{ comment: IComment }> = (props) => {
+const QuizComment: React.FC<{
+  comment: IComment;
+  isDelLoading: boolean;
+  onDelete: (id: string) => void;
+}> = (props) => {
   const userId = useSelector((state: IRootState) => state.auth.userId);
 
   const canDelete = userId === props.comment.authorId;
+
+  const deleteHandler = () => {
+    props.onDelete(props.comment.id);
+  };
 
   return (
     <li className="my-6">
@@ -38,13 +47,14 @@ const QuizComment: React.FC<{ comment: IComment }> = (props) => {
           </div>
         </div>
         <div className="py-auto px-10">
-          {canDelete && (
+          {canDelete && !props.isDelLoading && (
             <svg
               className="my-3 hover:scale-125 duration-100 ease-in transition-transform"
               xmlns="http://www.w3.org/2000/svg"
               height="24"
               viewBox="0 96 960 960"
               width="24"
+              onClick={deleteHandler}
             >
               <path
                 fill="white"
@@ -52,6 +62,7 @@ const QuizComment: React.FC<{ comment: IComment }> = (props) => {
               />
             </svg>
           )}
+          {canDelete && props.isDelLoading && <LoadingSpinner />}
         </div>
       </div>
       <p>{props.comment.content}</p>

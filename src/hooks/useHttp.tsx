@@ -185,25 +185,28 @@ const useHttp = () => {
       });
   };
 
-  const fetchQuizDetails = useCallback(async (id: string) => {
-    setIsLoading(true);
-    const quiz: IQuizDetails = await axios
-      .get(`https://localhost:7202/api/Quizzes/${id}`, {
+  const fetchQuizDetails = useCallback(
+    async (id: string) => {
+      setIsLoading(true);
+      const quiz: IQuizDetails = await axios
+        .get(`https://localhost:7202/api/Quizzes/${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-      })
-      .then((r) => {
-        return r.data.result;
-      })
-      .catch((e: AxiosError) => {
-        showError(e);
-        setIsLoading(false);
-      });
-    setIsLoading(false);
-    return quiz;
-  }, [token]);
+        })
+        .then((r) => {
+          return r.data.result;
+        })
+        .catch((e: AxiosError) => {
+          showError(e);
+          setIsLoading(false);
+        });
+      setIsLoading(false);
+      return quiz;
+    },
+    [token]
+  );
 
   const updateQuizInfo = (
     quizId: string,
@@ -591,15 +594,12 @@ const useHttp = () => {
   ) => {
     setIsLoading(true);
     const response = await axios
-      .delete(
-        `https://localhost:7202/api/Likes/${quizId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${newToken ? newToken : token}`,
-          },
-        }
-      )
+      .delete(`https://localhost:7202/api/Likes/${quizId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${newToken ? newToken : token}`,
+        },
+      })
       .then((r) => {
         return true;
       })
@@ -679,6 +679,37 @@ const useHttp = () => {
     return outcome;
   };
 
+  const deleteComment = async (
+    commentId: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+
+    const outcome: boolean = await axios
+      .delete(`https://localhost:7202/api/Comments/${commentId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${newToken ? newToken : token}`,
+        },
+      })
+      .then(() => {
+        showAlert("success", "Comment deleted.");
+        return true;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          deleteComment(commentId, true, o)
+        );
+        return false;
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return outcome;
+  };
+
   return {
     login: login,
     isLoading: isLoading,
@@ -702,6 +733,7 @@ const useHttp = () => {
     unlikeQuiz,
     fetchComments,
     addNewComment,
+    deleteComment,
   };
 };
 

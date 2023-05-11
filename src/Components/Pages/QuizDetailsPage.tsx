@@ -20,23 +20,30 @@ const QuizDetailsPage = () => {
     loadMore,
   } = useFetchComments();
   const { isLoading: addLoading, addNewComment } = useHttp();
+  const { isLoading: cmdelLoading, deleteComment } = useHttp();
   const auth = useSelector((state: IRootState) => state.auth);
 
   const addCommentHandler = (content: string) => {
     if (quiz)
-    addNewComment(content, quiz.id).then((o) => {
-      if (o) {
-        setComments((s) => [
-          ...s,
-          {
-            content: content,
-            id: o,
-            authorName: auth.username,
-            authorId: auth.userId,
-            createdAt: new Date(),
-          },
-        ]);
-      }
+      addNewComment(content, quiz.id).then((o) => {
+        if (o) {
+          setComments((s) => [
+            ...s,
+            {
+              content: content,
+              id: o,
+              authorName: auth.username,
+              authorId: auth.userId,
+              createdAt: new Date(),
+            },
+          ]);
+        }
+      });
+  };
+
+  const deleteCommentHandler = (id: string) => {
+    deleteComment(id).then((o) => {
+      if (o) setComments((c) => c.filter((cm) => cm.id !== id));
     });
   };
 
@@ -44,7 +51,11 @@ const QuizDetailsPage = () => {
     <>
       <PageHeader text={"Quiz Details"} />
       {isLoading && <LoadingSpinner size="xl" center={true} />}
-      {quiz ? <QuizDetailsCard quiz={quiz} commentsCount={comments.length} /> : <p> Could not fetch quiz. </p>}
+      {quiz ? (
+        <QuizDetailsCard quiz={quiz} commentsCount={comments.length} />
+      ) : (
+        <p> Could not fetch quiz. </p>
+      )}
       <SectionHeader text={"About"} />
       <div className="card bg-neutral p-4 text-xl">
         {isLoading && <LoadingSpinner size="xl" center={true} />}
@@ -60,11 +71,16 @@ const QuizDetailsPage = () => {
         <p>Coming soon! (stats)</p>
       </div>
       <SectionHeader text={"Comments"} />
-      <CommentForm onAdd={addCommentHandler} isLoading={addLoading ? addLoading : false} />
+      <CommentForm
+        onAdd={addCommentHandler}
+        isLoading={addLoading ? addLoading : false}
+      />
       <QuizCommentList
         comments={comments}
         loadMore={loadMore}
         isAllLoaded={isAllLoaded}
+        onDelete={deleteCommentHandler}
+        isDelLoading={cmdelLoading ? cmdelLoading : false}
       />
     </>
   );
