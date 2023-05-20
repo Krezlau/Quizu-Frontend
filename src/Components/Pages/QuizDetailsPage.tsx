@@ -4,15 +4,58 @@ import CommentForm from "../Forms/CommentForm";
 import QuizDetailsCard from "../Quizzes/QuizDetailsCard";
 import useFetchQuizDetails from "../../hooks/useFetchQuizDetails";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import QuizCommentList from "../Quizzes/QuizCommentList";
+import useFetchComments from "../../hooks/useFetchComments";
+import useHttp from "../../hooks/useHttp";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../store";
 
 const QuizDetailsPage = () => {
   const { isLoading, quiz } = useFetchQuizDetails();
+  const {
+    isLoading: commentsLoading,
+    isAllLoaded,
+    comments,
+    setComments,
+    loadMore,
+  } = useFetchComments();
+  const { isLoading: addLoading, addNewComment } = useHttp();
+  const { isLoading: cmdelLoading, deleteComment } = useHttp();
+  const auth = useSelector((state: IRootState) => state.auth);
+
+  const addCommentHandler = (content: string) => {
+    if (quiz)
+      addNewComment(content, quiz.id).then((o) => {
+        if (o) {
+          setComments((s) => [
+            ...s,
+            {
+              content: content,
+              id: o,
+              authorName: auth.username,
+              authorId: auth.userId,
+              createdAt: new Date(),
+            },
+          ]);
+        }
+      });
+  };
+
+  const deleteCommentHandler = (id: string) => {
+    deleteComment(id).then((o) => {
+      if (o) setComments((c) => c.filter((cm) => cm.id !== id));
+    });
+  };
 
   return (
     <>
       <PageHeader text={"Quiz Details"} />
-      {isLoading && <LoadingSpinner size="xl" center={true}/>}
-      {quiz ? <QuizDetailsCard quiz={quiz} /> : <p> Could not fetch quiz. </p>}
+      {isLoading && <LoadingSpinner size="xl" center={true} />}
+      {quiz ? (
+        <QuizDetailsCard quiz={quiz} commentsCount={comments.length} />
+      ) : (
+        <p> Could not fetch quiz. </p>
+      )}
       <SectionHeader text={"About"} />
       <div className="card bg-neutral p-4 text-xl">
         {isLoading && <LoadingSpinner size="xl" center={true} />}
@@ -28,8 +71,17 @@ const QuizDetailsPage = () => {
         <p>Coming soon! (stats)</p>
       </div>
       <SectionHeader text={"Comments"} />
-      <CommentForm />
-      <p>TODO Lista komentarzy tutaj, może infinite scroll??</p>
+      <CommentForm
+        onAdd={addCommentHandler}
+        isLoading={addLoading ? addLoading : false}
+      />
+      <QuizCommentList
+        comments={comments}
+        loadMore={loadMore}
+        isAllLoaded={isAllLoaded}
+        onDelete={deleteCommentHandler}
+        isDelLoading={cmdelLoading ? cmdelLoading : false}
+      />
     </>
   );
 };

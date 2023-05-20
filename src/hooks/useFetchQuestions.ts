@@ -2,30 +2,30 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { IRootState } from "../store";
-import IQuizDetails from "../types/IQuizDetails";
+import IQuestion from "../types/IQuestion";
 import useHttp from "./useHttp";
 
-const useFetchQuizDetails = () => {
+const useFetchQuestions = () => {
   const { quizId } = useParams<{ quizId?: string }>();
-  const { isLoading, fetchQuizDetails } = useHttp();
-  const [quiz, setQuiz] = useState<IQuizDetails>();
+  const { isLoading, fetchQuestions } = useHttp();
   const token = useSelector((state: IRootState) => state.auth.accessToken)
+  const [questions, setQuestions] = useState<IQuestion[]>([]);
 
-  const fetch = () => {
+  const renew = () => {
     if (quizId) {
-      fetchQuizDetails(quizId).then((r) => {
+      fetchQuestions(quizId).then((r) => {
         if (r) {
-          setQuiz(r);
+          setQuestions(r);
         }
       });
     }
-  }
+  };
 
   useEffect(() => {
-    fetch();
-  }, [token, quizId]);
+    renew();
+  }, [token]);
 
-  return { quiz, isLoading };
+  return { questions, renew, isLoading, setQuestions };
 };
 
-export default useFetchQuizDetails;
+export default useFetchQuestions;

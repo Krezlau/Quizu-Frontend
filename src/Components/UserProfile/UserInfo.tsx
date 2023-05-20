@@ -12,7 +12,7 @@ const UserInfo: React.FC<{user: IUserProfile}> = (props) => {
       </div>
       <div className="flex flex-row justify-left gap-8 row-start-2">
         <span className="badge text-xl sm:min-w-[8rem]">Joined at</span>
-        <span className="">{props.user.joinedAt.toString()}</span>
+        <span className="">{new Date(props.user.joinedAt).toDateString()}</span>
       </div>
       <div className="flex flex-row justify-left gap-8 row-start-3">
         <span className="badge text-xl sm:min-w-[8rem]">Followers</span>

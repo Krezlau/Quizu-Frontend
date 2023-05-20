@@ -10,7 +10,9 @@ import {
   useAuthDispatch,
 } from "../store/auth-actions";
 import { authActions } from "../store/auth-slice";
+import IComment from "../types/IComment";
 import IPageResponse from "../types/IPageResponse";
+import IQuestion from "../types/IQuestion";
 import IQuiz from "../types/IQuiz";
 import IQuizDetails from "../types/IQuizDetails";
 import IResponse from "../types/IResponse";
@@ -121,25 +123,33 @@ const useHttp = () => {
       });
   };
 
-  const fetchQuizzes = useCallback(async (page: number, pageSize: number, userId?: string) => {
-    setIsLoading(true);
-    const quizzes: IPageResponse<IQuiz> = await axios
-      .get(
-        `https://localhost:7202/api/Quizzes${userId ? "/byUserId/" + userId : ""}?PageNumber=${page}&PageSize=${pageSize}`,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      )
-      .then((r) => {
-        return r.data.result;
-      })
-      .catch((e: AxiosError) => {
-        showError(e);
-        setIsLoading(false);
-      });
-    setIsLoading(false);
-    return quizzes;
-  }, []);
+  const fetchQuizzes = useCallback(
+    async (page: number, pageSize: number, userId?: string) => {
+      setIsLoading(true);
+      const quizzes: IPageResponse<IQuiz> = await axios
+        .get(
+          `https://localhost:7202/api/Quizzes${
+            userId ? "/byUserId/" + userId : ""
+          }?PageNumber=${page}&PageSize=${pageSize}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((r) => {
+          return r.data.result;
+        })
+        .catch((e: AxiosError) => {
+          showError(e);
+          setIsLoading(false);
+        });
+      setIsLoading(false);
+      return quizzes;
+    },
+    []
+  );
 
   const addQuiz = (
     title: string,
@@ -175,22 +185,28 @@ const useHttp = () => {
       });
   };
 
-  const fetchQuizDetails = useCallback(async (id: string) => {
-    setIsLoading(true);
-    const quiz: IQuizDetails = await axios
-      .get(`https://localhost:7202/api/Quizzes/${id}`, {
-        headers: { "Content-Type": "application/json" },
-      })
-      .then((r) => {
-        return r.data.result;
-      })
-      .catch((e: AxiosError) => {
-        showError(e);
-        setIsLoading(false);
-      });
-    setIsLoading(false);
-    return quiz;
-  }, []);
+  const fetchQuizDetails = useCallback(
+    async (id: string) => {
+      setIsLoading(true);
+      const quiz: IQuizDetails = await axios
+        .get(`https://localhost:7202/api/Quizzes/${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((r) => {
+          return r.data.result;
+        })
+        .catch((e: AxiosError) => {
+          showError(e);
+          setIsLoading(false);
+        });
+      setIsLoading(false);
+      return quiz;
+    },
+    [token]
+  );
 
   const updateQuizInfo = (
     quizId: string,
@@ -452,6 +468,248 @@ const useHttp = () => {
       });
   };
 
+  const addNewQuestion = (
+    question: IQuestion,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+    axios
+      .post(
+        `https://localhost:7202/api/QuestionsAnswers`,
+        {
+          ...question,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken ? newToken : token}`,
+          },
+        }
+      )
+      .then((r) => {
+        showAlert("success", "Question added.");
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          addNewQuestion(question, true, o)
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const fetchQuestions = useCallback(
+    async (quizId: string, doNotTryAgain?: boolean, newToken?: string) => {
+      if (token) {
+        setIsLoading(true);
+        const questions: IQuestion[] = await axios
+          .get(`https://localhost:7202/api/QuestionsAnswers/quiz/${quizId}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((r) => {
+            return r.data.result;
+          })
+          .catch((e: AxiosError) => {
+            handleErrorResponse(e, doNotTryAgain, (o) =>
+              fetchQuestions(quizId, true, o)
+            );
+          });
+        setIsLoading(false);
+        return questions;
+      }
+    },
+    [token]
+  );
+
+  const deleteQuestion = async (
+    questionId: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+
+    const outcome = await axios
+      .delete(`https://localhost:7202/api/QuestionsAnswers/${questionId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${newToken ? newToken : token}`,
+        },
+      })
+      .then(() => {
+        showAlert("success", "Successfully deleted.");
+        return true;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          deleteQuestion(questionId, true, o)
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+    return outcome;
+  };
+
+  const likeQuiz = async (
+    quizId: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+    const response = await axios
+      .post(
+        `https://localhost:7202/api/Likes/${quizId}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken ? newToken : token}`,
+          },
+        }
+      )
+      .then((r) => {
+        return true;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          likeQuiz(quizId, doNotTryAgain, o)
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return response;
+  };
+
+  const unlikeQuiz = async (
+    quizId: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+    const response = await axios
+      .delete(`https://localhost:7202/api/Likes/${quizId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${newToken ? newToken : token}`,
+        },
+      })
+      .then((r) => {
+        return true;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          likeQuiz(quizId, doNotTryAgain, o)
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return response;
+  };
+
+  const fetchComments = useCallback(
+    async (quizId: string, page: number, pageSize: number) => {
+      setIsLoading(true);
+      const comments: IPageResponse<IComment> = await axios
+        .get(
+          `https://localhost:7202/api/Comments/quiz/${quizId}
+          ?PageNumber=${page}&PageSize=${pageSize}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((r) => {
+          return r.data.result;
+        })
+        .catch((e: AxiosError) => {
+          showError(e);
+          setIsLoading(false);
+        });
+      setIsLoading(false);
+      return comments;
+    },
+    []
+  );
+
+  const addNewComment = async (
+    content: string,
+    quizId: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+    const outcome: string = await axios
+      .post(
+        `https://localhost:7202/api/Comments`,
+        {
+          content,
+          quizId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken ? newToken : token}`,
+          },
+        }
+      )
+      .then((r) => {
+        showAlert("success", "Comment added.");
+        return r.data.result;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          addNewComment(content, quizId, true, o)
+        );
+        return null;
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return outcome;
+  };
+
+  const deleteComment = async (
+    commentId: string,
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+
+    const outcome: boolean = await axios
+      .delete(`https://localhost:7202/api/Comments/${commentId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${newToken ? newToken : token}`,
+        },
+      })
+      .then(() => {
+        showAlert("success", "Comment deleted.");
+        return true;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          deleteComment(commentId, true, o)
+        );
+        return false;
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return outcome;
+  };
+
   return {
     login: login,
     isLoading: isLoading,
@@ -468,6 +726,14 @@ const useHttp = () => {
     updateProfileInfo,
     deleteUserAccount,
     changeUserPassword,
+    addNewQuestion,
+    fetchQuestions,
+    deleteQuestion,
+    likeQuiz,
+    unlikeQuiz,
+    fetchComments,
+    addNewComment,
+    deleteComment,
   };
 };
 
