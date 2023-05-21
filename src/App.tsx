@@ -21,6 +21,9 @@ import { authActions } from "./store/auth-slice";
 import NotLoggedInPage from "./Components/Pages/NotLoggedInPage";
 import Alert from "./Components/UI/Alert";
 import ForbiddenPage from "./Components/Pages/ForbiddenPage";
+import NotFoundPage from "./Components/Pages/NotFoundPage";
+import InDevelopmentPage from "./Components/Pages/InDevelopmentPage";
+import AboutPage from "./Components/Pages/AboutPage";
 
 function App() {
   const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);
@@ -92,6 +95,13 @@ function App() {
             element={isLoggedIn ? <CreateNewQuizPage /> : <NotLoggedInPage />}
           />
           <Route path="/forbidden" element={<ForbiddenPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/search" element={<InDevelopmentPage />} />
+          <Route path="/explore" element={<InDevelopmentPage />} />
+          <Route path="/user/:userId/stats" element={<InDevelopmentPage />} />
+          <Route path="/user/:userId/settings" element={<InDevelopmentPage />} />
+          <Route path="/play" element={<InDevelopmentPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </PageLayout>
       <Alert />

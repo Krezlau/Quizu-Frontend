@@ -333,10 +333,10 @@ const useHttp = () => {
       })
       .then((r) => {
         if (r.data.result) setMessage("");
-        if (!r.data.result) setMessage("Title not available.");
+        if (!r.data.result) setMessage("Username not available.");
       })
       .catch((e: AxiosError) => {
-        setMessage("Title not valid.");
+        setMessage("Username not valid.");
       })
       .finally(() => {
         setIsLoading(false);

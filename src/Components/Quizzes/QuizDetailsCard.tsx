@@ -131,9 +131,9 @@ const QuizDetailsCard: React.FC<{ quiz: IQuiz, commentsCount: number }> = (props
             </p>
           </div>
         </div>
-        <button className="btn btn-secondary mx-auto w-full max-w-64 md:w-auto mt-12">
+        <Link to="/play" className="btn btn-secondary mx-auto w-full max-w-64 md:w-auto mt-12">
           PLAY
-        </button>
+        </Link>
       </div>
       {userId === props.quiz.authorId ? (
         <div className="flex flex-row justify-right w-full pt-4 px-4">

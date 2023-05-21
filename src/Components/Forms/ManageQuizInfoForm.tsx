@@ -110,6 +110,7 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
           onBlur={aboutBlurHandler}
         />
         <ErrorText text={aboutErrorMessage} />
+        {/*
         <SectionHeader text="Tags" centered={true} label="tags" />
         <select className="select w-full max-w-xs mx-auto">
           <option disabled selected>
@@ -143,6 +144,7 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
             <div className="hover:cursor-pointer mb-1">x</div>
           </div>
         </div>
+        */}
         <button
           type="submit"
           className={`btn btn-success mx-auto mb-8 w-full max-w-[20rem] ${
@@ -152,6 +154,7 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
           {isLoading ? <LoadingSpinner /> : "Save"}
         </button>
       </form>
+      {/*
       <form className="flex flex-col justify-center">
         <h1 className="text-4xl text-center border-t-gray-600 border-t-2 font-semibold pt-4">
           Play Parameters
@@ -207,6 +210,7 @@ const ManageQuizInfoForm: React.FC<{ quiz: IQuizDetails }> = (props) => {
           SAVE
         </button>
       </form>
+      */}
       <h1 className="text-4xl text-center border-t-gray-600 border-t-2 font-semibold pt-4 mt-12 mb-8">
         Danger Zone
       </h1>
