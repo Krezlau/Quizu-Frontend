@@ -54,13 +54,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={
-              <>
-                <h1 className="text-3xl font-bold underline dark:text-amber-400">
-                  Hello world!
-                </h1>
-              </>
-            }
+            element={<Navigate to="/about" />}
           />
           <Route
             path="/home"
