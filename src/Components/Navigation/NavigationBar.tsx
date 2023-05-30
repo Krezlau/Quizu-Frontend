@@ -8,12 +8,13 @@ import { Link } from "react-router-dom";
 
 const NavigationBar = () => {
   const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);
+  const isPlayActive = useSelector((state: IRootState) => state.play.isActive);
 
   return (
-    <div className="navbar fixed top-0 z-40 flex justify-between w-full gap-4 text-white bg-purple-700">
+    <div className={`navbar fixed top-0 z-40 flex justify-between w-full gap-4 text-white ${isPlayActive ? "" : "bg-purple-700"}`}>
       <MainMenuDropdown />
-      <Search />
-      <ThemeChanger />
+      {!isPlayActive && <Search />}
+      {!isPlayActive && <ThemeChanger />}
       {isLoggedIn ? (
         <AvatarDropdown />
       ) : (

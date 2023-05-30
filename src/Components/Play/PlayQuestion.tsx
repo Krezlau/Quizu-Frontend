@@ -1,12 +1,16 @@
+import PlayAnswer from "./PlayAnswer";
+
 const PlayQuestion = () => {
   // card with question and 4 answers
-  return <div className="card p-4 bg-neutral">
-    <div className="text-2xl font-bold text-center mb-4">Question</div>
-    <div className="grid grid-cols-2 gap-4">
-      <button className="btn bg-base-100">Answer 1</button>
-      <button className="btn bg-base-100">Answer 2</button>
-      <button className="btn bg-base-100">Answer 3</button>
-      <button className="btn bg-base-100">Answer 4</button>
+  return <div className="p-4">
+    <div className="card bg-neutral text-3xl font-bold text-center mb-4 p-4 h-64">
+      <p className="my-auto">Question?</p>
+    </div>
+    <div className="grid grid-cols-2 gap-5">
+      <PlayAnswer />
+      <PlayAnswer />
+      <PlayAnswer />
+      <PlayAnswer />
     </div>
   </div>;
 
