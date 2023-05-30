@@ -22,6 +22,7 @@ import NotLoggedInPage from "./Components/Pages/NotLoggedInPage";
 import Alert from "./Components/UI/Alert";
 import ForbiddenPage from "./Components/Pages/ForbiddenPage";
 import PlayFetchPage from "./Components/Pages/PlayFetchPage";
+import PlayPage from "./Components/Pages/PlayPage";
 
 function App() {
   const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);
@@ -93,6 +94,7 @@ function App() {
             path="/new-quiz"
             element={isLoggedIn ? <CreateNewQuizPage /> : <NotLoggedInPage />}
           />
+          <Route path="/:quizId/play" element={<PlayPage />} />
           <Route path="/forbidden" element={<ForbiddenPage />} />
         </Routes>
       </PageLayout>
