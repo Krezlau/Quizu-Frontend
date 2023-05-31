@@ -508,7 +508,7 @@ const useHttp = () => {
           .get(`https://localhost:7202/api/QuestionsAnswers/quiz/${quizId}`, {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${newToken ? newToken : token}`,
             },
           })
           .then((r) => {
@@ -710,6 +710,29 @@ const useHttp = () => {
     return outcome;
   };
 
+  const fetchPlayQuestions = useCallback(
+    async (quizId: string) => {
+      if (token) {
+        setIsLoading(true);
+        const questions: IQuestion[] = await axios
+          .get(`https://localhost:7202/api/Play/${quizId}`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((r) => {
+            return r.data.result;
+          })
+          .catch((e: AxiosError) => {
+            showError(e);
+          });
+        setIsLoading(false);
+        return questions;
+      }
+    },
+    [token]
+  );
+
   return {
     login: login,
     isLoading: isLoading,
@@ -734,6 +757,7 @@ const useHttp = () => {
     fetchComments,
     addNewComment,
     deleteComment,
+    fetchPlayQuestions,
   };
 };
 

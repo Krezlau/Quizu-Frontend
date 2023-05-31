@@ -11,7 +11,7 @@ interface IPlayState {
 }
 
 const initialState: IPlayState = {
-  isActive: true, //false,
+  isActive: false,
   questionNumber: 0,
   timeForAnswer_s: 0,
   questions: [],
