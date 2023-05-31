@@ -8,7 +8,7 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = (props) => {
   return (
     <div
       className={`mx-auto min-h-screen ${
-        isPLayActive ? "pt-36 flex flex-col justify-center" : "pt-24"
+        isPLayActive ? "pt-16 sm:pt-36 sm:flex sm:flex-col sm:justify-center" : "pt-24"
       } pb-8 max-w-7xl px-8`}
     >
       {props.children}

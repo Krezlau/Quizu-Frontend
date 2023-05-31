@@ -18,8 +18,8 @@ const PlayTimer = () => {
   const time = 10;
 
   return (
-    <div className="w-full flex flex-row justify-center p-4">
-      <div className="w-full mx-4 h-4 bg-gray-300 rounded-full">
+    <div className="w-full flex flex-row justify-center py-4">
+      <div className="w-full h-4 bg-gray-300 rounded-full">
         <div
           className={`h-full bg-green-500 text-xs font-medium text-white text-center p-0.5 leading-none rounded-full`}
           style={{ width: `${(timeLeft / time) * 100}%` }}
