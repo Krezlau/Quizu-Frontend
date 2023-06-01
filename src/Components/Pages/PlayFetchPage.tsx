@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
@@ -12,12 +13,12 @@ const PlayFetchPage = () => {
   const quizId = useParams<{ quizId: string }>().quizId;
   const navigate = useNavigate();
   const [error, setError] = useState(false);
-
+  const dispatch = useDispatch();
 
   // fetch questions
   useEffect(() => {
     if (quizId) {
-      fetchPlayQuestions(quizId).then(r => {
+      fetchPlayQuestions(quizId, dispatch).then(r => {
         if (!r) setError(true); 
       });
     }

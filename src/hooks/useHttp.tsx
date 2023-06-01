@@ -1,5 +1,6 @@
+import { AnyAction } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
-import { useCallback, useState } from "react";
+import { Dispatch, useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavigateFunction } from "react-router-dom";
 import { IRootState } from "../store";
@@ -10,8 +11,10 @@ import {
   useAuthDispatch,
 } from "../store/auth-actions";
 import { authActions } from "../store/auth-slice";
+import { playActions } from "../store/play-slice";
 import IComment from "../types/IComment";
 import IPageResponse from "../types/IPageResponse";
+import IPlayQuestionsResponse from "../types/IPlayQuestionsResponse";
 import IQuestion from "../types/IQuestion";
 import IQuiz from "../types/IQuiz";
 import IQuizDetails from "../types/IQuizDetails";
@@ -711,10 +714,10 @@ const useHttp = () => {
   };
 
   const fetchPlayQuestions = useCallback(
-    async (quizId: string) => {
+    async (quizId: string, dispatch: Dispatch<AnyAction>) => {
       if (token) {
         setIsLoading(true);
-        const questions: IQuestion[] = await axios
+        const response: IPlayQuestionsResponse = await axios
           .get(`https://localhost:7202/api/Play/${quizId}`, {
             headers: {
               "Content-Type": "application/json",
@@ -726,8 +729,9 @@ const useHttp = () => {
           .catch((e: AxiosError) => {
             showError(e);
           });
+        dispatch(playActions.startPlaying(response));
         setIsLoading(false);
-        return questions;
+        return response;
       }
     },
     [token]

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import IPlayQuestion from "../types/IPlayQuestion";
+import IPlayQuestionsResponse from "../types/IPlayQuestionsResponse";
 
 interface IPlayState {
   isActive: boolean;
@@ -25,21 +26,22 @@ const playSlice = createSlice({
   reducers: {
     startPlaying: (
       state,
-      action: PayloadAction<{
-        count: number;
-        timeForAnswer_s: number;
-        questions: IPlayQuestion[];
-      }>
+      action: PayloadAction<IPlayQuestionsResponse>
     ) => {
       state.isActive = true;
       state.questionNumber = 0;
-      state.timeForAnswer_s = action.payload.timeForAnswer_s;
+      state.timeForAnswer_s = action.payload.answerTime_s;
       state.questions = action.payload.questions;
       state.userAnswers = [];
       state.score = 0;
     },
     stopPlaying: (state) => {
-      state = initialState;
+      state.isActive = initialState.isActive;
+      state.questionNumber = initialState.questionNumber;
+      state.timeForAnswer_s = initialState.timeForAnswer_s;
+      state.questions = initialState.questions;
+      state.userAnswers = initialState.userAnswers;
+      state.score = initialState.score;
     },
   },
 });

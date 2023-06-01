@@ -1,7 +1,7 @@
 import NavigationBar from "./Components/Navigation/NavigationBar";
 import PageLayout from "./Components/Pages/PageLayout";
 import { useEffect } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import HomePage from "./Components/Pages/HomePage";
 import UserProfilePage from "./Components/Pages/UserProfilePage";
 import LoginPage from "./Components/Pages/LoginPage";
@@ -23,10 +23,27 @@ import Alert from "./Components/UI/Alert";
 import ForbiddenPage from "./Components/Pages/ForbiddenPage";
 import PlayFetchPage from "./Components/Pages/PlayFetchPage";
 import PlayPage from "./Components/Pages/PlayPage";
+import { playActions } from "./store/play-slice";
 
 function App() {
   const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);
+  const isPlaying = useSelector((state: IRootState) => state.play.isActive);
   const dispatch = useDispatch();
+  // get path with hook 
+  const location = useLocation();
+  const path = location.pathname;
+  console.log(path);
+
+  // if path is not /{quizId}/play, then dispatch stop play
+  useEffect(() => {
+    // match regex for /{guid}/play
+    const regex = new RegExp(/\/[a-zA-Z0-9]{8}\/play/);
+    if (!regex.test(path) && isPlaying) {
+      // TODO send request with user answers
+      dispatch(playActions.stopPlaying());
+      console.log("xd"); 
+    }
+  }, [path, dispatch]);
 
   useEffect(() => {
     retrieveStoredToken().then((tokenData) => {
