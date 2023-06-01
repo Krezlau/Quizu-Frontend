@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const PlayTimer = () => {
+const PlayTimer: React.FC<{time: number}> = (props) => {
   // timer bar
   // controlled with useEffect
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(props.time);
 
   useEffect(() => {
     const timer = setTimeout(() => {

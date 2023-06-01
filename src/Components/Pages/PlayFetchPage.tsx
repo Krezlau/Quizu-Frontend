@@ -6,6 +6,7 @@ import useHttp from "../../hooks/useHttp";
 import { IRootState } from "../../store";
 import { playActions } from "../../store/play-slice";
 import IPlayQuestionsResponse from "../../types/IPlayQuestionsResponse";
+import PlayInfoCard from "../Play/PlayInfoCard";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import PageHeader from "../UI/PageHeader";
 
@@ -21,7 +22,7 @@ const PlayFetchPage = () => {
   // fetch questions
   useEffect(() => {
     if (quizId) {
-      fetchPlayQuestions(quizId, dispatch).then(r => {
+      fetchPlayQuestions(quizId).then(r => {
         if (!r) setError(true); 
         else setData(r);
       });
@@ -45,9 +46,11 @@ const PlayFetchPage = () => {
   }
 
   return <>
-    <PageHeader text="Start playing"centered={true} />
+    <PageHeader text={`Start playing ${data ? data.quizName : ""}`} centered={true} />
+    {isLoading && <LoadingSpinner />}
+    {!isLoading && data && <PlayInfoCard info={data}/>}
     <div className="flex flex-col justify-center mx-auto w-full">
-      <button onClick={playClickedHandler} className={`btn btn-primary mx-auto max-w-sm ${isLoading || !data ? "btn-disabled" : ""}`}>
+      <button onClick={playClickedHandler} className={`btn btn-primary mx-auto my-6 max-w-sm ${isLoading || !data ? "btn-disabled" : ""}`}>
         {isLoading ? <LoadingSpinner /> : "Play"}
       </button>
     </div>

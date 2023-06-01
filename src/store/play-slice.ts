@@ -4,6 +4,7 @@ import IPlayQuestionsResponse from "../types/IPlayQuestionsResponse";
 
 interface IPlayState {
   isActive: boolean;
+  quizName: string;
   questionNumber: number;
   timeForAnswer_s: number;
   questions: IPlayQuestion[];
@@ -13,6 +14,7 @@ interface IPlayState {
 
 const initialState: IPlayState = {
   isActive: false,
+  quizName: "",
   questionNumber: 0,
   timeForAnswer_s: 0,
   questions: [],
@@ -30,13 +32,15 @@ const playSlice = createSlice({
     ) => {
       state.isActive = true;
       state.questionNumber = 0;
-      state.timeForAnswer_s = action.payload.answerTime_s;
+      state.quizName = action.payload.quizName;
+      state.timeForAnswer_s = action.payload.answerTimeS;
       state.questions = action.payload.questions;
       state.userAnswers = [];
       state.score = 0;
     },
     stopPlaying: (state) => {
       state.isActive = initialState.isActive;
+      state.quizName = initialState.quizName;
       state.questionNumber = initialState.questionNumber;
       state.timeForAnswer_s = initialState.timeForAnswer_s;
       state.questions = initialState.questions;

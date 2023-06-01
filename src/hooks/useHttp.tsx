@@ -11,7 +11,6 @@ import {
   useAuthDispatch,
 } from "../store/auth-actions";
 import { authActions } from "../store/auth-slice";
-import { playActions } from "../store/play-slice";
 import IComment from "../types/IComment";
 import IPageResponse from "../types/IPageResponse";
 import IPlayQuestionsResponse from "../types/IPlayQuestionsResponse";
@@ -714,7 +713,7 @@ const useHttp = () => {
   };
 
   const fetchPlayQuestions = useCallback(
-    async (quizId: string, dispatch: Dispatch<AnyAction>) => {
+    async (quizId: string) => {
       if (token) {
         setIsLoading(true);
         const response: IPlayQuestionsResponse = await axios

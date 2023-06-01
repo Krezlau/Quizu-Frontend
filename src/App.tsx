@@ -32,7 +32,6 @@ function App() {
   // get path with hook 
   const location = useLocation();
   const path = location.pathname;
-  console.log(path);
 
   // if path is not /{quizId}/play, then dispatch stop play
   useEffect(() => {
@@ -42,7 +41,6 @@ function App() {
     if (!regex.test(path) && isPlaying) {
       // TODO send request with user answers
       dispatch(playActions.stopPlaying());
-      console.log("xd"); 
     }
   }, [path, dispatch]);
 

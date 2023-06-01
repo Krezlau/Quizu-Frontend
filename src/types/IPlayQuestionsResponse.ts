@@ -1,8 +1,9 @@
 import IPlayQuestion from "./IPlayQuestion";
 
 interface IPlayQuestionsResponse {
+  quizName: string;
   questionsCount: number;
-  answerTime_s: number;
+  answerTimeS: number;
   questions: IPlayQuestion[];
 }
 
