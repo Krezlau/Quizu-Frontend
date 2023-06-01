@@ -36,8 +36,9 @@ function App() {
 
   // if path is not /{quizId}/play, then dispatch stop play
   useEffect(() => {
-    // match regex for /{guid}/play
-    const regex = new RegExp(/\/[a-zA-Z0-9]{8}\/play/);
+    // match regex for /{quizId}/play
+    // quizId is a guid
+    const regex = new RegExp(/\/[a-f\d]{8}(-[a-f\d]{4}){4}[a-f\d]{8}\/play/);
     if (!regex.test(path) && isPlaying) {
       // TODO send request with user answers
       dispatch(playActions.stopPlaying());
@@ -94,7 +95,7 @@ function App() {
             element={<QuizManageInfoPage />}
           />
           <Route path="/quizzes/:quizId/manage" element={<ManageQuizPage />} />
-          <Route path="/quizzes/:quizId/play" element={<PlayFetchPage />} />
+          <Route path="/quizzes/:quizId/start-playing" element={<PlayFetchPage />} />
           <Route
             path="/login"
             element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />}

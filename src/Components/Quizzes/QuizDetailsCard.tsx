@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import { IRootState } from "../../store";
-import { playActions } from "../../store/play-slice";
 import IQuiz from "../../types/IQuiz";
 
 const QuizDetailsCard: React.FC<{ quiz: IQuiz, commentsCount: number }> = (props) => {
@@ -12,8 +10,6 @@ const QuizDetailsCard: React.FC<{ quiz: IQuiz, commentsCount: number }> = (props
   const [isLiked, setIsLiked] = useState(props.quiz.isLikedByUser);
   const [likesCount, setLikesCount] = useState(props.quiz.likesCount);
   const { isLoading, likeQuiz, unlikeQuiz } = useHttp();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (props.quiz.isLikedByUser) {
@@ -135,7 +131,7 @@ const QuizDetailsCard: React.FC<{ quiz: IQuiz, commentsCount: number }> = (props
             </p>
           </div>
         </div>
-        <Link to={`/quizzes/${props.quiz.id}/play`} className="btn btn-secondary mx-auto w-full max-w-64 md:w-auto mt-12">
+        <Link to={`/quizzes/${props.quiz.id}/start-playing`} className="btn btn-secondary mx-auto w-full max-w-64 md:w-auto mt-12">
           PLAY
         </Link>
       </div>

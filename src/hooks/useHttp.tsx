@@ -729,7 +729,6 @@ const useHttp = () => {
           .catch((e: AxiosError) => {
             showError(e);
           });
-        dispatch(playActions.startPlaying(response));
         setIsLoading(false);
         return response;
       }
