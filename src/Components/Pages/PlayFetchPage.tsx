@@ -18,16 +18,17 @@ const PlayFetchPage = () => {
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const [data, setData] = useState<IPlayQuestionsResponse>();
+  const [countdown, setCountdown] = useState(3);
+  const [countdownActive, setCountdownActive] = useState(false);
 
   // fetch questions
   useEffect(() => {
     if (quizId) {
-      fetchPlayQuestions(quizId).then(r => {
-        if (!r) setError(true); 
+      fetchPlayQuestions(quizId).then((r) => {
+        if (!r) setError(true);
         else setData(r);
       });
     }
-    
   }, [fetchPlayQuestions, quizId]);
 
   useEffect(() => {
@@ -35,26 +36,49 @@ const PlayFetchPage = () => {
   }, [isLoading, isActive, navigate, quizId]);
 
   const playClickedHandler = () => {
-    if (!data) return; 
+    if (!data) return;
 
-    // TODO z copilotem
-    // timer na 3 sekundy itp
-    // some info about quiz
+    // start playing after 3 seconds
+    // but with state to display countdown
+    setCountdownActive(true);
 
-    dispatch(playActions.startPlaying(data));
-    navigate(`/${quizId}/play`)
-  }
+    const interval = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
 
-  return <>
-    <PageHeader text={`Start playing ${data ? data.quizName : ""}`} centered={true} />
-    {isLoading && <LoadingSpinner />}
-    {!isLoading && data && <PlayInfoCard info={data}/>}
-    <div className="flex flex-col justify-center mx-auto w-full">
-      <button onClick={playClickedHandler} className={`btn btn-primary mx-auto my-6 max-w-sm ${isLoading || !data ? "btn-disabled" : ""}`}>
-        {isLoading ? <LoadingSpinner /> : "Play"}
-      </button>
-    </div>
-  </>
-}
+    setTimeout(() => {
+      // todo check if user still on page
+      clearInterval(interval);
+      dispatch(playActions.startPlaying(data));
+      navigate(`/${quizId}/play`);
+    }, 4000);
+  };
+
+  return (
+    <>
+      <PageHeader
+        text={`Start playing ${data ? data.quizName : ""}`}
+        centered={true}
+      />
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && data && <PlayInfoCard info={data} />}
+      <div className="flex flex-col justify-center mx-auto w-full">
+        <button
+          onClick={playClickedHandler}
+          className={`btn btn-primary mx-auto my-6 max-w-sm ${
+            isLoading || !data ? "btn-disabled" : ""
+          }`}
+        >
+          {isLoading ? <LoadingSpinner /> : "Play"}
+        </button>
+      </div>
+      <div className="flex flex-col justify-center mx-auto">
+        {countdownActive && <p className="mx-auto my-6 w-16 text-center font-bold text-6xl animate-ping">
+          {countdownActive && `${countdown < 1 ? "Go!" : countdown}`}
+        </p>}
+      </div>
+    </>
+  );
+};
 
 export default PlayFetchPage;
