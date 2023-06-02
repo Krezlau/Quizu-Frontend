@@ -6,18 +6,28 @@ import PlayTimer from "./PlayTimer";
 import PlayTitle from "./PlayTitle";
 
 const PlayTopBar = () => {
-  const playState = useSelector((state: IRootState) => state.play)
+  const playState = useSelector((state: IRootState) => state.play);
 
   return (
     <div className="fixed left-0 bottom-0 md:static flex flex-col w-full px-4 md:mx-4 md:mt-24">
       <div className="w-full card p-4 bg-neutral flex flex-col justify-between">
-        <PlayTitle quizName={playState.quizName}/>
+        <PlayTitle quizName={playState.quizName} />
         <div className="flex flex-col sm:flex-row justify-between">
-          <PlayQuestionCount current={playState.questionNumber + 1} total={playState.questions.length}/>
-          <PlayPoints points={playState.score}/>
+          <PlayQuestionCount
+            current={playState.questionNumber + 1}
+            total={playState.questions.length}
+          />
+          <PlayPoints points={playState.score} />
         </div>
       </div>
-      <PlayTimer time={playState.timeForAnswer_s} />
+      <PlayTimer
+        time={playState.timeForAnswer_s}
+        isRunning={playState.timer.isRunning}
+        timeLeft={playState.timer.timeLeft_s}
+        hasNextQuestion={
+          playState.questionNumber < playState.questions.length - 1
+        }
+      />
     </div>
   );
 };
