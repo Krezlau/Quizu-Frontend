@@ -16,6 +16,10 @@ interface IPlayState {
     isRunning: boolean;
     timeLeft_s: number;
   };
+  correctCount: number;
+  incorrectCount: number;
+  unansweredCount: number;
+  percentage: number;
 }
 
 const initialState: IPlayState = {
@@ -32,6 +36,10 @@ const initialState: IPlayState = {
     isRunning: false,
     timeLeft_s: 0,
   },
+  correctCount: 0,
+  incorrectCount: 0,
+  unansweredCount: 0,
+  percentage: 0,
 };
 
 const playSlice = createSlice({
@@ -50,19 +58,13 @@ const playSlice = createSlice({
       state.score = 0;
       state.timer.isRunning = true;
       state.timer.timeLeft_s = action.payload.answerTimeS;
+      state.correctCount = 0;
+      state.incorrectCount = 0;
+      state.unansweredCount = 0;
+      state.percentage = 0;
     },
     stopPlaying: (state) => {
       state.isActive = initialState.isActive;
-      state.quizName = initialState.quizName;
-      state.quizId = initialState.quizId;
-      state.questionNumber = initialState.questionNumber;
-      state.timeForAnswer_s = initialState.timeForAnswer_s;
-      state.questions = initialState.questions;
-      state.userAnswers = initialState.userAnswers;
-      state.timeTaken_s = initialState.timeTaken_s;
-      state.score = initialState.score;
-      state.timer.isRunning = initialState.timer.isRunning;
-      state.timer.timeLeft_s = initialState.timer.timeLeft_s;
     },
     nextQuestion: (state) => {
       state.questionNumber++;
@@ -78,18 +80,23 @@ const playSlice = createSlice({
       state.score +=
         (action.payload.score * state.timer.timeLeft_s) / state.timeForAnswer_s;
       state.timeTaken_s.push(state.timeForAnswer_s - state.timer.timeLeft_s);
+      if (action.payload.score > 0) {
+        state.correctCount++;
+      } else  {
+        state.incorrectCount++;
+      } 
     },
     tick: (state) => {
       state.timer.timeLeft_s -= 0.01;
       if (state.timer.timeLeft_s <= 0) {
         state.timer.isRunning = false;
         state.userAnswers.push("");
+        state.timeTaken_s.push(state.timeForAnswer_s);
+        state.unansweredCount++;
       }
     },
-    timesUp: (state) => {
-      state.userAnswers.push("");
-      state.timer.isRunning = false;
-      state.timeTaken_s.push(state.timeForAnswer_s);
+    setPercentage: (state, action: PayloadAction<number>) => {
+      state.percentage = action.payload;
     },
   },
 });

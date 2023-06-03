@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import usePostAnswers from "../../hooks/usePostAnswers";
+import { useNavigate } from "react-router-dom";
 import { playActions } from "../../store/play-slice";
 
 const PlayTimer: React.FC<{time: number, isRunning: boolean, timeLeft: number, hasNextQuestion: boolean}> = (props) => {
   const dispatch = useDispatch();
   const [timesUp, setTimesUp] = useState(false);
-  const endOfQuiz = usePostAnswers();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!props.isRunning && props.timeLeft <= 0) {
-      dispatch(playActions.timesUp());
       setTimesUp(true);
       setTimeout(() => {
         setTimesUp(false);
         if (!props.hasNextQuestion) {
-          endOfQuiz();
+          navigate("/play/results")
+          return;
         }
         dispatch(playActions.nextQuestion());
       }, 1000);

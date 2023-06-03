@@ -739,6 +739,7 @@ const useHttp = () => {
     score: number,
     answers: string[],
     timeTaken_s: number[],
+    questionIds: string[],
     doNotTryAgain?: boolean,
     newToken?: string
   ) => {
@@ -746,7 +747,7 @@ const useHttp = () => {
 
     const outcome: number = await axios
       .post(`https://localhost:7202/api/Play/${quizId}`,
-        { score: score.toFixed(0), answerIds: answers, timeTookS: timeTaken_s },
+        { score: score.toFixed(0), answerIds: answers, timeTookS: timeTaken_s, questionIds },
         {
         headers: {
           "Content-Type": "application/json",
@@ -754,11 +755,12 @@ const useHttp = () => {
         },
       })
       .then((r) => {
+        showAlert("success", "Answers submitted successfully");
         return r.data.result;
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          postPlayAnswers(quizId, score, answers, timeTaken_s, true, o)
+          postPlayAnswers(quizId, score, answers, timeTaken_s, questionIds, true, o)
         );
         showAlert("error", "Could not save your answers. Please try again later.");
         return -1;

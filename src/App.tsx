@@ -24,6 +24,7 @@ import ForbiddenPage from "./Components/Pages/ForbiddenPage";
 import PlayFetchPage from "./Components/Pages/PlayFetchPage";
 import PlayPage from "./Components/Pages/PlayPage";
 import { playActions } from "./store/play-slice";
+import PlayResultPage from "./Components/Pages/PlayResultPage";
 
 function App() {
   const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);
@@ -38,7 +39,7 @@ function App() {
     // match regex for /{quizId}/play
     // quizId is a guid
     const regex = new RegExp(/\/[a-f\d]{8}(-[a-f\d]{4}){4}[a-f\d]{8}\/play/);
-    if (!regex.test(path) && isPlaying) {
+    if (!regex.test(path) && isPlaying && path !== "/play/results") {
       // TODO send request with user answers
       dispatch(playActions.stopPlaying());
     }
@@ -111,6 +112,7 @@ function App() {
             element={isLoggedIn ? <CreateNewQuizPage /> : <NotLoggedInPage />}
           />
           <Route path="/:quizId/play" element={<PlayPage />} />
+          <Route path="/play/results" element={<PlayResultPage />} />
           <Route path="/forbidden" element={<ForbiddenPage />} />
         </Routes>
       </PageLayout>

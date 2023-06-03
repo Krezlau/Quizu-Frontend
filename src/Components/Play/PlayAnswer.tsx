@@ -1,9 +1,8 @@
 import IPlayAnswer from "../../types/IPlayAnswer";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { playActions } from "../../store/play-slice";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import usePostAnswers from "../../hooks/usePostAnswers";
 
 const PlayAnswer: React.FC<{
   num: number;
@@ -16,7 +15,7 @@ const PlayAnswer: React.FC<{
   const INCORRECT = 2;
   const [correctstate, setCorrectState] = useState(NOTCLICKED);
   const dispatch = useDispatch();
-  const endOfQuiz = usePostAnswers();
+  const navigate = useNavigate();
 
   // todo handle key shortcuts
   const handleClick = () => {
@@ -39,7 +38,8 @@ const PlayAnswer: React.FC<{
     setTimeout(() => {
       setCorrectState(NOTCLICKED);
       if (!props.hasNextQuestion){
-        endOfQuiz();
+        navigate("/play/results");
+        return;
       } 
       dispatch(playActions.nextQuestion());
     }, 2000);
