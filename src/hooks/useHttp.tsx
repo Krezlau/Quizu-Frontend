@@ -1,6 +1,5 @@
-import { AnyAction } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
-import { Dispatch, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavigateFunction } from "react-router-dom";
 import { IRootState } from "../store";
@@ -735,6 +734,44 @@ const useHttp = () => {
     [token]
   );
 
+  const postPlayAnswers = async (
+    quizId: string,
+    score: number,
+    answers: string[],
+    timeTaken_s: number[],
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+
+    const outcome: number = await axios
+      .post(`https://localhost:7202/api/Play/${quizId}`,
+        { score: score.toFixed(0), answerIds: answers, timeTookS: timeTaken_s },
+        {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${newToken ? newToken : token}`,
+        },
+      })
+      .then((r) => {
+        return r.data.result;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          postPlayAnswers(quizId, score, answers, timeTaken_s, true, o)
+        );
+        showAlert("error", "Could not save your answers. Please try again later.");
+        return -1;
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return outcome;
+  }
+
+
+
   return {
     login: login,
     isLoading: isLoading,
@@ -760,6 +797,7 @@ const useHttp = () => {
     addNewComment,
     deleteComment,
     fetchPlayQuestions,
+    postPlayAnswers,
   };
 };
 
