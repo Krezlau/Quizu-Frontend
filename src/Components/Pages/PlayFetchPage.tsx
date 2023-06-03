@@ -20,6 +20,7 @@ const PlayFetchPage = () => {
   const [data, setData] = useState<IPlayQuestionsResponse>();
   const [countdown, setCountdown] = useState(3);
   const [countdownActive, setCountdownActive] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   // fetch questions
   useEffect(() => {
@@ -37,6 +38,9 @@ const PlayFetchPage = () => {
 
   const playClickedHandler = () => {
     if (!data) return;
+    if (isClicked) return;
+
+    setIsClicked(true);
 
     // start playing after 3 seconds
     // but with state to display countdown
