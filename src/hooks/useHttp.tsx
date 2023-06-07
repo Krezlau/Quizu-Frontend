@@ -16,6 +16,7 @@ import IPlayQuestionsResponse from "../types/IPlayQuestionsResponse";
 import IQuestion from "../types/IQuestion";
 import IQuiz from "../types/IQuiz";
 import IQuizDetails from "../types/IQuizDetails";
+import IQuizStats from "../types/IQuizStats";
 import IResponse from "../types/IResponse";
 import IUserProfile from "../types/IUserProfile";
 import useAlert from "./useAlert";
@@ -772,7 +773,27 @@ const useHttp = () => {
     return outcome;
   }
 
-
+  const fetchPlayStats = useCallback(
+    async (quizId: string) => {
+      if (token) {
+        setIsLoading(true);
+        const response: IQuizStats = await axios
+          .get(`https://localhost:7202/api/Play/stats/${quizId}`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((r) => {
+            return r.data.result;
+          })
+          .catch((e: AxiosError) => {
+            showError(e);
+          });
+        setIsLoading(false);
+        return response;
+      }
+    },[]
+  );
 
   return {
     login: login,
@@ -800,6 +821,7 @@ const useHttp = () => {
     deleteComment,
     fetchPlayQuestions,
     postPlayAnswers,
+    fetchPlayStats,
   };
 };
 

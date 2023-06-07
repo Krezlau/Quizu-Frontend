@@ -1,11 +1,17 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { IRootState } from "../../store";
 import PlayAnswer from "./PlayAnswer";
 
 const PlayQuestion = () => {
   const playState = useSelector((state: IRootState) => state.play);
   const currentAnswers = playState.questions[playState.questionNumber].answers;
+  const navigate = useNavigate();
+
+  // navigate to /quizzes/${quizId}/start-playing if play is not active
+  if (!playState.isActive) {
+    navigate(`/quizzes/${playState.quizId}/start-playing`);
+  }
 
   // card with question and 4 answers
   return (

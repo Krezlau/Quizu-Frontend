@@ -9,6 +9,9 @@ import useFetchComments from "../../hooks/useFetchComments";
 import useHttp from "../../hooks/useHttp";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../store";
+import QuizStatsCard from "../Quizzes/QuizStatsCard";
+import { useEffect, useState } from "react";
+import IQuizStats from "../../types/IQuizStats";
 
 const QuizDetailsPage = () => {
   const { isLoading, quiz } = useFetchQuizDetails();
@@ -21,6 +24,8 @@ const QuizDetailsPage = () => {
   } = useFetchComments();
   const { isLoading: addLoading, addNewComment } = useHttp();
   const { isLoading: cmdelLoading, deleteComment } = useHttp();
+  const { isLoading: statsLoading, fetchPlayStats } = useHttp();
+  const [stats, setStats] = useState<IQuizStats>();;
   const auth = useSelector((state: IRootState) => state.auth);
 
   const addCommentHandler = (content: string) => {
@@ -40,6 +45,10 @@ const QuizDetailsPage = () => {
         }
       });
   };
+
+  useEffect(() => {
+    if (quiz) fetchPlayStats(quiz.id).then((o) => setStats(o));
+  }, [quiz?.id, fetchPlayStats]);
 
   const deleteCommentHandler = (id: string) => {
     deleteComment(id).then((o) => {
@@ -66,10 +75,7 @@ const QuizDetailsPage = () => {
         )}
       </div>
       <SectionHeader text={"Additional Info"} />
-      <div className="card bg-neutral p-4 text-xl">
-        {isLoading && <LoadingSpinner size="xl" center={true} />}
-        <p>Coming soon! (stats)</p>
-      </div>
+      <QuizStatsCard stats={stats} isLoading={statsLoading ? statsLoading : false}/>
       <SectionHeader text={"Comments"} />
       <CommentForm
         onAdd={addCommentHandler}

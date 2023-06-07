@@ -9,11 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/recharts": "^1.8.24",
     "daisyui": "^2.51.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-keybinds": "^1.0.7",
+    "recharts": "^2.6.2",
     "redux-persist": "^6.0.0",
     "redux-persist-cookie-storage": "^1.0.0"
   },
