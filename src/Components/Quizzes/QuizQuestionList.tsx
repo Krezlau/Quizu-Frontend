@@ -8,7 +8,7 @@ const QuizQuestionList: React.FC<{ questions: IQuestion[], onDelete: (questionId
   return (
     <ul>
       {!props.questions || props.questions.length === 0 ? (
-        <p className="text-center text-2xl italic text-gray-500">
+        <p className="text-center text-2xl italic text-warning">
           Currently no questions in this quiz.
         </p>
       ) : (

@@ -9,9 +9,10 @@ import useFetchComments from "../../hooks/useFetchComments";
 import useHttp from "../../hooks/useHttp";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../store";
+import QuizStatsCard from "../Quizzes/QuizStatsCard";
 
 const QuizDetailsPage = () => {
-  const { isLoading, quiz } = useFetchQuizDetails();
+  const { isLoading, quiz, stats } = useFetchQuizDetails();
   const {
     isLoading: commentsLoading,
     isAllLoaded,
@@ -62,14 +63,11 @@ const QuizDetailsPage = () => {
         {quiz && quiz.about && quiz.about.length > 0 ? (
           <p>{quiz.about}</p>
         ) : (
-          <p className="italic text-gray-300">No about provided.</p>
+          <p className="italic text-warning">No about provided.</p>
         )}
       </div>
       <SectionHeader text={"Additional Info"} />
-      <div className="card bg-neutral p-4 text-xl">
-        {isLoading && <LoadingSpinner size="xl" center={true} />}
-        <p>Coming soon! (stats)</p>
-      </div>
+      <QuizStatsCard stats={stats} isLoading={isLoading ? isLoading : false}/>
       <SectionHeader text={"Comments"} />
       <CommentForm
         onAdd={addCommentHandler}

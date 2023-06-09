@@ -20,7 +20,7 @@ const QuizCommentList: React.FC<{
       endMessage={
         props.comments &&
         props.comments.length > 0 && (
-          <p className="text-center text-xl italic text-gray-500">
+          <p className="text-center text-xl italic text-warning">
             No more comments to load.
           </p>
         )
@@ -38,7 +38,7 @@ const QuizCommentList: React.FC<{
             />
           ))}
         {(!props.comments || props.comments.length === 0) && (
-          <p className="text-center text-xl italic text-gray-500">
+          <p className="text-center text-xl italic text-warning">
             Currently no comments. Be the first!
           </p>
         )}
