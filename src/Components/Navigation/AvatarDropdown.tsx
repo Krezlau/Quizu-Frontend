@@ -28,7 +28,7 @@ const AvatarDropdown = () => {
       </label>
       <ul
         tabIndex={0}
-        className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4"
+        className="menu dropdown-content p-2 shadow bg-primary rounded-box w-52 mt-4"
       >
         <li>
           <Link to={`/user/${userId}/profile`}>Profile</Link>

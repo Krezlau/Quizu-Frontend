@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import { IRootState } from "../../store";
 import IQuiz from "../../types/IQuiz";
@@ -69,7 +69,7 @@ const QuizDetailsCard: React.FC<{ quiz: IQuiz, commentsCount: number }> = (props
           </Link>
         </h3>
         {!props.quiz.description || props.quiz.description.length === 0 ? (
-          <p className="italic text-gray-300">No description provided.</p>
+          <p className="italic text-warning">No description provided.</p>
         ) : (
           <p>{props.quiz.description}</p>
         )}
@@ -131,7 +131,7 @@ const QuizDetailsCard: React.FC<{ quiz: IQuiz, commentsCount: number }> = (props
             </p>
           </div>
         </div>
-        <Link to="/play" className="btn btn-secondary mx-auto w-full max-w-64 md:w-auto mt-12">
+        <Link to={`/quizzes/${props.quiz.id}/start-playing`} className="btn btn-secondary mx-auto w-full max-w-64 md:w-auto mt-12">
           PLAY
         </Link>
       </div>

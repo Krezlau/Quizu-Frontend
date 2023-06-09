@@ -3,11 +3,13 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { IRootState } from "../store";
 import IQuizDetails from "../types/IQuizDetails";
+import IQuizStats from "../types/IQuizStats";
 import useHttp from "./useHttp";
 
 const useFetchQuizDetails = () => {
   const { quizId } = useParams<{ quizId?: string }>();
-  const { isLoading, fetchQuizDetails } = useHttp();
+  const { isLoading, fetchQuizDetails, fetchPlayStats } = useHttp();
+  const [stats, setStats] = useState<IQuizStats>();;
   const [quiz, setQuiz] = useState<IQuizDetails>();
   const token = useSelector((state: IRootState) => state.auth.accessToken)
 
@@ -18,14 +20,17 @@ const useFetchQuizDetails = () => {
           setQuiz(r);
         }
       });
+      console.log("staty")
+      fetchPlayStats(quizId).then((o) => setStats(o));
+      console.log(stats)
     }
   }
 
   useEffect(() => {
     fetch();
-  }, [token, quizId]);
+  }, [token, quizId, fetchQuizDetails, fetchPlayStats]);
 
-  return { quiz, isLoading };
+  return { quiz, isLoading, stats };
 };
 
 export default useFetchQuizDetails;

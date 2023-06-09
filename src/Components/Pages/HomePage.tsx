@@ -18,7 +18,7 @@ const HomePage = () => {
 
   return (
     <>
-      <PageHeader text={`Hello, ${username}! 👋`} />
+      <PageHeader text={`Hello, ${username === "" || !username ? "Not Logged User" : username}! 👋`} />
       <SectionHeader text={"Recent Quizzes"} />
       <QuizCarousel quizzes={quizzes} isLoading={isLoading}/>
     </>

@@ -12,9 +12,11 @@ import {
 import { authActions } from "../store/auth-slice";
 import IComment from "../types/IComment";
 import IPageResponse from "../types/IPageResponse";
+import IPlayQuestionsResponse from "../types/IPlayQuestionsResponse";
 import IQuestion from "../types/IQuestion";
 import IQuiz from "../types/IQuiz";
 import IQuizDetails from "../types/IQuizDetails";
+import IQuizStats from "../types/IQuizStats";
 import IResponse from "../types/IResponse";
 import IUserProfile from "../types/IUserProfile";
 import useAlert from "./useAlert";
@@ -508,7 +510,7 @@ const useHttp = () => {
           .get(`https://quizuapi.azurewebsites.net/api/QuestionsAnswers/quiz/${quizId}`, {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${newToken ? newToken : token}`,
             },
           })
           .then((r) => {
@@ -710,6 +712,103 @@ const useHttp = () => {
     return outcome;
   };
 
+  const fetchPlayQuestions = useCallback(
+    async (quizId: string) => {
+      if (token) {
+        setIsLoading(true);
+        const response: IPlayQuestionsResponse = await axios
+          .get(`https://localhost:7202/api/Play/${quizId}`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((r) => {
+            return r.data.result;
+          })
+          .catch((e: AxiosError) => {
+            showError(e);
+          });
+        setIsLoading(false);
+        return response;
+      }
+    },
+    [token]
+  );
+
+  const postPlayAnswers = async (
+    quizId: string,
+    score: number,
+    answers: string[],
+    timeTaken_s: number[],
+    questionIds: string[],
+    doNotTryAgain?: boolean,
+    newToken?: string
+  ) => {
+    setIsLoading(true);
+
+    const outcome: number = await axios
+      .post(
+        `https://localhost:7202/api/Play/${quizId}`,
+        {
+          score: score.toFixed(0),
+          answerIds: answers,
+          timeTookS: timeTaken_s,
+          questionIds,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken ? newToken : token}`,
+          },
+        }
+      )
+      .then((r) => {
+        showAlert("success", "Answers submitted successfully");
+        return r.data.result;
+      })
+      .catch((e: AxiosError) => {
+        handleErrorResponse(e, doNotTryAgain, (o) =>
+          postPlayAnswers(
+            quizId,
+            score,
+            answers,
+            timeTaken_s,
+            questionIds,
+            true,
+            o
+          )
+        );
+        showAlert(
+          "error",
+          "Could not save your answers. Please try again later."
+        );
+        return -1;
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return outcome;
+  };
+
+  const fetchPlayStats = useCallback(async (quizId: string) => {
+    setIsLoading(true);
+    const response: IQuizStats = await axios
+      .get(`https://localhost:7202/api/Play/stats/${quizId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((r) => {
+        return r.data.result;
+      })
+      .catch((e: AxiosError) => {
+        showError(e);
+      });
+    setIsLoading(false);
+    return response;
+  }, []);
+
   return {
     login: login,
     isLoading: isLoading,
@@ -734,6 +833,9 @@ const useHttp = () => {
     fetchComments,
     addNewComment,
     deleteComment,
+    fetchPlayQuestions,
+    postPlayAnswers,
+    fetchPlayStats,
   };
 };
 
