@@ -69,7 +69,7 @@ const QuizDetailsCard: React.FC<{ quiz: IQuiz, commentsCount: number }> = (props
           </Link>
         </h3>
         {!props.quiz.description || props.quiz.description.length === 0 ? (
-          <p className="italic text-gray-300">No description provided.</p>
+          <p className="italic text-warning">No description provided.</p>
         ) : (
           <p>{props.quiz.description}</p>
         )}

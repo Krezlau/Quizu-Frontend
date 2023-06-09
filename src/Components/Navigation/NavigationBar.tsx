@@ -12,8 +12,8 @@ const NavigationBar = () => {
   const isPlayActive = useSelector((state: IRootState) => state.play.isActive);
 
   return (
-    <div className={`navbar fixed top-0 z-40 flex justify-between w-full gap-4 text-white h-12 ${isPlayActive ? "" : "bg-purple-700"}`}>
-      <MainMenuDropdown />
+    <div className={`navbar fixed top-0 z-40 flex justify-between w-full gap-4 text-white h-12 ${isPlayActive ? "" : "bg-primary"}`}>
+      <MainMenuDropdown isPlayActive={isPlayActive}/>
       {!isPlayActive && <Search />}
       {!isPlayActive && <ThemeChanger />}
       {isPlayActive && <PlayTopBar />}

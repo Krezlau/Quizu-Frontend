@@ -5,17 +5,19 @@ import storage from "redux-persist/lib/storage";
 import alertSlice from "./alert-slice";
 import authSlice from "./auth-slice";
 import playSlice from "./play-slice";
+import themeSlice from "./theme-slice";
 
 const persistConfig = {
-  key: "play",
+  key: "state",
   storage: storage,
-  whitelist: ["play"],
+  whitelist: ["play", "theme", "auth"],
 }
 
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
   alert: alertSlice.reducer,
   play: playSlice.reducer,
+  theme: themeSlice.reducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

@@ -9,8 +9,8 @@ const PlayTopBar = () => {
   const playState = useSelector((state: IRootState) => state.play);
 
   return (
-    <div className="fixed left-0 bottom-0 md:static flex flex-col w-full px-4 md:mx-4 md:mt-24">
-      <div className="w-full card p-4 bg-neutral flex flex-col justify-between">
+    <div className="fixed left-0 bottom-0 md:static text-black dark:text-white flex flex-col w-full px-4 md:mx-4 md:mt-24">
+      <div className="w-full card p-4 bg-primary dark:bg-neutral flex flex-col justify-between">
         <PlayTitle quizName={playState.quizName} />
         <div className="flex flex-col sm:flex-row justify-between">
           <PlayQuestionCount

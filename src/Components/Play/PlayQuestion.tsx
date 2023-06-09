@@ -16,7 +16,7 @@ const PlayQuestion = () => {
   // card with question and 4 answers
   return (
     <div>
-      <div className="card bg-neutral text-3xl font-bold text-center mb-4 p-4 md:h-64">
+      <div className="card bg-primary dark:bg-neutral text-3xl font-bold text-center mb-4 p-4 md:h-64">
         <p className="my-auto">
           {playState.questions[playState.questionNumber].content}
         </p>

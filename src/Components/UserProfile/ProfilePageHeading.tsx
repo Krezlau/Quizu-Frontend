@@ -12,7 +12,7 @@ const ProfilePageHeading: React.FC<{ user: IUserProfile }> = (props) => {
       <div className="flex flex-col justify-between sm:gap-8 sm:flex-row lg:px-32">
         <div className="avatar placeholder h-32 my-auto mx-auto">
           <div className="bg-neutral-focus text-neutral-content rounded-full w-32">
-            <span>{props.user.username[0]}</span>
+            <span className="text-6xl font-semibold">{props.user.username[0]}</span>
           </div>
         </div>
         <div className="w-full grid grid-rows-3">

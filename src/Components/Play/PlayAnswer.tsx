@@ -49,7 +49,7 @@ const PlayAnswer: React.FC<{
     <button
       className={`card p-4 md:h-32 transform transition duration-500 ease-in-out hover:scale-[1.05] hover:rotate-1 active:scale-[1.05] active:rotate-1 ${
         correctstate === NOTCLICKED
-          ? "bg-neutral"
+          ? "dark:bg-neutral bg-primary"
           : correctstate === CORRECT
           ? "bg-green-500 animate-bounce"
           : "bg-red-500"

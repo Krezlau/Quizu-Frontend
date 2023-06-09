@@ -71,7 +71,7 @@ const QuizDetailsPage = () => {
         {quiz && quiz.about && quiz.about.length > 0 ? (
           <p>{quiz.about}</p>
         ) : (
-          <p className="italic text-gray-300">No about provided.</p>
+          <p className="italic text-warning">No about provided.</p>
         )}
       </div>
       <SectionHeader text={"Additional Info"} />

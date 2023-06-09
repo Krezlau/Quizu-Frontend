@@ -60,7 +60,7 @@ const QuizStatsCard: React.FC<{
                   >
                     <XAxis dataKey="score" />
                     <YAxis allowDecimals={false} width={40}/>
-                    <Bar dataKey="count" fill="#8884d8" />
+                    <Bar dataKey="count" fill="#661AE6" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

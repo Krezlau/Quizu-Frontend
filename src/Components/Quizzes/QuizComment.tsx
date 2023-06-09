@@ -41,7 +41,7 @@ const QuizComment: React.FC<{
                 {props.comment.authorName}
               </Link>
             </h3>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-warning">
               {new Date(props.comment.createdAt).toDateString()}
             </p>
           </div>
