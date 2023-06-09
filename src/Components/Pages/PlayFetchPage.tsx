@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import { IRootState } from "../../store";
 import { playActions } from "../../store/play-slice";
@@ -11,6 +11,7 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 import PageHeader from "../UI/PageHeader";
 
 const PlayFetchPage = () => {
+  const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);
   const isActive = useSelector((state: IRootState) => state.play.isActive);
   const { fetchPlayQuestions, isLoading } = useHttp();
   const quizId = useParams<{ quizId: string }>().quizId;
@@ -24,7 +25,7 @@ const PlayFetchPage = () => {
 
   // fetch questions
   useEffect(() => {
-    if (quizId) {
+    if (quizId && isLoggedIn) {
       fetchPlayQuestions(quizId).then((r) => {
         if (!r) setError(true);
         else setData(r);
@@ -66,6 +67,7 @@ const PlayFetchPage = () => {
       />
       {isLoading && <LoadingSpinner />}
       {!isLoading && data && <PlayInfoCard info={data} />}
+      {!isLoggedIn && <p className="text-center">You need to be logged in to play quizzes! <Link className="link-accent link link-hover" to={"/login"}>Log in</Link></p>}
       <div className="flex flex-col justify-center mx-auto w-full">
         <button
           onClick={playClickedHandler}

@@ -14,7 +14,7 @@ const Quiz: React.FC<{ quiz: IQuiz }> = (props) => {
           by{" "}
           <Link
             className="link link-accent link-hover hover:no-underline"
-            to={`user/${props.quiz.authorId}/profile`}
+            to={`/user/${props.quiz.authorId}/profile`}
           >
             {props.quiz.authorName}
           </Link>

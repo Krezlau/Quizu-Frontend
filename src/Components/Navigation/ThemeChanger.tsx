@@ -20,11 +20,6 @@ const ThemeChanger = () => {
     }
   };
 
-  if (theme !== "dark") {
-    document.documentElement.classList.remove("dark");
-    document.documentElement.setAttribute("data-theme", "mytheme");
-  }
-
   return (
     <div>
       <label className="swap swap-rotate">

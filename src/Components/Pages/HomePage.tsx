@@ -9,24 +9,18 @@ import SectionHeader from "../UI/SectionHeader";
 
 const HomePage = () => {
   const [quizzes, setQuizzes] = useState<IQuiz[]>([]);
-  const [recommended, setRecommended] = useState<IQuiz[]>([]);
   const { isLoading, fetchQuizzes } = useHttp();
   const username = useSelector((state: IRootState) => state.auth.username);
 
   useEffect(() => {
     fetchQuizzes(1, 5).then((r) => setQuizzes(r.queryResult));
-    fetchQuizzes(2, 5).then((r) => setRecommended(r.queryResult));
   }, [fetchQuizzes]);
 
   return (
     <>
-      <PageHeader text={`Hello, ${username}! 👋`} />
+      <PageHeader text={`Hello, ${username === "" || !username ? "Not Logged User" : username}! 👋`} />
       <SectionHeader text={"Recent Activity"} />
       <QuizCarousel quizzes={quizzes} isLoading={isLoading}/>
-      <SectionHeader text={"Streak"} />
-      <div className="card p-4 w-full h-64 bg-neutral">xd</div>
-      <SectionHeader text={"Recommendations"} />
-      <QuizCarousel quizzes={recommended} isLoading={true}/>
     </>
   );
 };

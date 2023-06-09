@@ -1,5 +1,7 @@
+import { useSelector } from "react-redux";
 import { ResponsiveContainer } from "recharts";
 import { BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
+import { IRootState } from "../../store";
 import IQuizStats from "../../types/IQuizStats";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
@@ -7,6 +9,8 @@ const QuizStatsCard: React.FC<{
   isLoading: boolean;
   stats: IQuizStats | undefined;
 }> = (props) => {
+  const theme = useSelector((state: IRootState) => state.theme.theme);
+
   return (
     <div className="card bg-neutral p-4 text-xl">
       {!props.isLoading && props.stats && props.stats.totalPlays === 0 && (
@@ -60,7 +64,7 @@ const QuizStatsCard: React.FC<{
                   >
                     <XAxis dataKey="score" />
                     <YAxis allowDecimals={false} width={40}/>
-                    <Bar dataKey="count" fill="#661AE6" />
+                    <Bar dataKey="count" fill={`${theme === "dark" ? "#641ae6" : "#22d3ee"}`} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

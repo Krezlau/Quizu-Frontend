@@ -27,12 +27,18 @@ import { playActions } from "./store/play-slice";
 import PlayResultPage from "./Components/Pages/PlayResultPage";
 
 function App() {
+  const theme = useSelector((state: IRootState) => state.theme.theme);
   const isLoggedIn = useSelector((state: IRootState) => state.auth.isLoggedIn);
   const isPlaying = useSelector((state: IRootState) => state.play.isActive);
   const dispatch = useDispatch();
-  // get path with hook 
+  // get path with hook
   const location = useLocation();
   const path = location.pathname;
+
+  if (theme !== "dark") {
+    document.documentElement.classList.remove("dark");
+    document.documentElement.setAttribute("data-theme", "mytheme");
+  }
 
   // if path is not /{quizId}/play, then dispatch stop play
   useEffect(() => {
@@ -78,10 +84,7 @@ function App() {
               </>
             }
           />
-          <Route
-            path="/home"
-            element={isLoggedIn ? <HomePage /> : <Navigate to="/about" />}
-          />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/user/:userId/profile" element={<UserProfilePage />} />
           <Route path="/user/:userId/quizzes" element={<UserQuizzesPage />} />
           <Route path="/user/:userId/edit" element={<EditProfilePage />} />
@@ -94,7 +97,10 @@ function App() {
             element={<QuizManageInfoPage />}
           />
           <Route path="/quizzes/:quizId/manage" element={<ManageQuizPage />} />
-          <Route path="/quizzes/:quizId/start-playing" element={<PlayFetchPage />} />
+          <Route
+            path="/quizzes/:quizId/start-playing"
+            element={<PlayFetchPage />}
+          />
           <Route
             path="/login"
             element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />}

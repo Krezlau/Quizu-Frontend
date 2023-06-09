@@ -747,23 +747,41 @@ const useHttp = () => {
     setIsLoading(true);
 
     const outcome: number = await axios
-      .post(`https://localhost:7202/api/Play/${quizId}`,
-        { score: score.toFixed(0), answerIds: answers, timeTookS: timeTaken_s, questionIds },
+      .post(
+        `https://localhost:7202/api/Play/${quizId}`,
         {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${newToken ? newToken : token}`,
+          score: score.toFixed(0),
+          answerIds: answers,
+          timeTookS: timeTaken_s,
+          questionIds,
         },
-      })
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken ? newToken : token}`,
+          },
+        }
+      )
       .then((r) => {
         showAlert("success", "Answers submitted successfully");
         return r.data.result;
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          postPlayAnswers(quizId, score, answers, timeTaken_s, questionIds, true, o)
+          postPlayAnswers(
+            quizId,
+            score,
+            answers,
+            timeTaken_s,
+            questionIds,
+            true,
+            o
+          )
         );
-        showAlert("error", "Could not save your answers. Please try again later.");
+        showAlert(
+          "error",
+          "Could not save your answers. Please try again later."
+        );
         return -1;
       })
       .finally(() => {
@@ -771,29 +789,25 @@ const useHttp = () => {
       });
 
     return outcome;
-  }
+  };
 
-  const fetchPlayStats = useCallback(
-    async (quizId: string) => {
-      if (token) {
-        setIsLoading(true);
-        const response: IQuizStats = await axios
-          .get(`https://localhost:7202/api/Play/stats/${quizId}`, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-          .then((r) => {
-            return r.data.result;
-          })
-          .catch((e: AxiosError) => {
-            showError(e);
-          });
-        setIsLoading(false);
-        return response;
-      }
-    },[]
-  );
+  const fetchPlayStats = useCallback(async (quizId: string) => {
+    setIsLoading(true);
+    const response: IQuizStats = await axios
+      .get(`https://localhost:7202/api/Play/stats/${quizId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((r) => {
+        return r.data.result;
+      })
+      .catch((e: AxiosError) => {
+        showError(e);
+      });
+    setIsLoading(false);
+    return response;
+  }, []);
 
   return {
     login: login,

@@ -10,11 +10,9 @@ import useHttp from "../../hooks/useHttp";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../store";
 import QuizStatsCard from "../Quizzes/QuizStatsCard";
-import { useEffect, useState } from "react";
-import IQuizStats from "../../types/IQuizStats";
 
 const QuizDetailsPage = () => {
-  const { isLoading, quiz } = useFetchQuizDetails();
+  const { isLoading, quiz, stats } = useFetchQuizDetails();
   const {
     isLoading: commentsLoading,
     isAllLoaded,
@@ -24,8 +22,6 @@ const QuizDetailsPage = () => {
   } = useFetchComments();
   const { isLoading: addLoading, addNewComment } = useHttp();
   const { isLoading: cmdelLoading, deleteComment } = useHttp();
-  const { isLoading: statsLoading, fetchPlayStats } = useHttp();
-  const [stats, setStats] = useState<IQuizStats>();;
   const auth = useSelector((state: IRootState) => state.auth);
 
   const addCommentHandler = (content: string) => {
@@ -45,10 +41,6 @@ const QuizDetailsPage = () => {
         }
       });
   };
-
-  useEffect(() => {
-    if (quiz) fetchPlayStats(quiz.id).then((o) => setStats(o));
-  }, [quiz?.id, fetchPlayStats]);
 
   const deleteCommentHandler = (id: string) => {
     deleteComment(id).then((o) => {
@@ -75,7 +67,7 @@ const QuizDetailsPage = () => {
         )}
       </div>
       <SectionHeader text={"Additional Info"} />
-      <QuizStatsCard stats={stats} isLoading={statsLoading ? statsLoading : false}/>
+      <QuizStatsCard stats={stats} isLoading={isLoading ? isLoading : false}/>
       <SectionHeader text={"Comments"} />
       <CommentForm
         onAdd={addCommentHandler}
