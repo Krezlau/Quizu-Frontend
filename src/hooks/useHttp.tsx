@@ -717,7 +717,7 @@ const useHttp = () => {
       if (token) {
         setIsLoading(true);
         const response: IPlayQuestionsResponse = await axios
-          .get(`https://localhost:7202/api/Play/${quizId}`, {
+          .get(`https://quizuapi.azurewebsites.net/api/Play/${quizId}`, {
             headers: {
               "Content-Type": "application/json",
             },
@@ -748,7 +748,7 @@ const useHttp = () => {
 
     const outcome: number = await axios
       .post(
-        `https://localhost:7202/api/Play/${quizId}`,
+        `https://quizuapi.azurewebsites.net/api/Play/${quizId}`,
         {
           score: score.toFixed(0),
           answerIds: answers,
@@ -794,7 +794,7 @@ const useHttp = () => {
   const fetchPlayStats = useCallback(async (quizId: string) => {
     setIsLoading(true);
     const response: IQuizStats = await axios
-      .get(`https://localhost:7202/api/Play/stats/${quizId}`, {
+      .get(`https://quizuapi.azurewebsites.net/api/Play/stats/${quizId}`, {
         headers: {
           "Content-Type": "application/json",
         },
