@@ -4,9 +4,21 @@ import ProfilePageHeading from "../UserProfile/ProfilePageHeading";
 import UserInfo from "../UserProfile/UserInfo";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import useFetchUserDetails from "../../hooks/useFetchUserDetails";
+import { useEffect, useState } from "react";
+import useHttp from "../../hooks/useHttp";
+import IQuiz from "../../types/IQuiz";
+import { useParams } from "react-router-dom";
 
 const UserProfilePage = () => {
   const {isLoading, user} = useFetchUserDetails();
+  const { userId } = useParams<{ userId?: string }>();
+
+  const [quizzes, setQuizzes] = useState<IQuiz[]>([]);
+  const { isLoading: quizzesLoading, fetchQuizzes } = useHttp();
+
+  useEffect(() => {
+    fetchQuizzes(1, 5, userId).then((r) => setQuizzes(r.queryResult));
+  }, [fetchQuizzes]);
 
   return <>
     
@@ -22,7 +34,7 @@ const UserProfilePage = () => {
     </div>
     {user && <UserInfo user={user}/> }
     <SectionHeader text={"Most Popular Quizzes"} />
-    <QuizCarousel quizzes={[]}/>
+    <QuizCarousel quizzes={quizzes} isLoading={quizzesLoading}/>
   </>
 }
 

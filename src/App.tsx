@@ -25,6 +25,10 @@ import PlayFetchPage from "./Components/Pages/PlayFetchPage";
 import PlayPage from "./Components/Pages/PlayPage";
 import { playActions } from "./store/play-slice";
 import PlayResultPage from "./Components/Pages/PlayResultPage";
+import NotFoundPage from "./Components/Pages/NotFoundPage";
+import InDevelopmentPage from "./Components/Pages/InDevelopmentPage";
+import AboutPage from "./Components/Pages/AboutPage";
+
 
 function App() {
   const theme = useSelector((state: IRootState) => state.theme.theme);
@@ -76,13 +80,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={
-              <>
-                <h1 className="text-3xl font-bold underline dark:text-amber-400">
-                  Hello world!
-                </h1>
-              </>
-            }
+            element={<Navigate to="/about" />}
           />
           <Route path="/home" element={<HomePage />} />
           <Route path="/user/:userId/profile" element={<UserProfilePage />} />
@@ -120,6 +118,13 @@ function App() {
           <Route path="/:quizId/play" element={<PlayPage />} />
           <Route path="/play/results" element={<PlayResultPage />} />
           <Route path="/forbidden" element={<ForbiddenPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/search" element={<InDevelopmentPage />} />
+          <Route path="/explore" element={<InDevelopmentPage />} />
+          <Route path="/user/:userId/stats" element={<InDevelopmentPage />} />
+          <Route path="/user/:userId/settings" element={<InDevelopmentPage />} />
+          <Route path="/play" element={<InDevelopmentPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </PageLayout>
       <Alert />

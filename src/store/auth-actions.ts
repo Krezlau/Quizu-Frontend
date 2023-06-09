@@ -61,7 +61,7 @@ export const retrieveStoredToken = async () => {
     try {
       storedToken = await axios
         .post(
-          "https://localhost:7202/api/Auth/refresh",
+          "https://quizuapi.azurewebsites.net/api/Auth/refresh",
           { accessToken: storedToken },
           {
             headers: { "Content-Type": "application/json" },
@@ -103,7 +103,7 @@ export const loginUser = (
 
     axios
       .post(
-        "https://localhost:7202/api/auth/login",
+        "https://quizuapi.azurewebsites.net/api/auth/login",
         { email, password },
         {
           headers: { "Content-Type": "application/json" },

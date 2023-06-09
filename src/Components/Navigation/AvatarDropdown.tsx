@@ -34,7 +34,7 @@ const AvatarDropdown = () => {
           <Link to={`/user/${userId}/profile`}>Profile</Link>
         </li>
         <li>
-          <Link to={`/user/${userId}/profile`}>Settings</Link>
+          <Link to={`/user/${userId}/settings`}>Settings</Link>
         </li>
         <li>
           <button onClick={logoutHandler}>Logout</button>
