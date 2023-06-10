@@ -54,7 +54,6 @@ const useHttp = () => {
     const isAuthError =
       e.response && e.response.status && e.response.status === 401;
     if (isAuthError && !doNotTryAgain) {
-      console.log("its auth error and try again is on.");
       refresh().then((outcome) => {
         if (outcome) {
           tryAgainFunc(outcome);
@@ -115,7 +114,6 @@ const useHttp = () => {
       )
       .then(() => {
         showAlert("success", "Successfully registered. You can now log in.");
-        console.log("success");
       })
       .catch((e: AxiosError) => {
         showError(e);
@@ -284,11 +282,14 @@ const useHttp = () => {
     setIsLoading(true);
 
     axios
-      .get(`https://quizuapi.azurewebsites.net/api/Quizzes/available?title=${value}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .get(
+        `https://quizuapi.azurewebsites.net/api/Quizzes/available?title=${value}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((r) => {
         if (r.data.result) setMessage("");
         if (!r.data.result) setMessage("Title not available.");
@@ -328,11 +329,14 @@ const useHttp = () => {
     setIsLoading(true);
 
     axios
-      .get(`https://quizuapi.azurewebsites.net/api/Users/available?username=${value}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .get(
+        `https://quizuapi.azurewebsites.net/api/Users/available?username=${value}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((r) => {
         if (r.data.result) setMessage("");
         if (!r.data.result) setMessage("Username not available.");
@@ -507,12 +511,15 @@ const useHttp = () => {
       if (token) {
         setIsLoading(true);
         const questions: IQuestion[] = await axios
-          .get(`https://quizuapi.azurewebsites.net/api/QuestionsAnswers/quiz/${quizId}`, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${newToken ? newToken : token}`,
-            },
-          })
+          .get(
+            `https://quizuapi.azurewebsites.net/api/QuestionsAnswers/quiz/${quizId}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${newToken ? newToken : token}`,
+              },
+            }
+          )
           .then((r) => {
             return r.data.result;
           })
@@ -536,12 +543,15 @@ const useHttp = () => {
     setIsLoading(true);
 
     const outcome = await axios
-      .delete(`https://quizuapi.azurewebsites.net/api/QuestionsAnswers/${questionId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${newToken ? newToken : token}`,
-        },
-      })
+      .delete(
+        `https://quizuapi.azurewebsites.net/api/QuestionsAnswers/${questionId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${newToken ? newToken : token}`,
+          },
+        }
+      )
       .then(() => {
         showAlert("success", "Successfully deleted.");
         return true;
@@ -741,6 +751,7 @@ const useHttp = () => {
     answers: string[],
     timeTaken_s: number[],
     questionIds: string[],
+    navigate: NavigateFunction,
     doNotTryAgain?: boolean,
     newToken?: string
   ) => {
@@ -774,6 +785,7 @@ const useHttp = () => {
             answers,
             timeTaken_s,
             questionIds,
+            navigate,
             true,
             o
           )
@@ -782,7 +794,8 @@ const useHttp = () => {
           "error",
           "Could not save your answers. Please try again later."
         );
-        return -1;
+        navigate(`/quizzes/${quizId}/details`);
+        return 0;
       })
       .finally(() => {
         setIsLoading(false);

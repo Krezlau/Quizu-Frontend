@@ -13,20 +13,16 @@ const usePostAnswers = () => {
   const dispatch = useDispatch();
 
   const endOfQuiz = useCallback (() => {
-    console.log(playState);
     postPlayAnswers(
       playState.quizId,
       playState.score,
       playState.userAnswers,
       playState.timeTaken_s,
-      playState.questions.map((q) => q.id)
+      playState.questions.map((q) => q.id),
+      navigate
     ).then((r) => {
-      console.log(r);
       dispatch(playActions.setPercentage(r));
       dispatch(playActions.stopPlaying());
-      if(!r){
-          navigate(`/quizzes/${playState.quizId}/details`)
-        }
     });
   }, []);
 

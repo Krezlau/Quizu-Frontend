@@ -20,9 +20,7 @@ const useFetchQuizDetails = () => {
           setQuiz(r);
         }
       });
-      console.log("staty")
       fetchPlayStats(quizId).then((o) => setStats(o));
-      console.log(stats)
     }
   }
 

@@ -10,7 +10,6 @@ const QuizCommentList: React.FC<{
   onDelete: (id: string) => void;
   isDelLoading: boolean;
 }> = (props) => {
-  console.log(props.isAllLoaded);
   return (
     <InfiniteScroll
       next={props.loadMore}

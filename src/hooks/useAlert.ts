@@ -8,7 +8,6 @@ const useAlert = () => {
   const dispatch = useDispatch();
 
   const showAlert = (type: string, text: string) => {
-    console.log("xd")
     if (!isActive) {
       dispatch(alertActions.show({ type, text }));
     }

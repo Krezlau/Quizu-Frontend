@@ -27,7 +27,6 @@ export const clearAuthStorage = () => {
 const storeAuthData = (token: string, userId: string, username: string) => {
   const currentTime = new Date();
   currentTime.setHours(currentTime.getHours() + 1);
-  console.log(currentTime);
 
   localStorage.setItem("token", token);
   localStorage.setItem("expirationTime", currentTime.toISOString());
@@ -52,7 +51,6 @@ export const retrieveStoredToken = async () => {
 
   const remainingTime = calculateRemainingTime(storedExpirationDate);
 
-  console.log("trying to retrieve token");
   if (remainingTime <= 0 || !storedToken || !storedUsername || !storedUserId) {
     if (!storedToken || !storedUsername || !storedUserId) {
       clearAuthStorage();
@@ -88,7 +86,6 @@ export const refreshToken = (newToken: string) => {
   return (dispatch: Dispatch<AnyAction>) => {
     storeNewToken(newToken);
     dispatch(authActions.refresh({ token: newToken }));
-    console.log("refreshed")
   };
 };
 

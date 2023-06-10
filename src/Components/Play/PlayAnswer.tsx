@@ -22,13 +22,11 @@ const PlayAnswer: React.FC<{
     if (!props.canClick) return;
 
     if (props.answer.isCorrect) {
-      console.log("correct");
       setCorrectState(CORRECT);
       dispatch(
         playActions.answerQuestion({ answerId: props.answer.id, score: 1000 })
       );
     } else {
-      console.log("incorrect");
       setCorrectState(INCORRECT);
       dispatch(
         playActions.answerQuestion({ answerId: props.answer.id, score: 0 })
