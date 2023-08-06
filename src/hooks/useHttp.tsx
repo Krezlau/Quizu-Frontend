@@ -20,12 +20,14 @@ import IQuizStats from "../types/IQuizStats";
 import IResponse from "../types/IResponse";
 import IUserProfile from "../types/IUserProfile";
 import useAlert from "./useAlert";
+import settings from "../../local.settings.json";
 
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
   const dispatch = useAuthDispatch();
   const token = useSelector((state: IRootState) => state.auth.accessToken);
   const showAlert = useAlert();
+  const apiUrl = settings["Values"]["apiUrl"];
 
   const showError = (e: AxiosError) => {
     if (e.response && e.response.status && e.response.status === 401) {
@@ -69,7 +71,7 @@ const useHttp = () => {
   const refresh = async () => {
     const newToken = await axios
       .post(
-        "https://quizuapi.azurewebsites.net/api/Auth/refresh",
+        `${apiUrl}Auth/refresh`,
         { accessToken: token },
         {
           headers: { "Content-Type": "application/json" },
@@ -108,7 +110,7 @@ const useHttp = () => {
 
     axios
       .post(
-        "https://quizuapi.azurewebsites.net/api/auth/register",
+        `${apiUrl}auth/register`,
         { username, email, password, repeatPassword, location, name, surname },
         { headers: { "Content-Type": "application/json" } }
       )
@@ -128,7 +130,7 @@ const useHttp = () => {
       setIsLoading(true);
       const quizzes: IPageResponse<IQuiz> = await axios
         .get(
-          `https://quizuapi.azurewebsites.net/api/Quizzes${
+          `${apiUrl}Quizzes${
             userId ? "/byUserId/" + userId : ""
           }?PageNumber=${page}&PageSize=${pageSize}`,
           {
@@ -160,7 +162,7 @@ const useHttp = () => {
     setIsLoading(true);
     axios
       .post(
-        `https://quizuapi.azurewebsites.net/api/Quizzes`,
+        `${apiUrl}Quizzes`,
         {
           title,
         },
@@ -189,7 +191,7 @@ const useHttp = () => {
     async (id: string) => {
       setIsLoading(true);
       const quiz: IQuizDetails = await axios
-        .get(`https://quizuapi.azurewebsites.net/api/Quizzes/${id}`, {
+        .get(`${apiUrl}Quizzes/${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -220,7 +222,7 @@ const useHttp = () => {
 
     axios
       .put(
-        `https://quizuapi.azurewebsites.net/api/Quizzes/${quizId}`,
+        `${apiUrl}Quizzes/${quizId}`,
         {
           title,
           description,
@@ -255,7 +257,7 @@ const useHttp = () => {
     setIsLoading(true);
 
     axios
-      .delete(`https://quizuapi.azurewebsites.net/api/Quizzes/${quizId}`, {
+      .delete(`${apiUrl}Quizzes/${quizId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${newToken ? newToken : token}`,
@@ -283,7 +285,7 @@ const useHttp = () => {
 
     axios
       .get(
-        `https://quizuapi.azurewebsites.net/api/Quizzes/available?title=${value}`,
+        `${apiUrl}Quizzes/available?title=${value}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -305,7 +307,7 @@ const useHttp = () => {
   const fetchUserInfo = useCallback(async (userId: string) => {
     setIsLoading(true);
     const user: IUserProfile = await axios
-      .get(`https://quizuapi.azurewebsites.net/api/Users/${userId}`, {
+      .get(`${apiUrl}Users/${userId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -330,7 +332,7 @@ const useHttp = () => {
 
     axios
       .get(
-        `https://quizuapi.azurewebsites.net/api/Users/available?username=${value}`,
+        `${apiUrl}Users/available?username=${value}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -363,7 +365,7 @@ const useHttp = () => {
 
     axios
       .put(
-        `https://quizuapi.azurewebsites.net/api/Users/${userId}`,
+        `${apiUrl}Users/${userId}`,
         {
           username,
           name,
@@ -409,7 +411,7 @@ const useHttp = () => {
     setIsLoading(true);
 
     axios
-      .delete(`https://quizuapi.azurewebsites.net/api/Users/${userId}`, {
+      .delete(`${apiUrl}Users/${userId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${newToken ? newToken : token}`,
@@ -441,7 +443,7 @@ const useHttp = () => {
     setIsLoading(true);
     axios
       .post(
-        `https://quizuapi.azurewebsites.net/api/Auth/change-password`,
+        `${apiUrl}Auth/change-password`,
         {
           currentPassword,
           newPassword,
@@ -482,7 +484,7 @@ const useHttp = () => {
     setIsLoading(true);
     axios
       .post(
-        `https://quizuapi.azurewebsites.net/api/QuestionsAnswers`,
+        `${apiUrl}QuestionsAnswers`,
         {
           ...question,
         },
@@ -512,7 +514,7 @@ const useHttp = () => {
         setIsLoading(true);
         const questions: IQuestion[] = await axios
           .get(
-            `https://quizuapi.azurewebsites.net/api/QuestionsAnswers/quiz/${quizId}`,
+            `${apiUrl}QuestionsAnswers/quiz/${quizId}`,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -544,7 +546,7 @@ const useHttp = () => {
 
     const outcome = await axios
       .delete(
-        `https://quizuapi.azurewebsites.net/api/QuestionsAnswers/${questionId}`,
+        `${apiUrl}QuestionsAnswers/${questionId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -575,7 +577,7 @@ const useHttp = () => {
     setIsLoading(true);
     const response = await axios
       .post(
-        `https://quizuapi.azurewebsites.net/api/Likes/${quizId}`,
+        `${apiUrl}Likes/${quizId}`,
         {},
         {
           headers: {
@@ -606,7 +608,7 @@ const useHttp = () => {
   ) => {
     setIsLoading(true);
     const response = await axios
-      .delete(`https://quizuapi.azurewebsites.net/api/Likes/${quizId}`, {
+      .delete(`${apiUrl}Likes/${quizId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${newToken ? newToken : token}`,
@@ -632,7 +634,7 @@ const useHttp = () => {
       setIsLoading(true);
       const comments: IPageResponse<IComment> = await axios
         .get(
-          `https://quizuapi.azurewebsites.net/api/Comments/quiz/${quizId}
+          `${apiUrl}Comments/quiz/${quizId}
           ?PageNumber=${page}&PageSize=${pageSize}`,
           {
             headers: {
@@ -662,7 +664,7 @@ const useHttp = () => {
     setIsLoading(true);
     const outcome: string = await axios
       .post(
-        `https://quizuapi.azurewebsites.net/api/Comments`,
+        `${apiUrl}Comments`,
         {
           content,
           quizId,
@@ -699,7 +701,7 @@ const useHttp = () => {
     setIsLoading(true);
 
     const outcome: boolean = await axios
-      .delete(`https://quizuapi.azurewebsites.net/api/Comments/${commentId}`, {
+      .delete(`${apiUrl}Comments/${commentId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${newToken ? newToken : token}`,
@@ -727,7 +729,7 @@ const useHttp = () => {
       if (token) {
         setIsLoading(true);
         const response: IPlayQuestionsResponse = await axios
-          .get(`https://quizuapi.azurewebsites.net/api/Play/${quizId}`, {
+          .get(`${apiUrl}Play/${quizId}`, {
             headers: {
               "Content-Type": "application/json",
             },
@@ -759,7 +761,7 @@ const useHttp = () => {
 
     const outcome: number = await axios
       .post(
-        `https://quizuapi.azurewebsites.net/api/Play/${quizId}`,
+        `${apiUrl}Play/${quizId}`,
         {
           score: score.toFixed(0),
           answerIds: answers,
@@ -807,7 +809,7 @@ const useHttp = () => {
   const fetchPlayStats = useCallback(async (quizId: string) => {
     setIsLoading(true);
     const response: IQuizStats = await axios
-      .get(`https://quizuapi.azurewebsites.net/api/Play/stats/${quizId}`, {
+      .get(`${apiUrl}Play/stats/${quizId}`, {
         headers: {
           "Content-Type": "application/json",
         },

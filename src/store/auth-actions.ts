@@ -4,6 +4,7 @@ import { Dispatch } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from ".";
 import { authActions } from "./auth-slice";
+import settings from "../../local.settings.json";
 
 const calculateRemainingTime = (expirationTime: string | null) => {
   if (expirationTime === null) {
@@ -50,6 +51,7 @@ export const retrieveStoredToken = async () => {
   const storedUsername = localStorage.getItem("username");
 
   const remainingTime = calculateRemainingTime(storedExpirationDate);
+  const apiUrl = settings["Values"]["apiUrl"];
 
   if (remainingTime <= 0 || !storedToken || !storedUsername || !storedUserId) {
     if (!storedToken || !storedUsername || !storedUserId) {
@@ -59,7 +61,7 @@ export const retrieveStoredToken = async () => {
     try {
       storedToken = await axios
         .post(
-          "https://quizuapi.azurewebsites.net/api/Auth/refresh",
+          `${apiUrl}Auth/refresh`,
           { accessToken: storedToken },
           {
             headers: { "Content-Type": "application/json" },
@@ -97,10 +99,11 @@ export const loginUser = (
 ) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     setIsLoading(true);
+    const apiUrl = settings["Values"]["apiUrl"];
 
     axios
       .post(
-        "https://quizuapi.azurewebsites.net/api/auth/login",
+        `${apiUrl}auth/login`,
         { email, password },
         {
           headers: { "Content-Type": "application/json" },
