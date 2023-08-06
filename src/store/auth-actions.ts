@@ -4,7 +4,6 @@ import { Dispatch } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from ".";
 import { authActions } from "./auth-slice";
-import settings from "../../local.settings.json";
 
 const calculateRemainingTime = (expirationTime: string | null) => {
   if (expirationTime === null) {
@@ -51,7 +50,7 @@ export const retrieveStoredToken = async () => {
   const storedUsername = localStorage.getItem("username");
 
   const remainingTime = calculateRemainingTime(storedExpirationDate);
-  const apiUrl = settings["Values"]["apiUrl"];
+  const apiUrl = !import.meta.env.PROD ? "https://localhost:7202/api/" : "https://quizuapi.azurewebsites.net/api/";
 
   if (remainingTime <= 0 || !storedToken || !storedUsername || !storedUserId) {
     if (!storedToken || !storedUsername || !storedUserId) {
@@ -99,7 +98,7 @@ export const loginUser = (
 ) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     setIsLoading(true);
-    const apiUrl = settings["Values"]["apiUrl"];
+    const apiUrl = !import.meta.env.PROD ? "https://localhost:7202/api/" : "https://quizuapi.azurewebsites.net/api/";
 
     axios
       .post(
