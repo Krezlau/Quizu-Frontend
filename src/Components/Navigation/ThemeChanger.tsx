@@ -21,7 +21,7 @@ const ThemeChanger = () => {
   };
 
   return (
-    <div>
+    <div className="mt-2">
       <label className="swap swap-rotate">
         <input
           type="checkbox"

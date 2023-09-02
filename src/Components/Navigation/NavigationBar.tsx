@@ -12,11 +12,12 @@ const NavigationBar = () => {
   const isPlayActive = useSelector((state: IRootState) => state.play.isActive);
 
   return (
-    <div className={`navbar fixed top-0 z-40 flex justify-between w-full gap-4 text-white h-12 ${isPlayActive ? "" : "bg-primary"}`}>
+    <div className={`navbar fixed top-0 z-10 flex justify-between w-full gap-4 text-white h-12 ${isPlayActive ? "" : "bg-primary"}`}>
       <MainMenuDropdown isPlayActive={isPlayActive}/>
       {!isPlayActive && <Search />}
-      {!isPlayActive && <ThemeChanger />}
       {isPlayActive && <PlayTopBar />}
+      <div className="flex gap-4">
+      {!isPlayActive && <ThemeChanger />}
       {isLoggedIn ? (
         <AvatarDropdown />
       ) : (
@@ -24,6 +25,7 @@ const NavigationBar = () => {
           Login
         </Link>
       )}
+      </div>
     </div>
   );
 };
