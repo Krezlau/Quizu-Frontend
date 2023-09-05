@@ -1,8 +1,11 @@
+import QuizSearchResult from "../Quizzes/QuizSearchResult";
+
 const SearchResultList = () => {
-  return <ul className="flex flex-col gap-2">
-    <li>Search Result 1</li>
-    <li>Search Result 2</li>
-    <li>Search Result 3</li>
+  return <ul className="flex flex-col gap-2 pb-2">
+    <QuizSearchResult />
+    <QuizSearchResult />
+    <QuizSearchResult />
+    <QuizSearchResult />
   </ul>;
 }
 
