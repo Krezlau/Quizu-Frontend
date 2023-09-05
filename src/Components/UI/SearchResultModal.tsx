@@ -9,8 +9,8 @@ const SearchResultModal: React.FC<{
       <SearchResultBackdrop isOpen={props.isOpen} closeFunc={props.closeFunc} />
       <div
         className={`${
-          props.isOpen ? "" : "hidden"
-        } w-full max-w-2xl p-0 m-0 z-10`}
+          props.isOpen ? "sm:block" : ""
+        } w-full max-w-2xl p-0 m-0 z-10 hidden`}
       >
         <div className="bg-neutral rounded-box p-4 w-full border-base-100 border-2">
           <SearchResultList />
