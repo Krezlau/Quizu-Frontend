@@ -1,5 +1,6 @@
 import SearchResultModal from "../UI/SearchResultModal";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Search = () => {
   const [searchText, setSearchText] = useState("");
@@ -27,9 +28,9 @@ const Search = () => {
         <button className="hidden btn btn-circle opacity-60 rounded-l-none no-animation sm:block">
           <span className="material-symbols-outlined">search</span>
         </button>
-        <button className="btn btn-circle ml-auto mr-0 btn-ghost sm:hidden">
+        <Link to={'/search'} className="btn btn-circle ml-auto mr-0 btn-ghost sm:hidden">
           <span className="material-symbols-outlined">search</span>
-        </button>
+        </Link>
       </div>
       {<SearchResultModal isOpen={resultsOpen} closeFunc={() => {setResultsOpen(false);}}/>}
     </div>

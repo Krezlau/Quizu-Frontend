@@ -28,6 +28,7 @@ import PlayResultPage from "./Components/Pages/PlayResultPage";
 import NotFoundPage from "./Components/Pages/NotFoundPage";
 import InDevelopmentPage from "./Components/Pages/InDevelopmentPage";
 import AboutPage from "./Components/Pages/AboutPage";
+import SearchPage from "./Components/Pages/SearchPage";
 
 
 function App() {
@@ -119,7 +120,7 @@ function App() {
           <Route path="/play/results" element={<PlayResultPage />} />
           <Route path="/forbidden" element={<ForbiddenPage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/search" element={<InDevelopmentPage />} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/explore" element={<InDevelopmentPage />} />
           <Route path="/user/:userId/stats" element={<InDevelopmentPage />} />
           <Route path="/user/:userId/settings" element={<InDevelopmentPage />} />
