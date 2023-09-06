@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 import alertSlice from "./alert-slice";
 import authSlice from "./auth-slice";
 import playSlice from "./play-slice";
+import searchSlice from "./search-slice";
 import themeSlice from "./theme-slice";
 
 const persistConfig = {
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   alert: alertSlice.reducer,
   play: playSlice.reducer,
   theme: themeSlice.reducer,
+  search: searchSlice.reducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

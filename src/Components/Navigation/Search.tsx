@@ -1,13 +1,18 @@
 import SearchResultModal from "../UI/SearchResultModal";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../store";
+import { useDispatch } from "react-redux";
+import { searchActions } from "../../store/search-slice";
 
 const Search = () => {
-  const [searchText, setSearchText] = useState("");
+  const searchText = useSelector((state: IRootState) => state.search.text);
   const [resultsOpen, setResultsOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
+    dispatch(searchActions.change({ text: e.target.value }));
     if (e.target.value.length > 0) {
       setResultsOpen(true);
     } else {
@@ -28,11 +33,21 @@ const Search = () => {
         <button className="hidden btn btn-circle opacity-60 rounded-l-none no-animation sm:block">
           <span className="material-symbols-outlined">search</span>
         </button>
-        <Link to={'/search'} className="btn btn-circle ml-auto mr-0 btn-ghost sm:hidden">
+        <Link
+          to={"/search"}
+          className="btn btn-circle ml-auto mr-0 btn-ghost sm:hidden"
+        >
           <span className="material-symbols-outlined">search</span>
         </Link>
       </div>
-      {<SearchResultModal isOpen={resultsOpen} closeFunc={() => {setResultsOpen(false);}}/>}
+      {
+        <SearchResultModal
+          isOpen={resultsOpen}
+          closeFunc={() => {
+            setResultsOpen(false);
+          }}
+        />
+      }
     </div>
   );
 };
