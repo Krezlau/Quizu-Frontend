@@ -51,7 +51,7 @@ const useHttp = () => {
   const handleErrorResponse = (
     e: AxiosError,
     doNotTryAgain: boolean | undefined,
-    tryAgainFunc: (outcome: string) => void
+    tryAgainFunc: (outcome: string) => void,
   ) => {
     const isAuthError =
       e.response && e.response.status && e.response.status === 401;
@@ -76,7 +76,7 @@ const useHttp = () => {
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
-        }
+        },
       )
       .then((r) => {
         return r.data.result;
@@ -104,7 +104,7 @@ const useHttp = () => {
     repeatPassword: string,
     name: string,
     surname: string,
-    location: string
+    location: string,
   ) => {
     setIsLoading(true);
 
@@ -112,7 +112,7 @@ const useHttp = () => {
       .post(
         `${apiUrl}auth/register`,
         { username, email, password, repeatPassword, location, name, surname },
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { "Content-Type": "application/json" } },
       )
       .then(() => {
         showAlert("success", "Successfully registered. You can now log in.");
@@ -138,7 +138,7 @@ const useHttp = () => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         )
         .then((r) => {
           return r.data.result;
@@ -150,14 +150,14 @@ const useHttp = () => {
       setIsLoading(false);
       return quizzes;
     },
-    []
+    [],
   );
 
   const addQuiz = (
     title: string,
     navigate: NavigateFunction,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
     axios
@@ -171,7 +171,7 @@ const useHttp = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${newToken ? newToken : token}`,
           },
-        }
+        },
       )
       .then((r) => {
         showAlert("success", "Successfully created new quiz.");
@@ -179,7 +179,7 @@ const useHttp = () => {
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          addQuiz(title, navigate, true, o)
+          addQuiz(title, navigate, true, o),
         );
       })
       .finally(() => {
@@ -207,7 +207,7 @@ const useHttp = () => {
       setIsLoading(false);
       return quiz;
     },
-    [token]
+    [token],
   );
 
   const updateQuizInfo = (
@@ -216,7 +216,7 @@ const useHttp = () => {
     about: string,
     title: string,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
 
@@ -233,14 +233,14 @@ const useHttp = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${newToken ? newToken : token}`,
           },
-        }
+        },
       )
       .then(() => {
         showAlert("success", "Successfully changed quiz info.");
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          updateQuizInfo(quizId, description, about, title, true, o)
+          updateQuizInfo(quizId, description, about, title, true, o),
         );
       })
       .finally(() => {
@@ -252,7 +252,7 @@ const useHttp = () => {
     quizId: string,
     navigate: NavigateFunction,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
 
@@ -269,7 +269,7 @@ const useHttp = () => {
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          deleteQuiz(quizId, navigate, true, o)
+          deleteQuiz(quizId, navigate, true, o),
         );
       })
       .finally(() => {
@@ -279,19 +279,16 @@ const useHttp = () => {
 
   const checkIfTitleAvailable = (
     value: string,
-    setMessage: (message: string) => void
+    setMessage: (message: string) => void,
   ) => {
     setIsLoading(true);
 
     axios
-      .get(
-        `${apiUrl}Quizzes/available?title=${value}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .get(`${apiUrl}Quizzes/available?title=${value}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((r) => {
         if (r.data.result) setMessage("");
         if (!r.data.result) setMessage("Title not available.");
@@ -326,19 +323,16 @@ const useHttp = () => {
 
   const checkIfUsernameAvailable = (
     value: string,
-    setMessage: (message: string) => void
+    setMessage: (message: string) => void,
   ) => {
     setIsLoading(true);
 
     axios
-      .get(
-        `${apiUrl}Users/available?username=${value}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .get(`${apiUrl}Users/available?username=${value}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((r) => {
         if (r.data.result) setMessage("");
         if (!r.data.result) setMessage("Username not available.");
@@ -359,7 +353,7 @@ const useHttp = () => {
     location: string,
     about: string,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
 
@@ -378,7 +372,7 @@ const useHttp = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${newToken ? newToken : token}`,
           },
-        }
+        },
       )
       .then(() => {
         showAlert("success", "Successfully changed profile info.");
@@ -393,8 +387,8 @@ const useHttp = () => {
             location,
             about,
             true,
-            o
-          )
+            o,
+          ),
         );
       })
       .finally(() => {
@@ -406,7 +400,7 @@ const useHttp = () => {
     userId: string,
     navigate: NavigateFunction,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
 
@@ -424,7 +418,7 @@ const useHttp = () => {
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          deleteUserAccount(userId, navigate, true, o)
+          deleteUserAccount(userId, navigate, true, o),
         );
       })
       .finally(() => {
@@ -438,7 +432,7 @@ const useHttp = () => {
     newPassword: string,
     navigate: NavigateFunction,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
     axios
@@ -453,7 +447,7 @@ const useHttp = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${newToken ? newToken : token}`,
           },
-        }
+        },
       )
       .then((r) => {
         showAlert("success", "Successfully changed password.");
@@ -467,8 +461,8 @@ const useHttp = () => {
             newPassword,
             navigate,
             true,
-            o
-          )
+            o,
+          ),
         );
       })
       .finally(() => {
@@ -479,7 +473,7 @@ const useHttp = () => {
   const addNewQuestion = (
     question: IQuestion,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
     axios
@@ -493,14 +487,14 @@ const useHttp = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${newToken ? newToken : token}`,
           },
-        }
+        },
       )
       .then((r) => {
         showAlert("success", "Question added.");
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          addNewQuestion(question, true, o)
+          addNewQuestion(question, true, o),
         );
       })
       .finally(() => {
@@ -513,54 +507,48 @@ const useHttp = () => {
       if (token) {
         setIsLoading(true);
         const questions: IQuestion[] = await axios
-          .get(
-            `${apiUrl}QuestionsAnswers/quiz/${quizId}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${newToken ? newToken : token}`,
-              },
-            }
-          )
+          .get(`${apiUrl}QuestionsAnswers/quiz/${quizId}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${newToken ? newToken : token}`,
+            },
+          })
           .then((r) => {
             return r.data.result;
           })
           .catch((e: AxiosError) => {
             handleErrorResponse(e, doNotTryAgain, (o) =>
-              fetchQuestions(quizId, true, o)
+              fetchQuestions(quizId, true, o),
             );
           });
         setIsLoading(false);
         return questions;
       }
     },
-    [token]
+    [token],
   );
 
   const deleteQuestion = async (
     questionId: string,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
 
     const outcome = await axios
-      .delete(
-        `${apiUrl}QuestionsAnswers/${questionId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${newToken ? newToken : token}`,
-          },
-        }
-      )
+      .delete(`${apiUrl}QuestionsAnswers/${questionId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${newToken ? newToken : token}`,
+        },
+      })
       .then(() => {
         showAlert("success", "Successfully deleted.");
         return true;
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          deleteQuestion(questionId, true, o)
+          deleteQuestion(questionId, true, o),
         );
       })
       .finally(() => {
@@ -572,7 +560,7 @@ const useHttp = () => {
   const likeQuiz = async (
     quizId: string,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
     const response = await axios
@@ -584,14 +572,14 @@ const useHttp = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${newToken ? newToken : token}`,
           },
-        }
+        },
       )
       .then((r) => {
         return true;
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          likeQuiz(quizId, doNotTryAgain, o)
+          likeQuiz(quizId, doNotTryAgain, o),
         );
       })
       .finally(() => {
@@ -604,7 +592,7 @@ const useHttp = () => {
   const unlikeQuiz = async (
     quizId: string,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
     const response = await axios
@@ -619,7 +607,7 @@ const useHttp = () => {
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          likeQuiz(quizId, doNotTryAgain, o)
+          likeQuiz(quizId, doNotTryAgain, o),
         );
       })
       .finally(() => {
@@ -640,7 +628,7 @@ const useHttp = () => {
             headers: {
               "Content-Type": "application/json",
             },
-          }
+          },
         )
         .then((r) => {
           return r.data.result;
@@ -652,14 +640,14 @@ const useHttp = () => {
       setIsLoading(false);
       return comments;
     },
-    []
+    [],
   );
 
   const addNewComment = async (
     content: string,
     quizId: string,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
     const outcome: string = await axios
@@ -674,7 +662,7 @@ const useHttp = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${newToken ? newToken : token}`,
           },
-        }
+        },
       )
       .then((r) => {
         showAlert("success", "Comment added.");
@@ -682,7 +670,7 @@ const useHttp = () => {
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          addNewComment(content, quizId, true, o)
+          addNewComment(content, quizId, true, o),
         );
         return null;
       })
@@ -696,7 +684,7 @@ const useHttp = () => {
   const deleteComment = async (
     commentId: string,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
 
@@ -713,7 +701,7 @@ const useHttp = () => {
       })
       .catch((e: AxiosError) => {
         handleErrorResponse(e, doNotTryAgain, (o) =>
-          deleteComment(commentId, true, o)
+          deleteComment(commentId, true, o),
         );
         return false;
       })
@@ -744,7 +732,7 @@ const useHttp = () => {
         return response;
       }
     },
-    [token]
+    [token],
   );
 
   const postPlayAnswers = async (
@@ -755,7 +743,7 @@ const useHttp = () => {
     questionIds: string[],
     navigate: NavigateFunction,
     doNotTryAgain?: boolean,
-    newToken?: string
+    newToken?: string,
   ) => {
     setIsLoading(true);
 
@@ -773,7 +761,7 @@ const useHttp = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${newToken ? newToken : token}`,
           },
-        }
+        },
       )
       .then((r) => {
         showAlert("success", "Answers submitted successfully");
@@ -789,12 +777,12 @@ const useHttp = () => {
             questionIds,
             navigate,
             true,
-            o
-          )
+            o,
+          ),
         );
         showAlert(
           "error",
-          "Could not save your answers. Please try again later."
+          "Could not save your answers. Please try again later.",
         );
         navigate(`/quizzes/${quizId}/details`);
         return 0;
@@ -824,6 +812,31 @@ const useHttp = () => {
     return response;
   }, []);
 
+  const searchQuiz = useCallback(
+    async (text: string, page: number, pageSize: number) => {
+      setIsLoading(true);
+      const results: IPageResponse<IQuiz> = await axios
+        .get(
+          `${apiUrl}search/?Query=${text}&PageNumber=${page}&PageSize=${pageSize}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        )
+        .then((r) => {
+          return r.data.result;
+        })
+        .catch((e: AxiosError) => {
+          showError(e);
+          setIsLoading(false);
+        });
+      setIsLoading(false);
+      return results;
+    },
+    [],
+  );
+
   return {
     login: login,
     isLoading: isLoading,
@@ -851,6 +864,7 @@ const useHttp = () => {
     fetchPlayQuestions,
     postPlayAnswers,
     fetchPlayStats,
+    searchQuiz,
   };
 };
 

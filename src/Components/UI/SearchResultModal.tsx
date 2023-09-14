@@ -1,8 +1,12 @@
+import IPageResponse from "../../types/IPageResponse";
+import IQuiz from "../../types/IQuiz";
 import SearchResultList from "./SearchResultList";
 
 const SearchResultModal: React.FC<{
   isOpen: boolean;
   closeFunc: () => void;
+  isLoading: boolean;
+  results: IPageResponse<IQuiz> | undefined;
 }> = (props) => {
   return (
     <>

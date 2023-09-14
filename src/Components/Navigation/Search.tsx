@@ -1,21 +1,43 @@
 import SearchResultModal from "../UI/SearchResultModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../store";
 import { useDispatch } from "react-redux";
 import { searchActions } from "../../store/search-slice";
+import useHttp from "../../hooks/useHttp"
+import IPageResponse from "../../types/IPageResponse";
+import IQuiz from "../../types/IQuiz";
+import { is } from "immer/dist/internal";
 
 const Search = () => {
   const searchText = useSelector((state: IRootState) => state.search.text);
   const [resultsOpen, setResultsOpen] = useState(false);
   const dispatch = useDispatch();
+  const {isLoading, searchQuiz} = useHttp();
+  const [results, setResults] = useState<IPageResponse<IQuiz>>();
+
+  // after 1 second of no typing, show the results
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchText.length > 0) {
+        setResultsOpen(true);
+        searchQuiz(searchText, 0, 5).then((res) => {
+          setResults(res);
+        });
+      } else {
+        setResultsOpen(false);
+      }
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchText]);
 
   const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(searchActions.change({ text: e.target.value }));
-    if (e.target.value.length > 0) {
-      setResultsOpen(true);
-    } else {
+    if (e.target.value.length === 0) {
       setResultsOpen(false);
     }
   };
@@ -46,6 +68,8 @@ const Search = () => {
           closeFunc={() => {
             setResultsOpen(false);
           }}
+          isLoading={isLoading ? isLoading : false}
+          results={results}
         />
       }
     </div>
