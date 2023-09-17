@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import IPageResponse from "../../types/IPageResponse";
 import IQuiz from "../../types/IQuiz";
+import LoadingSpinner from "./LoadingSpinner";
 import SearchResultList from "./SearchResultList";
 
 const SearchResultModal: React.FC<{
@@ -7,6 +9,7 @@ const SearchResultModal: React.FC<{
   closeFunc: () => void;
   isLoading: boolean;
   results: IPageResponse<IQuiz> | undefined;
+  moreResultsFunc: () => void;
 }> = (props) => {
   return (
     <>
@@ -17,12 +20,21 @@ const SearchResultModal: React.FC<{
         } w-full max-w-2xl p-0 m-0 z-10 hidden`}
       >
         <div className="bg-neutral rounded-box p-4 w-full border-base-100 border-2">
-          <SearchResultList />
-          <div className="flex justify-end">
-            <button className="" onClick={props.closeFunc}>
-              More Results...
-            </button>
-          </div>
+          {props.isLoading && (
+            <div className="flex justify-center">
+              <LoadingSpinner size="xl"/>
+            </div>
+          )}
+          {!props.isLoading && (
+            <>
+              <SearchResultList />
+              <div className="flex justify-end">
+                <button className="" onClick={props.moreResultsFunc}>
+                  More Results...
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>
