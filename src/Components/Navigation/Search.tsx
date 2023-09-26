@@ -8,7 +8,6 @@ import { searchActions } from "../../store/search-slice";
 import useHttp from "../../hooks/useHttp";
 import IPageResponse from "../../types/IPageResponse";
 import IQuiz from "../../types/IQuiz";
-import { is } from "immer/dist/internal";
 
 const Search = () => {
   const searchText = useSelector((state: IRootState) => state.search.text);
@@ -22,7 +21,7 @@ const Search = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (searchText.length > 0) {
+      if (searchText.length > 2) {
         setResultsOpen(true);
         searchQuiz(searchText, 0, 5).then((res) => {
           setResults(res);

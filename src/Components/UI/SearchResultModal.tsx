@@ -20,14 +20,14 @@ const SearchResultModal: React.FC<{
         } w-full max-w-2xl p-0 m-0 z-10 hidden`}
       >
         <div className="bg-neutral rounded-box p-4 w-full border-base-100 border-2">
-          {props.isLoading && (
+          {(props.isLoading || !props.results) && (
             <div className="flex justify-center">
               <LoadingSpinner size="xl"/>
             </div>
           )}
-          {!props.isLoading && (
+          {!props.isLoading && props.results && (
             <>
-              <SearchResultList />
+              <SearchResultList results={props.results} closeFunc={props.closeFunc}/>
               <div className="flex justify-end">
                 <button className="" onClick={props.moreResultsFunc}>
                   More Results...

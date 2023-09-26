@@ -817,10 +817,11 @@ const useHttp = () => {
       setIsLoading(true);
       const results: IPageResponse<IQuiz> = await axios
         .get(
-          `${apiUrl}search/?Query=${text}&PageNumber=${page}&PageSize=${pageSize}`,
+          `${apiUrl}Quizzes/search/?Query=${text}&PageNumber=${page}&PageSize=${pageSize}`,
           {
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
           },
         )
