@@ -27,11 +27,6 @@ const SearchPage = () => {
         </button>
       </div>
       <SectionHeader text="Search Results" centered={true} />
-      <QuizList
-        quizzes={[
-          { id: "jadksa", authorName: "xd", authorId: "sfa", title: "LMAOOOO" },
-        ]}
-      />
     </>
   );
 };

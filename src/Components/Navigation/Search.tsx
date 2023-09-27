@@ -1,5 +1,5 @@
 import SearchResultModal from "../UI/SearchResultModal";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../store";
@@ -42,7 +42,8 @@ const Search = () => {
     }
   };
 
-  const moreResultsClickHandler = () => {
+  const moreResultsClickHandler = (event: FormEvent) => {
+    event.preventDefault();
     setResultsOpen(false);
 
     navigate(`/search?Query=${searchText}`);
