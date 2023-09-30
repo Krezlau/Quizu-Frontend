@@ -11,7 +11,7 @@ import themeSlice from "./theme-slice";
 const persistConfig = {
   key: "state",
   storage: storage,
-  whitelist: ["play", "theme", "auth", "search"],
+  whitelist: ["play", "theme", "auth"],
 }
 
 const rootReducer = combineReducers({

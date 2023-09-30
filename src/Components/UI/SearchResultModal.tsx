@@ -1,14 +1,14 @@
-import { useNavigate } from "react-router-dom";
 import IPageResponse from "../../types/IPageResponse";
 import IQuiz from "../../types/IQuiz";
 import LoadingSpinner from "./LoadingSpinner";
 import SearchResultList from "./SearchResultList";
+import { FormEvent } from "react";
 
 const SearchResultModal: React.FC<{
   isOpen: boolean;
-  closeFunc: () => void;
+  closeFunc: (event: FormEvent) => void;
   isLoading: boolean;
-  results: IPageResponse<IQuiz> | undefined;
+  results: IPageResponse<IQuiz> | undefined | null;
   moreResultsFunc: () => void;
 }> = (props) => {
   return (
@@ -43,13 +43,13 @@ const SearchResultModal: React.FC<{
 
 const SearchResultBackdrop: React.FC<{
   isOpen: boolean;
-  closeFunc: () => void;
+  closeFunc: (event: FormEvent) => void;
 }> = (props) => {
   return (
     <div
       className={`${
-        props.isOpen ? "" : "hidden"
-      } fixed top-16 left-0 w-full h-full bg-base-200 bg-opacity-50 z-0`}
+        props.isOpen ? "sm:block" : ""
+      } hidden fixed top-16 left-0 w-full h-full bg-base-200 bg-opacity-50 z-0`}
       onClick={props.closeFunc}
     ></div>
   );

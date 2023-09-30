@@ -10,11 +10,11 @@ import IPageResponse from "../../types/IPageResponse";
 import IQuiz from "../../types/IQuiz";
 
 const Search = () => {
-  const searchText = useSelector((state: IRootState) => state.search.text);
+  const { text: searchText, supressSearchWindow} = useSelector((state: IRootState) => state.search);
   const [resultsOpen, setResultsOpen] = useState(false);
   const dispatch = useDispatch();
   const { isLoading, searchQuiz } = useHttp();
-  const [results, setResults] = useState<IPageResponse<IQuiz>>();
+  const [results, setResults] = useState<IPageResponse<IQuiz> | null>();
   const navigate = useNavigate();
 
   // after 1 second of no typing, show the results
@@ -33,10 +33,11 @@ const Search = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, [searchText]);
+  }, [searchText, supressSearchWindow]);
 
   const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(searchActions.change({ text: e.target.value }));
+    setResults(null);
     if (e.target.value.length === 0) {
       setResultsOpen(false);
     }
@@ -44,6 +45,7 @@ const Search = () => {
 
   const moreResultsClickHandler = (event: FormEvent) => {
     event.preventDefault();
+    dispatch(searchActions.supress())
     setResultsOpen(false);
 
     navigate(`/search?Query=${searchText}`);
@@ -71,7 +73,7 @@ const Search = () => {
       </form>
       {
         <SearchResultModal
-          isOpen={resultsOpen}
+          isOpen={resultsOpen && !supressSearchWindow}
           closeFunc={() => {
             setResultsOpen(false);
           }}

@@ -1,10 +1,11 @@
 import IPageResponse from "../../types/IPageResponse";
 import IQuiz from "../../types/IQuiz";
 import QuizSearchResult from "../Quizzes/QuizSearchResult";
+import { FormEvent } from "react";
 
 const SearchResultList: React.FC<{
   results: IPageResponse<IQuiz>;
-  closeFunc: () => void;
+  closeFunc: (event: FormEvent) => void;
 }> = (props) => {
   return (
     <ul className="flex flex-col gap-2 pb-2">
