@@ -25,10 +25,10 @@ const Quiz: React.FC<{ quiz: IQuiz }> = (props) => {
           <p>{props.quiz.description}</p>
         )}
         <div className="flex flex-row flex-wrap justify-left gap-2 mt-4 mb-4">
-          {!props.quiz.tags || props.quiz.tags.length === 0 ? (
+          {!props.quiz.tagNames || props.quiz.tagNames.length === 0 ? (
             <></>
           ) : (
-            props.quiz.tags.map((t) => (
+            props.quiz.tagNames.map((t) => (
               <div className="badge badge-accent">{t}</div>
             ))
           )}

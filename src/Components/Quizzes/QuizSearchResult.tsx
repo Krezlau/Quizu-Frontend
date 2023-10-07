@@ -1,3 +1,4 @@
+import { FormEvent } from "react";
 import { Link } from "react-router-dom";
 
 const QuizSearchResult: React.FC<{
@@ -7,7 +8,7 @@ const QuizSearchResult: React.FC<{
   playsCount: number;
   tags: string[];
   commentsCount: number;
-  closeFunc: () => void;
+  closeFunc: (event: FormEvent) => void;
 }> = (props) => {
   return (
     <Link to={`/quizzes/${props.id}/details`} onClick={props.closeFunc}>

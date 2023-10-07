@@ -9,7 +9,7 @@ const SearchResultModal: React.FC<{
   closeFunc: (event: FormEvent) => void;
   isLoading: boolean;
   results: IPageResponse<IQuiz> | undefined | null;
-  moreResultsFunc: () => void;
+  moreResultsFunc: (event: FormEvent) => void;
 }> = (props) => {
   return (
     <>
