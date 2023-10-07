@@ -20,14 +20,13 @@ import IQuizStats from "../types/IQuizStats";
 import IResponse from "../types/IResponse";
 import IUserProfile from "../types/IUserProfile";
 import useAlert from "./useAlert";
-import settings from "../../local.settings.json";
 
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
   const dispatch = useAuthDispatch();
   const token = useSelector((state: IRootState) => state.auth.accessToken);
   const showAlert = useAlert();
-  const apiUrl = settings["Values"]["apiUrl"];
+  const apiUrl = !import.meta.env.PROD ? "https://localhost:7202/api/" : "https://quizuapi.azurewebsites.net/api/";
 
   const showError = (e: AxiosError) => {
     if (e.response && e.response.status && e.response.status === 401) {
