@@ -18,7 +18,7 @@ const AboutPage = () => {
             Play, Create, Comment & Like
           </h2>
         </div>
-        <div className="hidden px-2 mockup mockup-window bg-base-200 mx-auto overflow-visible pb-4 backdrop-blur [transform:rotateX(20deg)rotateZ(-20deg)skewY(8deg)scale(1)] lg:block h-[40rem] xl:w-[50rem] ">
+        <div className="hidden px-2 mockup mockup-window bg-base-200 m-auto overflow-visible pb-4 backdrop-blur [transform:rotateX(20deg)rotateZ(-20deg)skewY(8deg)scale(1)] lg:block h-[40rem] xl:w-[50rem] ">
           <PlayQuestionMock />
         </div>
       </div>
