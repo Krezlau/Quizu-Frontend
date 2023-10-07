@@ -6,7 +6,7 @@ interface IQuiz {
   authorId: string;
   likesCount: number;
   playsCount: number;
-  tags: string[];
+  tagNames: string[];
   commentsCount: number;
   isLikedByUser: boolean;
   isAlreadyPlayed: boolean;

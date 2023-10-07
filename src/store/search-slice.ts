@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ISearchState {
   text: string;
+  supressSearchWindow: boolean;
 }
 
 const initialState: ISearchState = {
   text: "",
+  supressSearchWindow: false,
 };
 
 const searchSlice = createSlice({
@@ -19,9 +21,13 @@ const searchSlice = createSlice({
       }>
     ) => {
       state.text = action.payload.text;
+      state.supressSearchWindow = false;
     },
     reset: (state) => {
       state.text = "";
+    },
+    supress: (state) => {
+      state.supressSearchWindow = true;
     },
   },
 });

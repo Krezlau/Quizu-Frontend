@@ -1,8 +1,15 @@
+import IPageResponse from "../../types/IPageResponse";
+import IQuiz from "../../types/IQuiz";
+import LoadingSpinner from "./LoadingSpinner";
 import SearchResultList from "./SearchResultList";
+import { FormEvent } from "react";
 
 const SearchResultModal: React.FC<{
   isOpen: boolean;
-  closeFunc: () => void;
+  closeFunc: (event: FormEvent) => void;
+  isLoading: boolean;
+  results: IPageResponse<IQuiz> | undefined | null;
+  moreResultsFunc: () => void;
 }> = (props) => {
   return (
     <>
@@ -13,12 +20,21 @@ const SearchResultModal: React.FC<{
         } w-full max-w-2xl p-0 m-0 z-10 hidden`}
       >
         <div className="bg-neutral rounded-box p-4 w-full border-base-100 border-2">
-          <SearchResultList />
-          <div className="flex justify-end">
-            <button className="" onClick={props.closeFunc}>
-              More Results...
-            </button>
-          </div>
+          {(props.isLoading || !props.results) && (
+            <div className="flex justify-center">
+              <LoadingSpinner size="xl"/>
+            </div>
+          )}
+          {!props.isLoading && props.results && (
+            <>
+              <SearchResultList results={props.results} closeFunc={props.closeFunc}/>
+              <div className="flex justify-end">
+                <button className="" onClick={props.moreResultsFunc}>
+                  More Results...
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>
@@ -27,13 +43,13 @@ const SearchResultModal: React.FC<{
 
 const SearchResultBackdrop: React.FC<{
   isOpen: boolean;
-  closeFunc: () => void;
+  closeFunc: (event: FormEvent) => void;
 }> = (props) => {
   return (
     <div
       className={`${
-        props.isOpen ? "" : "hidden"
-      } fixed top-16 left-0 w-full h-full bg-base-200 bg-opacity-50 z-0`}
+        props.isOpen ? "sm:block" : ""
+      } hidden fixed top-16 left-0 w-full h-full bg-base-200 bg-opacity-50 z-0`}
       onClick={props.closeFunc}
     ></div>
   );
