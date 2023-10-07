@@ -37,12 +37,31 @@ const SearchPage = () => {
     }
   }, [search]);
 
+  if (!search || search.length === 0) {
+    return (
+      <>
+        <form onSubmit={submitSearchHandler} className="flex flex-row gap-2">
+          <div className="w-16" />
+          <input
+            className="input input-bordered w-full sm:hidden"
+            value={searchText}
+            onChange={searchChangeHandler}
+          />
+          <button type="submit" className="btn btn-ghost btn-circle sm:hidden">
+            <span className="material-symbols-outlined">search</span>
+          </button>
+        </form>
+        <SectionHeader
+          text={`Search for quizzes. Just type in the search bar above.`}
+          centered={true}
+        />
+      </>
+    );
+  }
+
   return (
     <>
-      <form
-        onSubmit={submitSearchHandler}
-        className="flex flex-row gap-2"
-      >
+      <form onSubmit={submitSearchHandler} className="flex flex-row gap-2">
         <div className="w-16" />
         <input
           className="input input-bordered w-full sm:hidden"
